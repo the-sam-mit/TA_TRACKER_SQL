@@ -12,3 +12,5 @@
 + command: node scripts/create_database.js
 + command STARTS SERVER: nodemon app.js
 
+## RESOURCE
++ How to write nodejs SQL queries [template](https://github.com/mysqljs/mysql#escaping-query-values)
