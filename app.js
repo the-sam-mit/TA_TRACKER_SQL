@@ -15,7 +15,6 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 
-
 // ================
 // INTEGRATING LIBS
 app.use(flash());``
@@ -24,9 +23,6 @@ app.use(bodyParser.json());
 
 //----------------FOR ABLE TO USE PUBLIC DIRECTORY IN FRONTEND-----------             
 app.use(express.static(__dirname + "/public"));  //__dirname is whole directory name  
-
-//------------------MODELS USED IN PROJECT---------------------------------
-
 
 // =================================_REQUIRE ROUTES_==================================
 var  CourseRoutes  = require('./routes/course.js');
@@ -40,52 +36,6 @@ app.use(require("express-session")({
 }))	;
 app.use(passport.initialize());
 app.use(passport.session());
-// passport.use('stuLocal',     new LocalStrategy(Student.authenticate()));
-// passport.use('professLocal', new LocalStrategy(Professor.authenticate()));
-// passport.use('assistLocal',  new LocalStrategy(Assistant.authenticate()));
-
-// // add to session
-// passport.serializeUser(function(user, done) {
-// 	console.log("USER SERIALIZE: "+user._id);
-// 	console.log(user);
-// 	done(null, {id:user.id, userType:user.userType}); 
-// });
-
-// // rechecks session login of user at every refresh/pageChange
-// passport.deserializeUser(function(userDetails, done) {
-// 	console.log("DEserialiize : "+userDetails.id );
-// 	if(userDetails.userType === "Professor"){
-// 		Professor.findById(userDetails.id, function(err, user) {
-// 			if(err)
-// 				console.log(err);
-// 			else{
-// 				console.log("DEserialiize pro: "+userDetails.id );
-// 				done(err, user);
-// 			}
-// 		});
-// 	}
-// 	else if(userDetails.userType === "Student"){
-// 		Student.findById(userDetails.id, function(err, user) {
-// 			if(err)
-// 				console.log(err);
-// 			else{
-// 				console.log("DEserialiize stu: "+userDetails.id );
-// 				done(err, user);
-// 			}
-// 		});
-// 	}
-// 	else{
-// 		Assistant.findById(userDetails.id, function(err, user) {
-// 			if(err)
-// 				console.log(err);
-// 			else{
-// 				console.log("DEserialiize assis: "+userDetails.id );
-// 				done(err, user);
-// 			}
-// 		});
-// 	}
-	
-// });
 // =================================_GLOBAL VARIABLES ACCESS_============================
 app.use(async function(req,res,next){
 	res.locals.userDetails=req.user;                    // USER DETAILS
@@ -96,10 +46,7 @@ app.use(async function(req,res,next){
 
 // ===========================================_Refactored routes use_======================
 app.use(indexRoutes);
-app.use("/course",CourseRoutes);
-
-// ===========================================_DATABASE_===================================
-
+app.use("/courses",CourseRoutes);
 // ===========================================_Server Listing_=================================
 app.listen(config.PORT,config.IP,function(){
 	console.log("Server On !!");

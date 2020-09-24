@@ -13,7 +13,7 @@ router.use(flash());
 
 //-------------Landing GET----------------------------
 router.get("/",middleware.isLoggedIn,function(req,res){
-		console.log(" Root ! ");
+		console.log(" courses list ! ");
 		
 		// Course.find({},function(err,emp_data){
 		// 	if(err)

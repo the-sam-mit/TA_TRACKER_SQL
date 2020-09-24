@@ -2,11 +2,11 @@
 module.exports = {
     'connection': {
         'host': 'localhost',
-        'user': 'YOUR USERNAME',
-        'password': 'YOUR PASSWORD',
-        'database': 'my_schema2'
+        'user': 'hsuya',
+        'password': 'aviverma123',
+        'database': 'my_schema2',
     },
-	'database': 'my_schema2',
+    'database': 'my_schema2',
     'users_table': 'users',
     'users_table1': 'professor',
     'users_table2': 'student',
