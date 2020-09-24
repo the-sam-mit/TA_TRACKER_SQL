@@ -1,0 +1,12 @@
+#comment_section{
+	background: #b9beb6;
+}
+.thumbnail img{
+	width:100%;
+}
+#data_descrip{
+	padding:10px;
+}
+#deletebutton{
+	display:inline;
+}
