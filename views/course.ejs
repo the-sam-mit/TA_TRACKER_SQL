@@ -35,25 +35,7 @@
 
 	</div>
 
-	<%// ALL DISPLAY %>
-	<div class="container">
-		<div class="row">
-			<%emp_data.forEach(function(data){ %>
-					<div class="col md-3 sm-6 ">   
-						<div id="card-des" class="card" style="width: 15rem;">
-							<img  class="card-img-top" src= "<%=data.image %> " width="250px" height="220px" alt="course"> 
-							<div class="card-body">  
-									<h4 class="card-text"> <%= data.name %></h4>		
-									<h4 class="card-text"> <%= data.courseCode %></h4>		
-								<a href="/course/<%=data._id%>"><button class="btn btn-md btn-primary">info</button></a>	
-							</div>
-						</div>
-					</div>
-					<br>
-			<%});%>
-			<br>
-		</div>
-	</div>
+	
 
 
 </div>
