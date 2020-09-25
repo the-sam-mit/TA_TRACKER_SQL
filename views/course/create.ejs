@@ -1,20 +1,37 @@
-<%include ../partials/header.ejs%>
-		<div class="container mx-auto  " style="text-align: center; margin-top: 12%;background: #d5dde0;padding-left: 0px;padding-right: 0px;margin-left: 1px;margin-right: 0px">
-			<h1>Add New Course</h1>
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+	<div class="container mx-auto  " style="text-align: center; margin-top: 12%;background: #d5dde0;padding-left: 0px;padding-right: 0px;margin-left: 1px;margin-right: 0px">
+		<h1>Add New Course</h1>
 		<br>
 		<div style="width:30% ;margin:auto;">
-			<form  action="/course" method="POST">
-			<div class="form-group">
-				<input class="form-control" placeholder="name" name="name" type="text">
-			</div>
-			<div class="form-group">
-				<input class="form-control" placeholder="image-url" name="image" type="text">
-			</div>
-			
-			<button class="btn btn-md btn-primary btn-block">Add it</button>
-		</form>
+			<form  action="/courses/new" method="POST">
+				<div class="form-group">
+					<input class="form-control" placeholder="name" name="name" type="text">
+				</div>
+				<div class="form-group">
+					<input class="form-control" placeholder="semester" name="semester" type="text">
+				</div>
+				<div class="form-group">
+					<input class="form-control" placeholder="year" name="year" type="text">
+				</div>
+				<div class="form-group">
+					<input class="form-control" placeholder="stream" name="stream" type="text">
+				</div>
+				<button class="btn btn-md btn-primary btn-block">Create</button>
+			</form>
 		</div>
 		<br>
-		<a href="/course"><button class="btn " style="background: #b4b8ab">back</button></a>
-		</div>
-<%include ../partials/footer.ejs%>
+		<a href="/courses"><button class="btn " style="background: #b4b8ab">back</button></a>
+	</div>
+
+</body>
+</html>
