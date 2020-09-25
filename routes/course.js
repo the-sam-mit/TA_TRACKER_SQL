@@ -3,6 +3,8 @@ var router=express.Router({mergeParams: true});;
 var methodOverride=require("method-override");
 var passport=require('passport');
 var flash=require('connect-flash');
+var mysql      = require('mysql');
+var dbconfig   = require('../config/database');
 
 // ==============_ Model+MiddleWare _=================
 var middleware  = require("../middleware/index.js");
@@ -12,36 +14,49 @@ router.use(methodOverride("_method"));
 router.use(flash());
 
 //-------------Landing GET----------------------------
-router.get("/",middleware.isLoggedIn,function(req,res){
-		console.log(" courses list ! ");
+router.get("/",function(req,res){
+	console.log(" courses list ! ");
+	let con = mysql.createConnection(dbconfig.connection);
+	con.connect(function(err) {
+		if (err) throw err;
 		
-		// Course.find({},function(err,emp_data){
-		// 	if(err)
-		// 		console.log("Cannot Find in DB");
-		// 	else
-		// 		res.render("./course/landing.ejs",{emp_data:emp_data});
-		// });
+	});
+	const query = 'SELECT * FROM `course`';
+		con.query(query, function (err, result, fields) {
+			if (err) throw err;
+			console.log(result);
+			console.log(JSON.stringify(result));
+			con.end();
+			// res.send(JSON.stringify(result));
+			res.render("./landing.ejs",{user: req.user, courseList:result});
+		});
 });
 
 //-------------SAVE COURSE POST----------------------------
-router.post("/",middleware.isLoggedIn,function(req,res){
+router.post("/new",function(req,res){
 	// Form Post route redirected to /course
 	console.log(" new course add route ! ");	
-		var name=req.body.name;
-		var url=req.body.image;
+		var name       = req.body.name;
+		var semester   = req.body.semester;
+		var year       = req.body.year;
+		var stream     = req.body.stream;
 		var courseCode = makeid(10);
-		var new_course={    
-						name	   : name,
-						image      : url,
-						courseCode : courseCode
-						};
-	// 	Course.create(new_course,function(err,data){
-	// 	   if(err)
-	// 		   console.log("Couldnt create data in DB");
-	// 	   else
-	// 		   res.redirect("/course");
-	//    });
-
+		const newCourse= [name,semester,year,stream,courseCode];
+		let con = mysql.createConnection(dbconfig.connection);
+		con.connect(function(err) {
+			if (err) throw err;
+		});
+		var query = "INSERT INTO course(name, semester, year, stream, code) VALUES (?,?,?,?,?)";
+		con.query(query, newCourse, function (err, result, fields) {
+			if (err){
+				console.log("course insert error");
+				throw err;
+			}
+			console.log(result);
+			console.log(JSON.stringify(result));
+			con.end();
+			res.redirect('/courses');
+		});
 });
 
 // --------------NEW COURSE ADD GET--------------------------

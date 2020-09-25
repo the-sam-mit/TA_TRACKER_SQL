@@ -35,17 +35,28 @@
 
 	</div>
 
+	<div class="jumbotron" style="text-align: center">
+		<h1 class="display-3">Add new Course</h1>
+		<br>
+		<a href="/courses/new"><button  class="btn btn-lg  btn-primary">Add Course</button></a>
+	</div>
+	
 	<%// ALL DISPLAY %>
 	<div class="container">
 		<div class="row">
-			<%emp_data.forEach(function(data){ %>
-					<div class="col md-3 sm-6 ">   
-						<div id="card-des" class="card" style="width: 15rem;">
-							<img  class="card-img-top" src= "<%=data.image %> " width="250px" height="220px" alt="course"> 
+			<% console.log(typeof courseList) %>
+			<% console.log( courseList) %>
+			<% courseList.forEach(function(data){ %>
+					<div class="col md-3 sm-4 lg-6" >   
+						<div id="card-des" class="card" >
+							<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
 							<div class="card-body">  
 									<h4 class="card-text"> <%= data.name %></h4>		
-									<h4 class="card-text"> <%= data.courseCode %></h4>		
-								<a href="/course/<%=data._id%>"><button class="btn btn-md btn-primary">info</button></a>	
+									<h5 class="card-text"> <%= data.semeseter %></h5>		
+									<p class="card-text"> <%= data.year %></p>		
+									<p class="card-text"> <%= data.stream %></p>		
+									<p class="card-text"> <%= data.code %></p>		
+								<a href="/courses/<%=data.id%>"><button class="btn btn-md btn-primary">info</button></a>	
 							</div>
 						</div>
 					</div>
@@ -54,7 +65,6 @@
 			<br>
 		</div>
 	</div>
-
 
 </div>
 </body>
