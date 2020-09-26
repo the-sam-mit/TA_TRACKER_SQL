@@ -2,8 +2,8 @@
 module.exports = {
     'connection': {
         'host': 'localhost',
-        'user': 'hsuya',
-        'password': 'aviverma123',
+        'user': 'user',
+        'password': 'password',
         'database': 'my_schema2',
     },
     'database': 'my_schema2',
@@ -11,10 +11,10 @@ module.exports = {
     'users_table1': 'professor',
     'users_table2': 'student',
     'users_table3': 'asisstant',
+    'users_table4': 'assignment',
     'courses': 'course',
-    'rel1': 'professorTACourse',
-    'rel2': 'professorCourse',
-    'rel3': 'TACourse',
-    'rel4': 'studentCourse'
-    
+    'rel1': 'takes',
+    'rel2': 'teaches',
+    'rel3': 'under',
+    'rel4': 'assigned'
 };
