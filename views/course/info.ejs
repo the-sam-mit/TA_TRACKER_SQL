@@ -1,25 +1,60 @@
-<%include ../partials/header.ejs%>
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+	<div class="container">
 
-<div class="container" >
-	<div class="row">
-		<div class="col-md-3">
-			<h3>Dashboard</h3>
-			<div class="list-group">
-
-			</div>
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Course Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
 		</div>
-		<div class="col-md-9" >
 
-			<div class="thumbnail">
-				<img class="img-responsive" src= "<%=emp_data.image %> " alt="course">
-					<h4 >  <%=emp_data.name%></h4>
-						<a href="/course/<%=emp_data._id%>/edit" class="btn btn-md btn-success">Edit</a>
-						<form id="deletebutton" action="/course/<%=emp_data._id%>/delete" method="GET"> 
-							<button class="btn btn-md btn-danger">Delete</button>
-						</form>
+		<div class="row">
+
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+
 				</div>
 			</div>
-		</div>	
+		</div>
 	</div>
-</div>
-<%include ../partials/footer.ejs%>
+
+	<div class="container">
+		<div class="row">
+			<% console.log(typeof course_data) %>
+			<% console.log( course_data) %>
+			<% course_data.forEach(function(data){ %>
+				<div class="row" >
+					<div class="col-md-9">  
+						<h4 ><strong>Name</strong> <%= data.name %></h4>		
+						<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
+						<p ><strong> Year</strong> <%= data.year %></p>		
+						<p ><strong> Stream</strong> <%= data.stream %></p>		
+						<p ><strong> Code</strong> <%= data.code %></p>		
+					</div>
+				</div>
+				<a href="/courses/<%=data.id%>/edit" class="btn btn-md btn-success">Edit</a>
+				<form id="deletebutton" action="/courses/<%=data.id%>/delete" method="GET"> 
+					<button class="btn btn-md btn-danger">Delete</button>
+				</form>
+			<%});%>
+		</div>
+	</div>
+</body>
+</html>
