@@ -46,7 +46,7 @@ app.use(async function(req,res,next){
 
 // ===========================================_Refactored routes use_======================
 app.use(indexRoutes);
-app.use("/course",CourseRoutes);
+app.use("/courses",CourseRoutes);
 // ===========================================_Server Listing_=================================
 app.listen(config.PORT,config.IP,function(){
 	console.log("Server On !!");
