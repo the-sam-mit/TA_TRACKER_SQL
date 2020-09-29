@@ -32,6 +32,7 @@ module.exports = function(passport) {
     // used to deserialize the user
     passport.deserializeUser(function(userObj, done) {
         // //connection.connect();\
+        console.log("USER OBJ: "+JSON.stringify(userObj));
         if(userObj.type === "Professor"){
             connection.query("SELECT * FROM professor WHERE id = ? ",[userObj.id], function(err, rows){
                 done(err, rows[0]);
@@ -64,46 +65,95 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password,  done) {
-            
-            console.log("type: "+type);
+            let type = req.body.type;
             // console.log("REQ: "+JSON.stringify(req.body));
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows) {
-                if (err)
-                    return done(err);
-                if (rows.length) {
-                    return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
-                } else {
-                    // if there is no user with that username
-                    // create the user
-                    var newUserMysql = {
-                        username: username,
-                        password: bcrypt.hashSync(password, null, null),  
-                        type: type
-                    };
-                    var type = req.body.type;
-                    var table = "student";
-                    if(newUserMysql.type === "Professor"){
-                        table = "professor";
+            if(req.body.type === "Professor"){
+                connection.query("SELECT * FROM professor WHERE username = ?",[username], function(err, rows) {
+                    if (err)
+                        return done(err);
+                    if (rows.length) {
+                        return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                    } else {
+                        // if there is no user with that username
+                        // create the user
+                        var newUserMysql = {
+                            username: username,
+                            password: bcrypt.hashSync(password, null, null),
+                            type: "Professor"
+                        };
+                        var insertQuery = "INSERT INTO professor( username, password, type ) values (?,?,?)";
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.type],
+                            function(err, rows) {
+                                if(err){
+                                    throw err;
+                                }
+                                else{
+                                    console.log("NEWUSERMYSQL: "+ JSON.stringify(newUserMysql));
+                                    newUserMysql.id = rows.insertId;
+                                    return done(null, newUserMysql);
+                                }
+                        });
                     }
-                    else if(newUserMysql.type === "Asisstant"){
-                        table = "asisstant";
+                });
+            }
+            else if(req.body.type === "Student"){
+                connection.query("SELECT * FROM student WHERE username = ?",[username], function(err, rows) {
+                    if (err)
+                        return done(err);
+                    if (rows.length) {
+                        return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                    } else {
+                        // if there is no user with that username
+                        // create the user
+                        var newUserMysql = {
+                            username: username,
+                            password: bcrypt.hashSync(password, null, null),
+                            type: "Student"
+                        };
+                        var insertQuery = "INSERT INTO student( username, password, type ) values (?,?,?)";
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password,  newUserMysql.type],
+                            function(err, rows) {
+                                if(err){
+                                    throw err;
+                                }
+                                else{
+                                    newUserMysql.id = rows.insertId;
+                                    return done(null, newUserMysql);
+                                }
+                        });
                     }
-
-                    var insertQuery = "INSERT INTO "+table+"( username, password, type ) values (?,?,?)";
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, type],
-                        function(err, rows) {
-                            if(err){
-                                throw err;
-                            }
-                            else{
-                                newUserMysql.id = rows.insertId;
-                                return done(null, newUserMysql);
-                            }
-                    });
-                }
-            });
+                });
+            }
+            else if(req.body.type === "Asisstant"){
+                connection.query("SELECT * FROM asisstant WHERE username = ?",[username], function(err, rows) {
+                    if (err)
+                        return done(err);
+                    if (rows.length) {
+                        return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                    } else {
+                        // if there is no user with that username
+                        // create the user
+                        var newUserMysql = {
+                            username: username,
+                            password: bcrypt.hashSync(password, null, null),
+                            type: "Asisstant"
+                        };
+                        var insertQuery = "INSERT INTO asisstant( username, password, type ) values (?,?,?)";
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.type],
+                            function(err, rows) {
+                                if(err){
+                                    throw err;
+                                }
+                                else{
+                                    newUserMysql.id = rows.insertId;
+                                    return done(null, newUserMysql);
+                                }
+                        });
+                    }
+                });
+            }
         })
     );
 
