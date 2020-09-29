@@ -13,9 +13,9 @@ module.exports = {
     'users_table3': 'asisstant',
     'users_table4': 'assignment',
     'courses': 'course',
-//     'rel1': 'takes',
-//     'rel2': 'teaches',
-//     'rel3': 'under',
-//     'rel4': 'assigned'
-// };
+    'rel1': 'takes',
+    'rel2': 'teaches',
+    'rel3': 'under',
+    'rel4': 'assigned'
+};
 
