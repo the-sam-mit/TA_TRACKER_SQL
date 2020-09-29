@@ -13,4 +13,5 @@
 + command STARTS SERVER: nodemon app.js
 
 ## RESOURCE
-+ How to write nodejs SQL queries [template](https://github.com/mysqljs/mysql#escaping-query-values)
++ [How to write nodejs SQL queries template](https://github.com/mysqljs/mysql#escaping-query-values)
++ [Nodejs API Basics for SQL](https://bezkoder.com/node-js-rest-api-express-mysql/)
