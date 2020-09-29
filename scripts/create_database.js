@@ -13,7 +13,7 @@ connection.connect(function(err){
 
 // professor
 connection.query('\
-CREATE TABLE `' + dbconfig.users_table1 + '` ( \
+CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table1 + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
     `username` VARCHAR(20) NOT NULL, \
     `password` CHAR(60) NOT NULL, \
@@ -27,7 +27,7 @@ console.log('Success: professor table Created!')
 
 // --------------------------------------------
 connection.query('\
-CREATE TABLE `' + dbconfig.users_table2 + '` ( \
+CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table2 + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
     `username` VARCHAR(20) NOT NULL, \
     `password` CHAR(60) NOT NULL, \
@@ -43,7 +43,7 @@ console.log('Success: ta table Created!')
 var user3Type = "Student";
 // student
 connection.query('\
-CREATE TABLE `' + dbconfig.users_table3 + '` ( \
+CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table3 + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
     `username` VARCHAR(20) NOT NULL, \
     `password` CHAR(60) NOT NULL, \
@@ -64,7 +64,7 @@ console.log('Success: student table Created!');
 // sahi krdo yahaan se
 // ----------------------------------------
 connection.query('\
-CREATE TABLE `' + dbconfig.courses + '` ( \
+CREATE TABLE IF NOT EXISTS `' + dbconfig.courses + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
     `name` VARCHAR(20) , \
     `code` VARCHAR(20) , \
@@ -88,7 +88,7 @@ console.log('Success: course table Created!');
 // UPDATED FROM HERE
 // ----------------------------------------
 // assignment
-var sql = "CREATE TABLE "+dbconfig.users_table4+"(\
+var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
             id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,\
              name VARCHAR(255)\
              )";
@@ -98,7 +98,7 @@ console.log('Success: assignment table Created!');
 
 // ----------------------------------------
 // takes table(S_id - C_id)
-var sql = "CREATE TABLE "+dbconfig.rel1+"(\
+var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel1+"(\
             Sid INT UNSIGNED,\
             Cid INT UNSIGNED,\
             FOREIGN KEY(Cid) REFERENCES "+dbconfig.courses+"(id),\
@@ -111,7 +111,7 @@ console.log('Success: takes table Created!');
 
 // ----------------------------------------
 // teaches table(P_id - C_id)
-var sql = "CREATE TABLE "+dbconfig.rel2+"(\
+var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel2+"(\
             Pid INT UNSIGNED,\
             Cid INT UNSIGNED,\
             FOREIGN KEY(Cid) REFERENCES "+dbconfig.courses+"(id),\
@@ -124,7 +124,7 @@ console.log('Success: teaches table Created!');
 
 // ----------------------------------------
 // under table(T_id - P_id)
-var sql = "CREATE TABLE "+dbconfig.rel3+"(\
+var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel3+"(\
             Pid INT UNSIGNED,\
             Tid INT UNSIGNED,\
             FOREIGN KEY(Tid) REFERENCES "+dbconfig.users_table3+"(id),\
@@ -136,7 +136,7 @@ console.log('Success: under table Created!');
 
 // ----------------------------------------
 // assigned table(S_id - T_id - C_id - A_id)
-var sql = "CREATE TABLE "+dbconfig.rel4+"(\
+var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel4+"(\
             Sid INT UNSIGNED,\
             Tid INT UNSIGNED,\
             Cid INT UNSIGNED,\
