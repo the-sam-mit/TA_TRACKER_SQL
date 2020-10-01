@@ -36,6 +36,7 @@
 	</div>
 
 	<div class="container">
+		<%//course%>
 		<div class="row">
 				<div class="row" >
 					<div class="col-md-9">  
@@ -50,6 +51,49 @@
 				<form id="deletebutton" action="/courses/<%=course_data.id%>/delete" method="GET"> 
 					<button class="btn btn-md btn-danger">Delete</button>
 				</form>
+		</div>
+		<%//Professor%>
+		<%console.log(professor_data)%>
+		<div class="row">
+				<div class="row" >
+					<div class="col-md-9"> 
+						<% professor_data.forEach(function(data){ %> 
+							<h4 ><strong>Name</strong> <%= data.name %></h4>		
+							<h5 ><strong>username</strong> <%= data.username %></h5>		
+							<p ><strong> Type</strong> <%= data.type %></p>		
+						<% }) %>
+					</div>
+				</div>
+		</div>
+		<%//ta%>
+		<div class="row">
+				<div class="row" style="background:#fea" >
+					<% asisstant_data.forEach(function(data){ %>
+						<div class="col-md-9">  
+							<h4 ><strong>Name</strong> <%= data.name %></h4>		
+							<h4 ><strong>Username</strong> <%= data.username %></h4>		
+							<h4 ><strong>Type</strong> <%= data.type %></h4>		
+							<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
+							<p ><strong> Year</strong> <%= data.year %></p>		
+							<p ><strong> Stream</strong> <%= data.stream %></p>		
+						</div>
+					<% }) %>
+				</div>
+		</div>
+		<%//student%>
+		<div class="row">
+				<div class="row" style="background:#ccc" >
+					<% student_data.forEach(function(data){ %>
+						<div class="col-md-9">  
+							<h4 ><strong>Name</strong> <%= data.name %></h4>		
+							<h4 ><strong>Username</strong> <%= data.username %></h4>		
+							<h4 ><strong>Type</strong> <%= data.type %></h4>		
+							<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
+							<p ><strong> Year</strong> <%= data.year %></p>		
+							<p ><strong> Stream</strong> <%= data.stream %></p>		
+						</div>
+					<% }) %>
+				</div>
 		</div>
 	</div>
 </body>

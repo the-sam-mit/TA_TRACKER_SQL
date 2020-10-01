@@ -17,19 +17,6 @@ router.use(flash());
 //-------------Landing GET------------------------WORKING----
 router.get("/",middleware.isLoggedIn,function(req,res){
 	console.log(" courses list ! ");
-	// let con = mysql.createConnection(dbconfig.connection);
-	// con.connect(function(err) {
-	// 	if (err) throw err;
-		
-	// });
-	// const query = 'SELECT * FROM `course`';
-	// 	con.query(query, function (err, result, fields) {
-	// 		if (err) throw err;
-	// 		// console.log(result);
-	// 		// console.log(JSON.stringify(result));
-	// 		con.end();
-	// 		res.render("./landing.ejs",{user: req.user, courseList:result});
-	// 	});
 	async function courseListS() {
 		// Course--FindById 
 		var query = 'SELECT * FROM `course`';
@@ -48,7 +35,7 @@ router.get("/",middleware.isLoggedIn,function(req,res){
 			res.render("./landing.ejs", {user:req.user, courseList_Avail:course_data_Avail, courseList_Joined:course_data_Joined});
 		}
 	}
-	async function courseListA() {//--------------------------------------------------------------------------------ASSISSTANT joined and avaiable courses TODO
+	async function courseListA() {
 		// Course--FindById 
 		var query     = 'select * from course inner join manage on course.id = manage.Cid where Tid= ?';
 		let course_data_Joined = await queryExecute(query ,[req.user.id]) ;
@@ -96,7 +83,7 @@ router.get("/",middleware.isLoggedIn,function(req,res){
 		case "Professor":
 			courseListP().catch((message) => { 
 				console.log(message);
-				res.render("./error.ejs" ,{error:"Internal Error: Unable to joList in the Course"});
+				res.render("./error.ejs" ,{error:"Internal Error: Unable to List in the Course"});
 			});
 		  break;
 		default: res.redirect("/courses");
@@ -207,13 +194,24 @@ router.get("/:id",middleware.isLoggedIn,function(req,res){
 	console.log("info of id "+req.params.id);
 	async function showInfo() {
 		// Course--FindById 
-		const query     = 'SELECT * FROM `course` where id = ?';
+		var query     = 'SELECT * FROM `course` where id = ?';
 		let course_data = await queryExecute(query ,[req.params.id]) ;
 		if(course_data.length == 0 || course_data == undefined || course_data == null){
 			throw "course not found error";
 		}
 		else{
-			res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0]});
+			query     = 'select * from professor inner join teaches on professor.id = teaches.Pid where teaches.Cid = ?';
+			let professor_data = await queryExecute(query ,[req.params.id]) ;
+			
+			query     = 'select * from student inner join takes on student.id = takes.Sid where takes.Cid = ?';
+			let student_data = await queryExecute(query ,[req.params.id]) ;
+			
+			query     = 'select * from asisstant inner join manage on asisstant.id = manage.Tid where manage.Cid = ?';
+			let asisstant_data = await queryExecute(query ,[req.params.id]) ;
+			console.log("P: "+ JSON.stringify(professor_data));
+			console.log("S: "+ JSON.stringify(student_data));
+			console.log("A: "+ JSON.stringify(asisstant_data));
+			res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0], professor_data:professor_data, student_data:student_data, asisstant_data:asisstant_data});
 		}
 	}
 	showInfo().catch((message) => { 
@@ -302,8 +300,8 @@ function queryExecute(query, params) {
 		});
 		con.query(query, params, function (err, result, fields) {
 			if (err) throw err;
-			console.log(result);
-			console.log(JSON.stringify(fields));
+			// console.log(result);
+			// console.log(JSON.stringify(fields));
 			console.log(JSON.stringify(result));
 			con.end();
 			resolve(result);
