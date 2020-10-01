@@ -1,4 +1,4 @@
-<!-- views/profile.ejs -->
+<!-- views/landing.ejs  | lists all courses for every type of user accordingly-->
 <!doctype html>
 <html>
 <head>
@@ -34,37 +34,140 @@
 		</div>
 
 	</div>
+	<%// PROFESSOR ADD COURSE %>
+	<% if(user.type === "Professor"){ %>
+		<div class = "container">
+			<h1>Professor Course</h1>
+			<div class="jumbotron" style="text-align: center">
+				<h1 class="display-3">Add new Course</h1>
+				<br>
+				<a href="/courses/new"><button  class="btn btn-lg  btn-primary">Add Course</button></a>
+			</div>
+			<div class="row">
+				<% courseList.forEach(function(data){ %>
+						<div class="col md-3 sm-4 lg-6" >   
+							<div id="card-des" class="card" >
+								<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
+								<div class="card-body">  
+										<h4 class="card-text"> <%= data.name %></h4>		
+										<h5 class="card-text"> <%= data.semeseter %></h5>		
+										<p class="card-text"> <%= data.year %></p>		
+										<p class="card-text"> <%= data.stream %></p>		
+										<p class="card-text"> <%= data.code %></p>		
+									<a href="/courses/<%=data.id%>"><button class="btn btn-md btn-primary">Visit</button></a>	
+								</div>
+							</div>
+						</div>
+						<br>
+				<%});%>
+				<br>
+			</div>
+		</div>
+	<% } %>
 
-	<div class="jumbotron" style="text-align: center">
-		<h1 class="display-3">Add new Course</h1>
-		<br>
-		<a href="/courses/new"><button  class="btn btn-lg  btn-primary">Add Course</button></a>
-	</div>
-	
-	<%// ALL DISPLAY %>
-	<div class="container">
-		<div class="row">
-			<% console.log(typeof courseList) %>
-			<% console.log( courseList) %>
-			<% courseList.forEach(function(data){ %>
-					<div class="col md-3 sm-4 lg-6" >   
-						<div id="card-des" class="card" >
-							<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
-							<div class="card-body">  
+	<%// Asisstant %>
+	<% if(user.type === "Asisstant"){ %>
+		<div class = "container">
+			<h1>Asisstant Course</h1>
+			<h3>Joined Course</h3>
+			<div class="row">
+				<% courseListJoined.forEach(function(data){ %>
+						<div class="col md-3 sm-4 lg-6" >   
+							<div id="card-des" class="card" >
+								<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
+								<div class="card-body">  
+										<h4 class="card-text"> <%= data.name %></h4>		
+										<h5 class="card-text"> <%= data.semeseter %></h5>		
+										<p class="card-text"> <%= data.year %></p>		
+										<p class="card-text"> <%= data.stream %></p>		
+										<p class="card-text"> <%= data.code %></p>		
+									<a href="/courses/<%=data.id%>"><button class="btn btn-md btn-primary">Visit</button></a>	
+								</div>
+							</div>
+						</div>
+						<br>
+				<%});%>
+				<br>
+			</div>
+			<h3>Available Course</h3>
+			<div class="row">
+				<% courseListAvail.forEach(function(data){ %>
+						<div class="col md-3 sm-4 lg-6" >   
+							<div id="card-des" class="card" >
+								<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
+								<div class="card-body">  
 									<h4 class="card-text"> <%= data.name %></h4>		
 									<h5 class="card-text"> <%= data.semeseter %></h5>		
 									<p class="card-text"> <%= data.year %></p>		
 									<p class="card-text"> <%= data.stream %></p>		
-									<p class="card-text"> <%= data.code %></p>		
-								<a href="/courses/<%=data.id%>"><button class="btn btn-md btn-primary">info</button></a>	
+									<p class="card-text"> <%= data.code %></p>
+									<form  action="/courses/<%=data.id%>/join" method="POST">
+										<div class="form-group">
+											<input class="form-control" placeholder="Course Code" name="code" type="text">
+										</div>
+										<button class="btn btn-md btn-success">Join</button>
+									</form>		
+								</div>
 							</div>
 						</div>
-					</div>
-					<br>
-			<%});%>
-			<br>
+						<br>
+				<%});%>
+				<br>
+			</div>
 		</div>
-	</div>
+	<% } %>
+
+	<%// Student %>
+	<% if(user.type === "Student"){ %>
+		<div class = "container">
+			<h1>Student Course</h1>
+			<h3>Joined Course</h3>
+			<div class="row">
+				<% courseList_Joined.forEach(function(data){ %>
+						<div class="col md-3 sm-4 lg-6" >   
+							<div id="card-des" class="card" >
+								<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
+								<div class="card-body">  
+										<h4 class="card-text"> <%= data.name %></h4>		
+										<h5 class="card-text"> <%= data.semeseter %></h5>		
+										<p class="card-text"> <%= data.year %></p>		
+										<p class="card-text"> <%= data.stream %></p>		
+										<p class="card-text"> <%= data.code %></p>		
+									<a href="/courses/<%=data.id%>"><button class="btn btn-md btn-primary">Visit</button></a>	
+								</div>
+							</div>
+						</div>
+						<br>
+				<%});%>
+				<br>
+			</div>
+			<h3>Available Course</h3>
+			<div class="row">
+				<% courseList_Avail.forEach(function(data){ %>
+						<div class="col md-3 sm-4 lg-6" >   
+							<div id="card-des" class="card" >
+								<img  class="card-img-top" src= "https://leverageedu.com/blog/wp-content/uploads/2019/08/Course-after-MBA.png" width="190px" height="150px" alt="course"> 
+								<div class="card-body">  
+									<h4 class="card-text"> <%= data.name %></h4>		
+									<h5 class="card-text"> <%= data.semeseter %></h5>		
+									<p class="card-text"> <%= data.year %></p>		
+									<p class="card-text"> <%= data.stream %></p>		
+									<p class="card-text"> <%= data.code %></p>
+									<form  action="/courses/<%=data.id%>/join" method="POST">
+										<div class="form-group">
+											<input class="form-control" placeholder="Course Code" name="code" type="text">
+										</div>
+										<button class="btn btn-md btn-success">Join</button>
+									</form>		
+								</div>
+							</div>
+						</div>
+						<br>
+				<%});%>
+				<br>
+			</div>
+		</div>
+	<% } %>
 
 </div>
 </body>

@@ -16,6 +16,7 @@ module.exports = {
     'rel1': 'takes',
     'rel2': 'teaches',
     'rel3': 'under',
-    'rel4': 'assigned'
+    'rel4': 'assigned',
+    'rel5': 'manage'
 };
 

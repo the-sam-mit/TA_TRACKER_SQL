@@ -25,8 +25,11 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));  //__dirname is whole directory name  
 
 // =================================_REQUIRE ROUTES_==================================
-var  CourseRoutes  = require('./routes/course.js');
-var  indexRoutes   = require('./routes/index.js');
+var  CourseRoutes     = require('./routes/course.js');
+var  ProfessorRoutes  = require('./routes/professor.js');
+var  StudentRoutes    = require('./routes/student.js');
+var  AsisstantRoutes  = require('./routes/asisstant.js');
+var  indexRoutes      = require('./routes/index.js');
 
 // =================================_AUTH PASSPORT config_=============================
 app.use(require("express-session")({
@@ -47,6 +50,9 @@ app.use(async function(req,res,next){
 // ===========================================_Refactored routes use_======================
 app.use(indexRoutes);
 app.use("/courses",CourseRoutes);
+app.use("/professor",ProfessorRoutes);
+app.use("/student",StudentRoutes);
+app.use("/asisstant",AsisstantRoutes);
 // ===========================================_Server Listing_=================================
 app.listen(config.PORT,config.IP,function(){
 	console.log("Server On !!");

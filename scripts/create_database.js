@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table1 + '` ( \
 console.log('Success: professor table Created!')
 
 // --------------------------------------------
+// student
 connection.query('\
 CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table2 + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
@@ -33,6 +34,9 @@ CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table2 + '` ( \
     `password` CHAR(60) NOT NULL, \
     `name` VARCHAR(20) , \
     `type` VARCHAR(60)  , \
+    `semester` INT , \
+    `year` INT  , \
+    `stream` VARCHAR(60) , \
         PRIMARY KEY (`id`), \
     UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
     UNIQUE INDEX `username_UNIQUE` (`username` ASC) \
@@ -40,8 +44,8 @@ CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table2 + '` ( \
 console.log('Success: ta table Created!')
 
 // --------------------------------------
-var user3Type = "Student";
-// student
+
+// asisstant
 connection.query('\
 CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table3 + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
@@ -149,6 +153,18 @@ var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel4+"(\
 connection.query(sql);
 
 console.log('Success: assigned table Created!');
+
+// ----------------------------------------
+// manage table(T_id - C_id)
+var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel5+"(\
+    Tid INT UNSIGNED,\
+    Cid INT UNSIGNED,\
+    FOREIGN KEY(Tid) REFERENCES "+dbconfig.users_table3+"(id),\
+    FOREIGN KEY(Cid) REFERENCES "+dbconfig.courses+"(id)\
+     )";
+connection.query(sql);
+
+console.log('Success: manage table Created!');
 
 // connection.query('\
 // CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.rel1 + '` ( \

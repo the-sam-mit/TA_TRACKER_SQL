@@ -179,7 +179,7 @@ module.exports = function(passport) {
             async function profCheck() {
                 return new Promise(function(resolve, reject) {
                     var table = "professor";
-                    var sqlQuery = "SELECT * FROM "+table+" WHERE username = ?";
+                    var sqlQuery = "SELECT * FROM professor WHERE username = ?";
                     connection.query(sqlQuery,[username], function(err, rows){
                         var ret = null;
                         if (err){
@@ -192,14 +192,14 @@ module.exports = function(passport) {
                         else if(rows.length && bcrypt.compareSync(password, rows[0].password))
                         {userFound = 1;    ret= done(null, rows[0]);}
                         // all is well, return successful user
+                        resolve(ret); // successfully fill promise
                     });
-                    resolve(ret); // successfully fill promise
                 })
             }
             async function asisstCheck() {
                 return new Promise(function(resolve, reject) {
                     var table = "asisstant";
-                    var sqlQuery = "SELECT * FROM "+table+" WHERE username = ?";
+                    var sqlQuery = "SELECT * FROM asisstant WHERE username = ?";
                     connection.query(sqlQuery,[username], function(err, rows){
                         var ret = null;
                         if (err){
@@ -212,14 +212,14 @@ module.exports = function(passport) {
                         else if(rows.length && bcrypt.compareSync(password, rows[0].password))
                         {userFound = 1;    ret= done(null, rows[0]);}
                         // all is well, return successful user
+                        resolve(ret); // successfully fill promise
                     });
-                    resolve(ret); // successfully fill promise
                 })
             }
             async function studCheck() {
                 return new Promise(function(resolve, reject) {
                     var table = "student";
-                    var sqlQuery = "SELECT * FROM "+table+" WHERE username = ?";
+                    var sqlQuery = "SELECT * FROM student WHERE username = ?";
                     connection.query(sqlQuery,[username], function(err, rows){
                         var ret = null;
                         if (err){
@@ -232,31 +232,49 @@ module.exports = function(passport) {
                         else if(rows.length && bcrypt.compareSync(password, rows[0].password))
                         {userFound = 1;    ret= done(null, rows[0]);}
                         // all is well, return successful user
+                        resolve(ret); // successfully fill promise
                     });
-                    resolve(ret); // successfully fill promise
                 })
             }
 
             async function loginCheck() {
-                ret = await profCheck();
-                if(ret == null){
-                    ret = await asisstCheck();
-                    if(ret == null){
-                        ret = await studCheck();
-                        if(ret == null){
-                            return done(null, false, req.flash('loginMessage', 'No user Found.')); // create the loginMessage and save it to session as flashdata
-                        }
-                        else{
-                            return ret;
-                        }
-                    }
-                    else{
-                        return ret;
-                    }
+                ret1 = await profCheck();
+                ret2 = await asisstCheck();
+                ret3 = await studCheck();
+                if(ret1 != null){
+                    return ret1;
+                }
+                else if(ret2 != null){
+                    return ret2;
+                }
+                else if(ret3 != null){
+                    return ret3;
                 }
                 else{
-                    return ret;
+                    return done(null, false, req.flash('loginMessage', 'No user Found.')); // create the loginMessage and save it to session as flashdata
                 }
+                    
+                       
+                       
+                // ret = await profCheck();
+                // if(ret == null){
+                //     ret = await asisstCheck();
+                //     if(ret == null){
+                //         ret = await studCheck();
+                //         if(ret == null){
+                //             return done(null, false, req.flash('loginMessage', 'No user Found.')); // create the loginMessage and save it to session as flashdata
+                //         }
+                //         else{
+                //             return ret;
+                //         }
+                //     }
+                //     else{
+                //         return ret;
+                //     }
+                // }
+                // else{
+                //     return ret;
+                // }
             }
 
             return loginCheck();

@@ -37,23 +37,19 @@
 
 	<div class="container">
 		<div class="row">
-			<% console.log(typeof course_data) %>
-			<% console.log( course_data) %>
-			<% course_data.forEach(function(data){ %>
 				<div class="row" >
 					<div class="col-md-9">  
-						<h4 ><strong>Name</strong> <%= data.name %></h4>		
-						<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
-						<p ><strong> Year</strong> <%= data.year %></p>		
-						<p ><strong> Stream</strong> <%= data.stream %></p>		
-						<p ><strong> Code</strong> <%= data.code %></p>		
+						<h4 ><strong>Name</strong> <%= course_data.name %></h4>		
+						<h5 ><strong>Semeseter</strong> <%= course_data.semeseter %></h5>		
+						<p ><strong> Year</strong> <%= course_data.year %></p>		
+						<p ><strong> Stream</strong> <%= course_data.stream %></p>		
+						<p ><strong> Code</strong> <%= course_data.code %></p>		
 					</div>
 				</div>
-				<a href="/courses/<%=data.id%>/edit" class="btn btn-md btn-success">Edit</a>
-				<form id="deletebutton" action="/courses/<%=data.id%>/delete" method="GET"> 
+				<a href="/courses/<%=course_data.id%>/edit" class="btn btn-md btn-success">Edit</a>
+				<form id="deletebutton" action="/courses/<%=course_data.id%>/delete" method="GET"> 
 					<button class="btn btn-md btn-danger">Delete</button>
 				</form>
-			<%});%>
 		</div>
 	</div>
 </body>

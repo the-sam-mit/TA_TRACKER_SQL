@@ -1,0 +1,5 @@
+select distinct under.Pid from under inner join teaches on under.Pid = teaches.Pid where Tid = 2;
+
+select * from course inner join teaches on course.id = teaches.Cid where Pid = 2;
+
+select distinct * from course inner join teaches on course.id = teaches.Cid inner join under on under.Pid = teaches.Pid where under.Tid = 2;
