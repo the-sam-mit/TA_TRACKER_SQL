@@ -21,7 +21,7 @@ router.get("/",middleware.isLoggedIn,function(req,res){
 		// Course--FindById 
 		// var query = 'SELECT * FROM `course`';
 		var query = 'select * from course where course.id != (select course.id from course where course.id IN (Select course.id from course inner join takes on course.id = takes.Cid where Sid = ?))';
-		let course_data_Avail = await queryExecute(query ,[]) ;
+		let course_data_Avail = await queryExecute(query ,[req.user.id]) ;
 		if( course_data_Avail == undefined || course_data_Avail == null){
 			throw "course not found error";
 		}
