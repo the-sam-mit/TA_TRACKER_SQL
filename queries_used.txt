@@ -3,7 +3,3 @@ select distinct under.Pid from under inner join teaches on under.Pid = teaches.P
 select * from course inner join teaches on course.id = teaches.Cid where Pid = 2;
 
 select distinct * from course inner join teaches on course.id = teaches.Cid inner join under on under.Pid = teaches.Pid where under.Tid = 2;
-
-select * from course where course.id != (select course.id from course where course.id IN (Select course.id from course inner join takes on course.id = takes.Cid where Sid = 2));
-
-select * from course where course.id != (select course.id from course where course.id IN (Select course.id from course inner join manage on course.id = manage.Cid where Tid = 2));
