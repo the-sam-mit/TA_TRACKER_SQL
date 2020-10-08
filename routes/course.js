@@ -20,13 +20,13 @@ router.get("/",middleware.isLoggedIn,function(req,res){
 	async function courseListS() {
 		// Course--FindById 
 		// var query = 'SELECT * FROM `course`';
-		var query = 'select * from course where course.id != (select course.id from course where course.id IN (Select course.id from course inner join takes on course.id = takes.Cid where Sid = ?))';
+		var query = 'select * from course where course.id NOT IN (select course.id from course where course.id IN (Select course.id from course inner join takes on course.id = takes.Cid where Sid = ?))';
 		let course_data_Avail = await queryExecute(query ,[req.user.id]) ;
 		if( course_data_Avail == undefined || course_data_Avail == null){
 			throw "course not found error";
 		}
 		
-		query     = 'select * from course inner join takes on course.id = takes.Cid where Sid= ?';
+		query     = 'select distinct * from course inner join takes on course.id = takes.Cid where Sid= ?';
 		let course_data_Joined = await queryExecute(query ,[req.user.id]) ;
 		if( course_data_Joined == undefined || course_data_Joined == null){
 			throw "course not found error";
@@ -39,7 +39,7 @@ router.get("/",middleware.isLoggedIn,function(req,res){
 	async function courseListA() {
 		// Course--FindById 
 		// var query     = 'select * from course inner join manage on course.id = manage.Cid where Tid= ?';
-		query     = 'select * from course where course.id != (select course.id from course where course.id IN (Select course.id from course inner join manage on course.id = manage.Cid where Tid = ?))';
+		query     = 'select * from course where course.id NOT IN (select course.id from course where course.id IN (Select course.id from course inner join manage on course.id = manage.Cid where Tid = ?))';
 		let course_data_Joined = await queryExecute(query ,[req.user.id]) ;
 		console.log(" landing P: "+ course_data_Joined.length);
 		if( course_data_Joined == undefined || course_data_Joined == null){
