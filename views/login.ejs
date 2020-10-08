@@ -3,45 +3,71 @@
 <html>
 <head>
 	<title>Node Authentication</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-	<style>
-		body 		{ padding-top:80px; }
-	</style>
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> 
+    <link rel="stylesheet" href="stylesheets/css/login.css">
+
 </head>
 <body>
-    <div class="container">
-        <div class="col-sm-6 col-sm-offset-3">
-            <h1><span class="fa fa-sign-in"></span> Login</h1>
+  
+    <div class="nav">
+			
+		<input type="checkbox" id="nav-check">
+		<div class="nav-header">
+			<img class="logoimg" src="images/favicon.png" alt="Logo"/>
+		  <div class="nav-title">
+			 TA Tracker
+		  </div>
+		 
+		</div>
+		<div class="nav-btn">
+		  <label for="nav-check">
+			<span></span>
+			<span></span>
+			<span></span>
+		  </label>
+		</div>
+    
+		<div class="nav-links">
+			<%  if(!userDetails){ %>
+				<a href="/" target="_blank">About</a>
+				<a href="/login" target="_blank">Login</a>
+				<a href="/signup" target="_blank">SignUp</a>
+			    
+		  <% } else{  %>
+				 
+				  <a class="nav-link " href="/course"> Logged in as <%= userDetails.username%></a>	 
+				  <a class="nav-link " href="/logout">Logout</a>
+				 
+			<%  }  %>	
 
-            <!-- show any messages that come back with authentication -->
-            <% if (message.length > 0) { %>
-                <div class="alert alert-danger"><%= message %></div>
-            <% } %>
-
-            <!-- LOGIN FORM -->
-            <form action="/login" method="post">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control" name="username">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" name="password">
-                </div>
-                <div class="form-group">
-                    <label>Remember Me</label>
-                    <input type="checkbox" class="form-control" name="remember" value="yes">
-                </div>
-
-                <button type="submit" class="btn btn-warning btn-lg">Login</button>
-            </form>
-
-            <hr>
-
-            <p>Need an account? <a href="/signup">Signup</a></p>
-            <p>Or go <a href="/">home</a>.</p>
         </div>
-    </div>
+        
+
+      </div>
+      <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+    <% } %>
+
+	  <div class="box">
+		  <form action="/login" method="post"class="login-form">
+			  <h1>Login</h1>
+			  <input type="text" name="username" placeholder="Username" required>
+			  <input type="password" name="password" placeholder="Password" required>
+			  <input type="submit" name="Login" value="Login">
+			   <div class="links1">
+		
+				  <a href="/signup">SignUp </a>
+			 <a href="/"> Home</a></div>
+				 
+			  </div>
+			  </button>
+		  </form>
+		  
+      </div>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      
 </body>
 </html>
