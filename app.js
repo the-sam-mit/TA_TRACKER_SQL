@@ -30,6 +30,7 @@ var  ProfessorRoutes  = require('./routes/professor.js');
 var  StudentRoutes    = require('./routes/student.js');
 var  AsisstantRoutes  = require('./routes/asisstant.js');
 var  indexRoutes      = require('./routes/index.js');
+var  TARoutes      = require('./routes/ta_temp.js');
 
 // =================================_AUTH PASSPORT config_=============================
 app.use(require("express-session")({
@@ -53,6 +54,7 @@ app.use("/courses",CourseRoutes);
 app.use("/professor",ProfessorRoutes);
 app.use("/student",StudentRoutes);
 app.use("/asisstant",AsisstantRoutes);
+app.use("/ta_temp", TARoutes);
 // ===========================================_Server Listing_=================================
 app.listen(config.PORT,config.IP,function(){
 	console.log("Server On !!");
