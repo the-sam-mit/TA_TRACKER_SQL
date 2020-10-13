@@ -94,7 +94,10 @@ console.log('Success: course table Created!');
 // assignment
 var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
             id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,\
-             name VARCHAR(255)\
+             name VARCHAR(255),\
+             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,\
+             deadline_rubriks DATETIME ,\
+             deadline_eval DATETIME \
              )";
 connection.query(sql);
 console.log('Success: assignment table Created!');
