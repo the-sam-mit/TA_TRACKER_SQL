@@ -66,7 +66,7 @@ module.exports = function(passport) {
         },
         function(req, username, password,  done) {
             let type = req.body.type;
-            // console.log("REQ: "+JSON.stringify(req.body));
+            console.log("SIGNUP: "+JSON.stringify(req.body));
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
             if(req.body.type === "Professor"){
