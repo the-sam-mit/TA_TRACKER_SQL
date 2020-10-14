@@ -5,7 +5,7 @@ var passport=require('passport');
 var flash=require('connect-flash');
 var mysql      = require('mysql');
 var dbconfig   = require('../config/database');
-
+var  AssignmentRoutes     = require('./assignment.js');
 // ==============_ Model+MiddleWare _=================
 var middleware  = require("../middleware/index.js");
 const { query } = require('express');
@@ -13,6 +13,9 @@ const { query } = require('express');
 var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
+
+// ================Module inport========================
+var  AssignmentRoutes = require('./assignment.js');
 
 //-------------Landing GET------------------------WORKING----
 router.get("/",middleware.isLoggedIn,function(req,res){
@@ -290,6 +293,7 @@ function makeid(length) {
 	return result;
  }
 
+router.use("/:id/assignment",AssignmentRoutes);
 module.exports=router;
 
 // FUNCTION TO INTIATE QUERY

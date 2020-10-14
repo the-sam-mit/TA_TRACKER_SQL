@@ -34,7 +34,9 @@
 			</div>
 		</div>
 	</div>
-
+	 <% if(user.type === "Professor"){ %>
+		<a href="/courses/<%=course_data.id%>/assignment/new" class="btn btn-md btn-success">Open Assignment</a>
+	 <% } %>
 	<div class="container">
 		<%//course%>
 		<div class="row">

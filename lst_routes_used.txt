@@ -1,0 +1,17 @@
+/
+/login
+/signp
+/courses
+/courses/new
+
+/courses/:id    GET  show info
+/courses/:id    PUT  update
+/courses/:id/edit  
+/courses/:id/delete
+
+-----TO MAKE------
+/courses/:id/:id/assignment/new    
+/courses/:id/assignment/:id ==============  view assignment list all submission + assignment details
+=> different pages redirected for each user based on type
+
+/courses/:id/assignment/:id/submission/:id === view assignment indi assignment    
