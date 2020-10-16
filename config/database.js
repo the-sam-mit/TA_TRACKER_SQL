@@ -17,6 +17,7 @@ module.exports = {
     'rel2': 'teaches',
     'rel3': 'under',
     'rel4': 'assigned',
-    'rel5': 'manage'
+    'rel5': 'manage',
+    'rel6': 'include'
 };
 
