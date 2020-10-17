@@ -1,0 +1,52 @@
+BASIC  
+-----------
+- add users
+- login/signup
+- CRUD course
+- join course
+
+FEATURES
+-----------
+
+- CRD assignment
+- assign TA
+- import submissions  ----integration on going
+- upload rubricks     ----integration on going
+
+--------------------------------------------------------
+
+TODO
+-----------
+- TA allocated to submissions   ----  Equalize work Load
+- upload marks                  ----  Integration on going   
+- approve rubricks
+- approve marks          
+- update deadline
+
+- Raise Query
+- Resolve Query
+- Comments
+- Freeze Marks
+
+- Monitor TA performances 
+- prepare graphs and charts 
+- rating based on performance
+- export performance
+===========================================================================
+
+
+DIVISION OF WORK   
+----------------------
+Current Work
+---------
+Aayush T & Ayush V           ---        Professor Routes and Submission
+Shubham & Samarth            ---        handle TA routes
+Amritansh                    ---        Frontend Pages
+
+Next Set
+---------
+Aayush T                     ---        Student Routes
+Samarth &Shubham             ---        Raise Resolve Query
+Ayush                        ---        Approvals/last decision of professors, Freeze Marks, Deadline Related
+Amritansh                    ---        Frontend Pages + Performances Related Work
+
