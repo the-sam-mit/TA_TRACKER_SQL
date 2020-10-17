@@ -2,6 +2,8 @@
 module.exports = {
     'connection': {
         'host': 'localhost',
+        'user': 'user', //edit
+        'password': 'password', //edit
         'user': 'hsuya', //edit
         'password': 'aviverma123', //edit
         'database': 'my_schema2'
@@ -22,4 +24,3 @@ module.exports = {
     'rel6': 'include',
     'rel7': 'checks'
 };
-
