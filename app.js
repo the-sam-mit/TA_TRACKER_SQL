@@ -34,6 +34,7 @@ var  CourseRoutes     = require('./routes/course.js');
 var  indexRoutes      = require('./routes/index.js');
 var  AssignmentRoutes = require('./routes/assignment.js');
 var  SubmissionRoutes = require('./routes/submission.js');
+var  RubricsRoutes     = require('./routes/rubrics.js');
 
 // =================================_AUTH PASSPORT config_=============================
 app.use(require("express-session")({
