@@ -5,6 +5,10 @@ var passport      = require('passport');                  // Auth
 var LocalStrategy = require('passport-local').Strategy;  //auth
 var flash         = require('connect-flash');           // flash error\sucess message directly
 var request       = require('request');                     
+var busboy        = require("then-busboy"); 
+var fileUpload    = require('express-fileupload');                    
+var JSZip         = require('jszip');                     
+var fs            = require('fs');                     
 var config        = require('./config/keys');         // config details file
 
 // ================
@@ -20,17 +24,16 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(flash());``
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 //----------------FOR ABLE TO USE PUBLIC DIRECTORY IN FRONTEND-----------             
 app.use(express.static(__dirname + "/public"));  //__dirname is whole directory name  
 
 // =================================_REQUIRE ROUTES_==================================
 var  CourseRoutes     = require('./routes/course.js');
-var  ProfessorRoutes  = require('./routes/professor.js');
-var  StudentRoutes    = require('./routes/student.js');
-var  AsisstantRoutes  = require('./routes/asisstant.js');
 var  indexRoutes      = require('./routes/index.js');
-var  TARoutes      = require('./routes/ta_temp.js');
+var  AssignmentRoutes = require('./routes/assignment.js');
+var  SubmissionRoutes = require('./routes/submission.js');
 
 // =================================_AUTH PASSPORT config_=============================
 app.use(require("express-session")({
@@ -51,10 +54,8 @@ app.use(async function(req,res,next){
 // ===========================================_Refactored routes use_======================
 app.use(indexRoutes);
 app.use("/courses",CourseRoutes);
-app.use("/professor",ProfessorRoutes);
-app.use("/student",StudentRoutes);
-app.use("/asisstant",AsisstantRoutes);
-app.use("/ta_temp", TARoutes);
+
+
 // ===========================================_Server Listing_=================================
 app.listen(config.PORT,config.IP,function(){
 	console.log("Server On !!");
