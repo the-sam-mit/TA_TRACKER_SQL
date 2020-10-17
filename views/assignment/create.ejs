@@ -2,7 +2,9 @@
 <html>
 <head>
 	<title> Assignments</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
 		body { padding-top:80px; word-wrap:break-word; }
@@ -16,38 +18,35 @@
 		<div style="width:30% ;margin:auto;">
 			<form  action="/courses/<%=course.id%>/assignment/new" method="POST">
 				<div class="form-group">
-					<input class="form-control" placeholder="name" name="Assignment" type="text">
+					<input class="form-control" placeholder="name" name="name" type="text">
 				</div>
 				<div class="form-group">
 					<input class="form-control" placeholder="course" name="course" type="text" value="<%=course.name%>" fixed>
 				</div>
 				<div class="form-group">
-					<input class="form-control" placeholder="difficulty" name="difficulty" type="text">
+					<label for="type">Type</label>
+					<select name="Type" class="selectpicker"  data-live-search="true" id="type">
+						<option>Theory</option>
+						<option>Lab</option>
+						<option>Project</option>
+					</select>
 				</div>
 				<div class="form-group">
-					<input class="form-control" placeholder="deadlineRubriks" name="deadlineRubriks" type="text">
+					<label for="deadlineRubriks">deadlineRubriks</label>
+					<input class="form-control" placeholder="deadlineRubriks" name="deadlineRubriks" type="datetime-local" id="deadlineRubriks">
 				</div>
 				<div class="form-group">
-					<input class="form-control" placeholder="deadlineEvaluation" name="deadlineEvaluation" type="text">
+					<label for="deadlineEvaluation">deadlineEvaluation</label>
+					<input class="form-control" placeholder="deadlineEvaluation" name="deadlineEvaluation" type="datetime-local" id="deadlineEvaluation">
+
 				</div>
 				<div class="form-group">
 					<label for="assignedTA">Assigned TA</label>
-					<select name="assignedTA" class="form-control" id="assignedTA">
-						<option>TA1</option>
-						<option>TA2</option>
-						<option>TA3</option>
+					<select name="assignedTA" class="selectpicker" multiple data-live-search="true" id="assignedTA">
+					<%asisstant.forEach(function(data){ %>
+						<option value="<%=data.Tid%>"><%=data.username%></option>
+					<% }) %>
 					</select>
-				</div>
-				<div class="form-group">
-					<label for="HeadTA">Head TA</label>
-					<select name="headTA" class="form-control" id="headTA">
-						<option>TA1</option>
-						<option>TA2</option>
-						<option>TA3</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<input class="form-control" placeholder="import URL" name="importURL" type="text">
 				</div>
 				<button class="btn btn-md btn-primary btn-block">Create</button>
 			</form>
@@ -55,6 +54,20 @@
 		<br>
 		<a href="/courses/<%=course.id%>"><button class="btn " style="background: #b4b8ab">back</button></a>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+	<script type="text/javascript"
+     src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+    </script>
+	<script>
+		$('#assignedTA').selectpicker();
+		
+
+	</script>
+
 
 </body>
 </html>

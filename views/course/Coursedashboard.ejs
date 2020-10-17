@@ -97,6 +97,18 @@
 					<% }) %>
 				</div>
 		</div>
+		<%//assignment%>
+		<div class="row">
+			<% assignment_data.forEach(function(data){ %>
+				<div class="col-md-9">  
+					<h4 ><strong>Name</strong> <%= data.name %></h4>		
+					<h5 ><strong>Type</strong> <%= data.type %></h5>		
+					<p ><strong> DeadlineEvaluation</strong> <%= data.deadline_eval %></p>		
+					<p ><strong> CreatedAt</strong> <%= data.created_at %></p>	
+					<a href="/courses/<%=course_data.id%>/assignment/<%=data.id%>"><button class="btn btn-md btn-primary">View</button></a>	
+				</div>
+			<% }) %>			
+		</div>
 	</div>
 </body>
 </html>
