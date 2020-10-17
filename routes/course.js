@@ -1,18 +1,20 @@
-var express=require('express');
-var router=express.Router({mergeParams: true});;
-var methodOverride=require("method-override");
-var passport=require('passport');
-var flash=require('connect-flash');
-var mysql      = require('mysql');
-var dbconfig   = require('../config/database');
-
+var express        = require('express');
+var router         = express.Router({mergeParams: true});;
+var methodOverride = require("method-override");
+var passport       = require('passport');
+var flash          = require('connect-flash');
+var mysql          = require('mysql');
+var dbconfig       = require('../config/database');
 // ==============_ Model+MiddleWare _=================
-var middleware  = require("../middleware/index.js");
-const { query } = require('express');
+var middleware     = require("../middleware/index.js");
+const { query }    = require('express');
 // ==============ROUTER CONFIg=========================
 var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
+
+// ================Module inport========================
+var  AssignmentRoutes = require('./assignment.js');
 
 //-------------Landing GET------------------------WORKING----
 router.get("/",middleware.isLoggedIn,function(req,res){
@@ -171,7 +173,6 @@ router.post("/new",middleware.isLoggedIn,function(req,res){
 			var query    = "INSERT INTO course(name, semester, year, stream, code) VALUES (?,?,?,?,?)";
 			var params = [name,semester,year,stream,courseCode];
 			let result1 = await queryExecute(query ,params) ;
-			// console.log(result1)
 			query    = "INSERT INTO teaches(Pid, Cid) VALUES (?,?)";
 			params = [req.user.id, result1.insertId];
 			let result2 = await queryExecute(query ,params) ;
@@ -201,18 +202,27 @@ router.get("/:id",middleware.isLoggedIn,function(req,res){
 			throw "course not found error";
 		}
 		else{
+			// professor data
 			query     = 'select * from professor inner join teaches on professor.id = teaches.Pid where teaches.Cid = ?';
 			let professor_data = await queryExecute(query ,[req.params.id]) ;
 			
+			// student data
 			query     = 'select * from student inner join takes on student.id = takes.Sid where takes.Cid = ?';
 			let student_data = await queryExecute(query ,[req.params.id]) ;
 			
+			// asisstant data
 			query     = 'select * from asisstant inner join manage on asisstant.id = manage.Tid where manage.Cid = ?';
 			let asisstant_data = await queryExecute(query ,[req.params.id]) ;
+			
+			// assignment data
+			query     = 'select * from assignment inner join include on assignment.id = include.Aid where include.Cid = ?';
+			let assignment_data = await queryExecute(query ,[req.params.id]) ;
+			
 			console.log("P: "+ JSON.stringify(professor_data));
 			console.log("S: "+ JSON.stringify(student_data));
 			console.log("A: "+ JSON.stringify(asisstant_data));
-			res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0], professor_data:professor_data, student_data:student_data, asisstant_data:asisstant_data});
+			console.log("Assignments: "+ JSON.stringify(assignment_data));
+			res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0], professor_data:professor_data, student_data:student_data, asisstant_data:asisstant_data, assignment_data:assignment_data});
 		}
 	}
 	showInfo().catch((message) => { 
@@ -290,6 +300,7 @@ function makeid(length) {
 	return result;
  }
 
+router.use("/:id/assignment",AssignmentRoutes);
 module.exports=router;
 
 // FUNCTION TO INTIATE QUERY
