@@ -7,7 +7,9 @@ var mysql      = require('mysql');
 var dbconfig   = require('../config/database');
 
 // ==============_ Model+MiddleWare _=================
-var middleware  = require("../middleware/index.js");
+var middleware        = require("../middleware/index.js");
+var  SubmissionRoutes = require('./submission.js');
+
 const { query } = require('express');
 // ==============ROUTER CONFIg=========================
 var router=express.Router({mergeParams: true});;
@@ -111,7 +113,7 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 			
 			console.log("Assignment: "+ JSON.stringify(assignment_data));
 			console.log("Asisstant: "+ JSON.stringify(asisstant_data));
-			res.render("./assignment/info.ejs", {user:req.user, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
+			res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
 		}
 	}
 	showInfo().catch((message) => { 
@@ -121,23 +123,7 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+router.use("/:id/submission",SubmissionRoutes);
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
 

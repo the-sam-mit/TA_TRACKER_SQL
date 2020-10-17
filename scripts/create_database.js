@@ -170,4 +170,57 @@ connection.query(sql);
 
 console.log('Success: assigned table Created!');
 
+// submissions------------------
+//submission table - Aid,Cid,a_name,a_path
+var sql= "CREATE TABLE IF NOT EXISTS `submission` ( \
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
+    `Aid` INT UNSIGNED, \
+    `Cid` INT UNSIGNED, \
+    `a_name` VARCHAR(60) NOT NULL, \
+    `a_path` VARCHAR(255) , \
+        PRIMARY KEY (`id`), \
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
+    FOREIGN KEY(Aid) REFERENCES "+dbconfig.users_table4+"(id),\
+    FOREIGN KEY(Cid) REFERENCES "+dbconfig.courses+"(id)\
+)";
+
+connection.query(sql);
+
+//ALTER TABLE `submission` MODIFY `a_path` VARCHAR(255);
+console.log('Success: submission table Created!');
+
+// checks      submission ID , TID, SID
+var sql= "CREATE TABLE IF NOT EXISTS `checks` ( \
+    `Subid` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
+    `Sid` INT UNSIGNED, \
+    `Tid` INT UNSIGNED, \
+        PRIMARY KEY (`Subid`), \
+    UNIQUE INDEX `id_UNIQUE` (`Subid` ASC) \
+)";
+
+// //FOREIGN KEY(Aid) REFERENCES `submission`(Aid),\
+connection.query(sql);
+console.log('Success: assign table Created!');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 connection.end();

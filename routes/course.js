@@ -1,14 +1,13 @@
-var express=require('express');
-var router=express.Router({mergeParams: true});;
-var methodOverride=require("method-override");
-var passport=require('passport');
-var flash=require('connect-flash');
-var mysql      = require('mysql');
-var dbconfig   = require('../config/database');
-var  AssignmentRoutes     = require('./assignment.js');
+var express        = require('express');
+var router         = express.Router({mergeParams: true});;
+var methodOverride = require("method-override");
+var passport       = require('passport');
+var flash          = require('connect-flash');
+var mysql          = require('mysql');
+var dbconfig       = require('../config/database');
 // ==============_ Model+MiddleWare _=================
-var middleware  = require("../middleware/index.js");
-const { query } = require('express');
+var middleware     = require("../middleware/index.js");
+const { query }    = require('express');
 // ==============ROUTER CONFIg=========================
 var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
