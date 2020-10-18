@@ -124,7 +124,7 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 });
 
 
-router.use("/:id/submission",SubmissionRoutes);
+router.use("/:Aid/submission",SubmissionRoutes);
 router.use("/:id/rubrics",RubricsRoutes);
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;

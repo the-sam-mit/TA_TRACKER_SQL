@@ -200,7 +200,7 @@ var sql= "CREATE TABLE IF NOT EXISTS `checks` ( \
 
 // //FOREIGN KEY(Aid) REFERENCES `submission`(Aid),\
 connection.query(sql);
-console.log('Success: assign table Created!');
+console.log('Success: checks table Created!');
 
 
 

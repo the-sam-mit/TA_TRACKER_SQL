@@ -52,6 +52,7 @@ app.use(async function(req,res,next){
 	res.locals.success=req.flash("success");            // FLASH SUCcESS MESSAGE
 	next();
 });
+global.__basedir = __dirname;
 
 // ===========================================_Refactored routes use_======================
 app.use(indexRoutes);

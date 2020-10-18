@@ -1,22 +1,23 @@
 BASIC  
------------
+------
 - add users
 - login/signup
 - CRUD course
 - join course
 
 FEATURES
------------
+---------
 
 - CRD assignment
 - assign TA
 - import submissions  ----integration on going
 - upload rubricks     ----integration on going
 
+
 --------------------------------------------------------
 
 TODO
------------
+-----
 - TA allocated to submissions   ----  Equalize work Load
 - upload marks                  ----  Integration on going   
 - approve rubricks
@@ -32,10 +33,11 @@ TODO
 - prepare graphs and charts 
 - rating based on performance
 - export performance
+
 ===========================================================================
 
 
-DIVISION OF WORK   
+DIVISION OF WORK    for Time being
 ----------------------
 Current Work
 ---------
@@ -46,7 +48,6 @@ Amritansh                    ---        Frontend Pages
 Next Set
 ---------
 Aayush T                     ---        Student Routes
-Samarth &Shubham             ---        Raise Resolve Query
-Ayush                        ---        Approvals/last decision of professors, Freeze Marks, Deadline Related
-Amritansh                    ---        Frontend Pages + Performances Related Work
-
+Samarth & Shubham            ---        Raise Resolve Query
+Ayush                        ---        Approvals/ decision of professors, Freeze Marks, Deadline Related
+Amritansh                    ---        Frontend Pages + Performances graphs and measure Related Work
