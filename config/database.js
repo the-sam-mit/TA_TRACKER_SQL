@@ -4,6 +4,8 @@ module.exports = {
         'host': 'localhost',
         'user': 'user', //edit
         'password': 'password', //edit
+        'user': 'hsuya', //edit
+        'password': 'aviverma123', //edit
         'database': 'my_schema2'
     },
     'database': 'my_schema2',
