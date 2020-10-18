@@ -36,6 +36,7 @@ var  AssignmentRoutes = require('./routes/assignment.js');
 var  SubmissionRoutes = require('./routes/submission.js');
 var  RubricsRoutes     = require('./routes/rubrics.js');
 
+
 // =================================_AUTH PASSPORT config_=============================
 app.use(require("express-session")({
 	secret: config.session.secret,
@@ -51,6 +52,7 @@ app.use(async function(req,res,next){
 	res.locals.success=req.flash("success");            // FLASH SUCcESS MESSAGE
 	next();
 });
+global.__basedir = __dirname;
 
 // ===========================================_Refactored routes use_======================
 app.use(indexRoutes);
