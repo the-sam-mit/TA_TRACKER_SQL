@@ -9,6 +9,7 @@ var dbconfig   = require('../config/database');
 // ==============_ Model+MiddleWare _=================
 var middleware        = require("../middleware/index.js");
 var  SubmissionRoutes = require('./submission.js');
+var  RubricsRoutes     = require('./rubrics.js');
 
 const { query } = require('express');
 // ==============ROUTER CONFIg=========================
@@ -123,7 +124,8 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 });
 
 
-router.use("/:id/submission",SubmissionRoutes);
+router.use("/:Aid/submission",SubmissionRoutes);
+router.use("/:id/rubrics",RubricsRoutes);
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
 
