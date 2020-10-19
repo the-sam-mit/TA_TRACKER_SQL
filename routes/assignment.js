@@ -124,8 +124,18 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 });
 
 
+
+
+
+
+
+// REFATORING --------------------from assignment to submission and rubrics
 router.use("/:Aid/submission",SubmissionRoutes);
-router.use("/:id/rubrics",RubricsRoutes);
+router.use("/:Aid/rubrics",RubricsRoutes);
+
+
+
+
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
 

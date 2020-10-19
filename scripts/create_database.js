@@ -185,9 +185,15 @@ var sql= "CREATE TABLE IF NOT EXISTS `submission` ( \
 )";
 
 connection.query(sql);
-
-//ALTER TABLE `submission` MODIFY `a_path` VARCHAR(255);
 console.log('Success: submission table Created!');
+
+// rubrics------------------
+//rubrics table - Aid,Cid,image,
+var sql= "CREATE TABLE IF NOT EXISTS `rubrics_image` ( `c_id`  int(10) unsigned NOT NULL, \
+`a_id` int(10) unsigned NOT NULL,   `image` varchar(255) NOT NULL )DEFAULT CHARSET=latin1";
+
+connection.query(sql);
+console.log('Success: rubrics table Created!');
 
 // checks      submission ID , TID, SID
 var sql= "CREATE TABLE IF NOT EXISTS `checks` ( \
