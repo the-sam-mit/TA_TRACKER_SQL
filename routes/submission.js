@@ -8,6 +8,8 @@ var busboy         = require("then-busboy");
 var fileUpload     = require('express-fileupload');                    
 var JSZip          = require('jszip');                     
 var fs             = require('fs');                     
+const unzipper     = require('unzipper');
+var Path           = require('path');
 
 var dbconfig       = require('../config/database');
 // ==============_ Model+MiddleWare _=================
@@ -22,7 +24,7 @@ router.use(flash());
 router.get("/import", middleware.isLoggedIn, function(req,res){
 	console.log("import  submissions");
 	message = "format required, '.png','.gif','.jpg'";
-	res.render("./submission/upload.ejs",{message: message});
+	res.render("./submission/upload.ejs",{message: message, Aid:req.params.Aid, Cid:req.params.id});
 
 });
 
@@ -31,117 +33,159 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
 	console.log("importing submissions");
 	var post  = req.body;
 
-      if (!req.files)
-          return res.status(400).send('No files were uploaded.');
+  if (req.files == undefined)
+    return res.status(400).send('No files were uploaded.');
 
-      var file = req.files.uploaded_image;
-      var img_name= file.name;
-      var fs = require("fs");
-      var JSZip = require("jszip");
-      const unzipper = require('unzipper');
-      var Path = require('path');
-      var mysql      = require('mysql');
-                        console.log(__basedir);
+  console.log(req.files+" "+req.files.length)
+  var file = req.files.uploaded_image;
+  var img_name= file.name;
 
-       if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif"|| file.mimetype == "text/plain" ||  file.mimetype == "application/zip" )
-       {
-                                 
-              file.mv('public/Assignments/'+file.name, function(err) 
-              {
-                             
-                  if (err)
-                    return res.status(500).send(err);
-                  
-                                
-                         async function unzip() {
-                      
-                         fs.createReadStream("public/Assignments/"+file.name)
-                        .pipe(unzipper.Extract({ path: 'public/Assignments/' }));
-                        console.log("a");
-                   // })
-                  }
+  console.log(__basedir);
+  let ta_submission= {};
+  let submissions = [];
+  let talist = [];
 
+//unzip----------------------------------------------------
+  async function unzip() {
+    fs.createReadStream("public/Assignments/"+file.name)
+      .pipe(unzipper.Extract({ path: 'public/Assignments/' }));
+    console.log("a");
+  }
 
-                     async function storeinDB() {
-                     console.log("b");
+//Store in DB----------------------------------------------------
+  async function storeinDB() {
+    console.log("b");
 
-                        var tmp= file.name;
-                        var folder = tmp.substr(0, tmp.lastIndexOf('.'));
-                        var url= __basedir+"/public/Assignments/"+ folder +"/";
+    var tmp= file.name;
+    var folder = tmp.substr(0, tmp.lastIndexOf('.'));
+    var url=`${__basedir}/public/Assignments/${folder}/`;
 
-                        console.log("c");
-                        var query= "SELECT `id`,`username` from `student`";
-                        var params= [];
-                        let result = await queryExecute(query ,params) ;
-                      
-                        var dict={};
-                      
-                        var len= result.length;
-                        for(var i=0;i<len;i++)
-                        {
-                           var obj= result[i];
-                           var id= obj["id"];
-                           var username= obj["username"];
-                           dict[username]= id;
-                           //console.log(id);
-                           //console.log(username);
-                        }
+    console.log("c");
+    var query= "SELECT `id`,`username` from `student`";
+    var params= [];
+    let result = await queryExecute(query ,params) ;
 
-                        console.log("entry in submission table inserted");
+    var dict={};
 
-                        fs.readdir(url, function (err, files) {
-                    
-                            if (err) {
-                                return console.log('Unable to scan directory: ' + err);
-                            } 
-                             console.log("d");
-                            files.forEach(async function (file) {
-                                
-                                var a_name= file; 
-                                //console.log(A_name); 
-                                var a_path= url+ a_name;
-                                var courseID= 4; 
-                                //var sql = "INSERT INTO `submission`(`assignment_name`,`assignment_path`,`Cid`) VALUES ('" + A_name + "','" + A_path + "','" + C_id +")";
-                                   
-                                   // query for submission table
-                                var query= "INSERT INTO `submission`(`Cid`,`a_name`,`a_path`) VALUES (?,?,?)";
-                                var params= [courseID,a_name,a_path];
-                                let result1 = await queryExecute(query ,params) ;
-                                console.log("entry in submission table inserted");
+    var len= result.length;
+    for(var i=0;i<len;i++){
+      var obj= result[i];
+      var id= obj["id"];
+      var username= obj["username"];
+      dict[username]= id;
+    }
 
-                                  
-                                  // query for assign table
-                                var query= "INSERT INTO `assign`(`Sid`,`Tid`) VALUES (?,?)";
-                                var username= a_name.substr(0, a_name.lastIndexOf('.'));
-                                var sid= dict[username];
-                                var tid= 123;
-                                var params= [sid,tid];
-                                let result2 = await queryExecute(query ,params) ;
-                                console.log("entry in assign table inserted");
-                            });
-                        });
-                    // })
-                  }                  
+    var query  = "SELECT `Tid` from `assigned` where Aid = ?";
+    var params = [req.params.Aid];
+    let TAlist = await queryExecute(query ,params) ;   
+    for(var i=0;i<TAlist.length;i++){
+      var obj= TAlist[i];
+      var id= obj["Tid"];
+      talist.push(id);
+    }
+    console.log("Got TA List: "+talist);
 
-                  function func3()
-                  {
-                       unzip();
-                       //storeinDB();
-                       setTimeout(storeinDB,3000);
-                  }
-                  
-                  func3();
+    let ta = 0;
+    fs.readdir(url, function (err, files) {
+      if (err) {
+        return console.log('Unable to scan directory: ' + err);
+      } 
+      console.log("d");
+      console.log(files);
+      console.log(files.length);
+      var ta = 0;
+      files.forEach(async function (file) {
+        var a_name= file; 
+        var a_path= url+ a_name;
+        console.log(a_path);
+        // query for submission table
+        var query= "INSERT INTO `submission`(Aid,Cid,`a_name`,`a_path`) VALUES (?,?,?,?)";
+        var params= [req.params.Aid, req.params.id, a_name, a_path];
+        let result1 = await queryExecute(query ,params) ;
+        console.log(`${a_name}  submission  inserted`);
+        submissions.push({"Subid":result1.insertId, "Sid":dict[a_name.substr(0, a_name.lastIndexOf('.'))]});
 
-              });
-        } 
-        else 
-        {
-             message = "This format is not allowed , please upload file with '.png','.gif','.jpg'";
-             res.render('index.ejs',{message: message});
-        }
+        query             = "INSERT INTO `checks`(Subid,Sid,Tid) VALUES (?,?,?)";
+        var params        = [result1.insertId, dict[a_name.substr(0, a_name.lastIndexOf('.'))], talist[(ta++)%talist.length]];
+        let checksInsert  = await queryExecute(query ,params) ;
+        
+        console.log(`${params} in checks table inserted`);
+      });
+    });
+  }
 
+  //TA submission relation----------------------------------------------------
+  function taChecks(submissions, talist) {
+    return new Promise(function(resolve, reject) {
+      var ta = 0;
+      // query for checks table -----------add TID, SubID
+      console.log("TA CHEKS");
+      submissions.forEach(async function(data){
+        var query         = "INSERT INTO `checks`(Subid,Sid,Tid) VALUES (?,?,?)";
+        var Subid         = data.Subid;
+        var Sid           = data.Sid;
+        var Tid           = talist[ta];
+        var params        = [Subid, Sid, Tid];
+        let checksInsert  = await queryExecute(query ,params) ;
+        
+        console.log(`${params} in checks table inserted`);
+        ta = (ta + 1) % talist.length;
+      });
+      resolve(true);
+    })
+  }
+
+  if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif"|| file.mimetype == "text/plain" ||  file.mimetype == "application/zip" )
+  {
+    file.mv('public/Assignments/'+file.name, function(err) {
+
+      if (err)
+        return res.status(500).send(err);
+      async function func3(){
+        console.log("func3");
+        await unzip();
+        setTimeout(storeinDB,3000);
+      }
+      func3();
+    });
+
+  } 
+  else{
+    message = "This format is not allowed , please upload file with '.png','.gif','.jpg'";
+    res.render('index.ejs',{message: message});
+  }
 });
 
+
+// submission info------------------------------------------
+router.get("/:Subid", middleware.isLoggedIn, function(req,res){
+  console.log("get  submission");
+
+  async function getInfo() {
+    // submission --FindBy SubId 
+    var query   = "select * from `submission` where id = ?";
+    var params  = [req.params.Subid];
+    let submission_data = await queryExecute(query ,params) ;
+    if(submission_data.length == 0 || submission_data == undefined || submission_data == null){
+      throw "submission not found :ERROR";
+    }
+    else{
+      //  assigned  SubID TID
+      query     = 'select * from asisstant inner join checks on asisstant.id = checks.Tid where checks.Subid = ?';
+      let asisstant_data = await queryExecute(query ,params) ;
+      
+      console.log("submission_data: "+ JSON.stringify(submission_data));
+      console.log("Asisstant: "+ JSON.stringify(asisstant_data));
+      res.render("./submission/view.ejs", {user:req.user,CID:req.params.id, submission_data:submission_data[0],asisstant_data:asisstant_data});
+    }
+  }
+  getInfo().catch((message) => { 
+    console.log(message);
+    res.render("./error.ejs" ,{error:message});
+  });
+
+
+});
 
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
