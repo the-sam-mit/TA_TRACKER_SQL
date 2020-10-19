@@ -122,56 +122,20 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 		res.render("./error.ejs" ,{error:message});
 	});
 });
-// ---------------------------------------------rubrics add---------------------------------------
 
 
 
+
+
+
+
+// REFATORING --------------------from assignment to submission and rubrics
 router.use("/:Aid/submission",SubmissionRoutes);
-router.get("/:Aid/rubrics/add",middleware.isLoggedIn,function(req,res){
-	console.log("add  rubrics");
-	console.log(req.params);
-	message = "format required, '.png','.gif','.jpg'";
-	res.render("./rubrics/upload.ejs",{message: message,user:req.user,params:req.params}); // more parameters are to be added.
-});
+router.use("/:Aid/rubrics",RubricsRoutes);
 
-router.post("/:Aid/rubrics/adds", middleware.isLoggedIn, function(req,res){
-	console.log("adding rubrics");
-	var post  = req.body;
-	console.log(req.params);
-      if (!req.files)
-          return res.status(400).send('No files were uploaded.');
 
-      var file = req.files.uploaded_image;
-      var img_name= file.name;
-      var fs = require("fs");
-      var Path = require('path');
-      var mysql      = require('mysql');
-       if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif"|| file.mimetype == "text/plain" ||  file.mimetype == "application/zip" )
-       {
-                                 
-              file.mv('public/Rubrics/'+file.name, function(err) 
-              {
-                  if (err)
-					return res.status(500).send(err);
-					console.log(file);
-					var sql = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + file.name + "')";
-					var query    = "INSERT INTO rubrics_image(c_id,a_id,image) VALUES (?,?,?)";;
-					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,file.name]);
-						res.redirect("/courses/");
-			  });
-		}
 
-		async function addFile() {
-			
-		}
-		addFile().catch((message) => { 
-			console.log(message);
-			res.render("./error.ejs" ,{error:message});
-		});
-});
-//------------------------------------------------rubrics done-------------------------------------------
 
-router.use("/:id/rubrics",RubricsRoutes);
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
 
