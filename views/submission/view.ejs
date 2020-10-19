@@ -32,26 +32,27 @@
 		</div>
 	</div>
 	<div class="container">
+		<%
+			var v = "http://localhost:3000";
+			var path = submission_data.a_path.split( '/' );
+			pos = path.indexOf("public");
+			newPath="";
+			console.log(path+" "+pos);
+			for(var i=pos+1;i<path.length;i++){
+			    newPath = newPath +"/"+ path[i]
+			}
+		%>
 
-		<% //assignment info list here %>
+		<% //submission info list here %>
 		<div class="row">
 			<div class="col-md-4">  
-				<h4 ><strong>course</strong>             <%= assignment_data.course %>             </h4>		
-				<h4 ><strong>type</strong>               <%= assignment_data.type %>               </h4>		
-				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %>    </h4>		
-				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %> </h4>		
-				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>		
-				<h4 ><strong>assignedTA</strong>         <%= assignment_data.assignedTA %>         </h4>		
-			</div>
-
-			<% //assignment features %>
-			<div class="col-md-4">  
-				<p>coming soon..</p>
-				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/submission/import" class="btn btn-md btn-info">import Submissions</a>
-				<a href="#" class="btn btn-md btn-success">Edit</a>
-				<form id="deletebutton" action="#" method="GET"> 
-					<button class="btn btn-md btn-danger">Delete</button>
-				</form>
+				<h4 ><strong>id</strong>             <%= submission_data.id %>             </h4>		
+				<h4 ><strong>Aid</strong>               <%= submission_data.Aid %>               </h4>		
+				<h4 ><strong>Cid</strong>    <%= submission_data.Cid %>    </h4>		
+				<h4 ><strong>Name</strong> <%= submission_data.a_name %> </h4>		
+				<h4 ><strong>Path</strong>   
+					<a href="<%=newPath%>">  <%=newPath%> </a>
+				</h4>		
 			</div>
 		</div>
 
@@ -67,9 +68,6 @@
 					<p ><strong> Stream</strong>    <%= data.stream %>   </p>		
 				</div>
 			<% }) %>
-
-			<p>coming soon..</p>
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
 		</div>
 
 		

@@ -125,6 +125,8 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 // ---------------------------------------------rubrics add---------------------------------------
 
 
+
+router.use("/:Aid/submission",SubmissionRoutes);
 router.get("/:Aid/rubrics/add",middleware.isLoggedIn,function(req,res){
 	console.log("add  rubrics");
 	console.log(req.params);
@@ -169,7 +171,6 @@ router.post("/:Aid/rubrics/adds", middleware.isLoggedIn, function(req,res){
 });
 //------------------------------------------------rubrics done-------------------------------------------
 
-router.use("/:id/submission",SubmissionRoutes,);
 router.use("/:id/rubrics",RubricsRoutes);
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
