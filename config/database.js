@@ -22,5 +22,6 @@ module.exports = {
     'rel4': 'assigned',
     'rel5': 'manage',
     'rel6': 'include',
-    'rel7': 'checks'
+    'rel7': 'checks',
+    'rel8': 'rubrics_image'
 };
