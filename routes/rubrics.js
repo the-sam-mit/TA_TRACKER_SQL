@@ -18,7 +18,11 @@ var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
 
+<<<<<<< HEAD
 //-----------------------------------------------------------------------------submissions import GET------------------------WORKING----
+=======
+//-----------------------------------------------------------------------------rubrics view GET------------------------WORKING----
+>>>>>>> 4ecfb4f559b75ad995ceee3f2dc1edf280ea46fd
 // router.get("/add", middleware.isLoggedIn, function(req,res){
 //     // console.log("add  rubrics");
 //     // console.log(req.params);
@@ -26,6 +30,7 @@ router.use(flash());
 // 	// res.render("./rubrics/upload.ejs",{message: message});
 
 // });
+<<<<<<< HEAD
 
 // //-----------------------------------------------------------------------------submissions import POST------------------------WORKING----
 // router.post("/done", middleware.isLoggedIn, function(req,res){
@@ -134,6 +139,50 @@ router.use(flash());
 
 // });
 
+=======
+
+// //-----------------------------------------------------------------------------rubrics upload GET & POST------------------------WORKING----
+router.get("/add",middleware.isLoggedIn,function(req,res){
+	console.log("add  rubrics");
+	console.log(req.params);
+	message = "format required, '.png','.gif','.jpg'";
+	res.render("./rubrics/upload.ejs",{message: message,user:req.user,params:req.params}); // more parameters are to be added.
+});
+
+router.post("/adds", middleware.isLoggedIn, function(req,res){
+	console.log("adding rubrics");
+	console.log(req.params);
+      if (!req.files)
+          return res.status(400).send('No files were uploaded.');
+
+      var file = req.files.uploaded_image;
+      var img_name= file.name;
+
+       if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "application/pdf"|| file.mimetype == "text/plain" ||  file.mimetype == "application/zip" )
+       {
+                                 
+              file.mv('public/Rubrics/'+file.name, function(err) 
+              {
+                  if (err)
+					return res.status(500).send(err);
+					console.log(file);
+					var sql = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + file.name + "')";
+					var query    = "INSERT INTO rubrics_image(c_id,a_id,image) VALUES (?,?,?)";;
+					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,file.name]);
+						res.redirect("/courses/");
+			  });
+		}
+
+		async function addFile() {
+			
+		}
+		addFile().catch((message) => { 
+			console.log(message);
+			res.render("./error.ejs" ,{error:message});
+		});
+});
+
+>>>>>>> 4ecfb4f559b75ad995ceee3f2dc1edf280ea46fd
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
 
