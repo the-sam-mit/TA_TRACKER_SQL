@@ -189,8 +189,8 @@ console.log('Success: submission table Created!');
 
 // rubrics------------------
 //rubrics table - Aid,Cid,image,
-var sql= "CREATE TABLE IF NOT EXISTS `rubrics_image` ( `c_id`  int(10) unsigned NOT NULL, \
-`a_id` int(10) unsigned NOT NULL,   `image` varchar(255) NOT NULL )DEFAULT CHARSET=latin1";
+var sql= "CREATE TABLE IF NOT EXISTS `rubrics_image` ( `c_id`  int unsigned NOT NULL, \
+`a_id` int unsigned NOT NULL, `t_id` int unsigned NOT NULL,  `image` varchar(255) NOT NULL )DEFAULT CHARSET=latin1";
 
 connection.query(sql);
 console.log('Success: rubrics table Created!');
