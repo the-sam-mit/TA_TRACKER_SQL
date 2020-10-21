@@ -37,7 +37,7 @@ router.get("/add",middleware.isLoggedIn,function(req,res){
 
 router.post("/adds", middleware.isLoggedIn, function(req,res){
 	console.log("adding rubrics");
-	console.log(req.params);
+	console.log(req.user);
       if (!req.files)
           return res.status(400).send('No files were uploaded.');
 
@@ -52,9 +52,9 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
                   if (err)
 					return res.status(500).send(err);
 					console.log(file);
-					var sql = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + file.name + "')";
-					var query    = "INSERT INTO rubrics_image(c_id,a_id,image) VALUES (?,?,?)";;
-					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,file.name]);
+					var sql = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`t_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + req.user.id + "','" + file.name + "')";
+					var query    = "INSERT INTO rubrics_image(c_id,a_id,t_id,image) VALUES (?,?,?,?)";;
+					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,req.user.id,file.name]);
 						res.redirect("/courses/");
 			  });
 		}
