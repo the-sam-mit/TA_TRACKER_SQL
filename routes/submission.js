@@ -114,25 +114,28 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
     });
   }
 
-  //TA submission relation----------------------------------------------------
-  function taChecks(submissions, talist) {
-    return new Promise(function(resolve, reject) {
-      var ta = 0;
-      // query for checks table -----------add TID, SubID
-      console.log("TA CHEKS");
-      submissions.forEach(async function(data){
-        var query         = "INSERT INTO `checks`(Subid,Sid,Tid) VALUES (?,?,?)";
-        var Subid         = data.Subid;
-        var Sid           = data.Sid;
-        var Tid           = talist[ta];
-        var params        = [Subid, Sid, Tid];
-        let checksInsert  = await queryExecute(query ,params) ;
+  // //TA submission relation----------------------------------------------------
+  // function taChecks(submissions, talist) {
+  //   return new Promise(function(resolve, reject) {
+  //     var ta = 0;
+  //     // query for checks table -----------add TID, SubID
+  //     console.log("TA CHEKS");
+  //     submissions.forEach(async function(data){
+  //       var query         = "INSERT INTO `checks`(Subid,Sid,Tid) VALUES (?,?,?)";
+  //       var Subid         = data.Subid;
+  //       var Sid           = data.Sid;
+  //       var Tid           = talist[ta];
+  //       var params        = [Subid, Sid, Tid];
+  //       let checksInsert  = await queryExecute(query ,params) ;
         
-        console.log(`${params} in checks table inserted`);
-        ta = (ta + 1) % talist.length;
-      });
-      resolve(true);
-    })
+  //       console.log(`${params} in checks table inserted`);
+  //       ta = (ta + 1) % talist.length;
+  //     });
+  //     resolve(true);
+  //   })
+  // }
+  async function call() {
+    res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
   }
 
   if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif"|| file.mimetype == "text/plain" ||  file.mimetype == "application/zip" )
@@ -145,6 +148,7 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
         console.log("func3");
         await unzip();
         setTimeout(storeinDB,3000);
+        setTimeout(call,6000);
       }
       func3();
     });
@@ -154,10 +158,11 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
     message = "This format is not allowed , please upload file with '.png','.gif','.jpg'";
     res.render('index.ejs',{message: message});
   }
+      
 });
 
 
-// submission info------------------------------------------
+// submission info--------------------SINGLE-------------NOT ADDED BUTTON----TO BE USED for student-----
 router.get("/:Subid", middleware.isLoggedIn, function(req,res){
   console.log("get  submission");
 

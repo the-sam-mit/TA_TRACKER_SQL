@@ -52,8 +52,8 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
                   if (err)
 					return res.status(500).send(err);
 					console.log(file);
-					var sql = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`t_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + req.user.id + "','" + file.name + "')";
-					var query    = "INSERT INTO rubrics_image(c_id,a_id,t_id,image) VALUES (?,?,?,?)";;
+					var sql   = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`t_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + req.user.id + "','" + file.name + "')";
+					var query = "INSERT INTO rubrics_image(c_id,a_id,t_id,image) VALUES (?,?,?,?)";;
 					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,req.user.id,file.name]);
 						res.redirect("/courses/");
 			  });
@@ -66,6 +66,15 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
 			console.log(message);
 			res.render("./error.ejs" ,{error:message});
 		});
+});
+
+// APPROVE ROUTES HALFWAY----------------------------------------
+router.post("/approve", middleware.isLoggedIn, function(req,res){
+	console.log("APPROVED:::---DONE");
+	var query    = "UPDATE rubrics_image SET approved = ? where a_id = ?";;
+	// let insert_assigned = queryExecute(query ,[true,req.params.Aid]);
+				
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 });
 
 // ------------------------------------------END ROUTES------------------------------------------------
