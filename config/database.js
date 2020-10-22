@@ -2,8 +2,8 @@
 module.exports = {
     'connection': {
         'host': 'localhost',
-        'user': 'user', //edit
-        'password': 'password', //edit
+        'user': 'USER', //edit
+        'password': 'PASSWD', //edit
         'database': 'my_schema2'
     },
     'database': 'my_schema2',
