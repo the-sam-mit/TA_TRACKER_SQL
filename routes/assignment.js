@@ -22,6 +22,7 @@ router.get("/new",middleware.isLoggedIn,function(req,res){
 	console.log(" assignment new get ! ");
 	let availableTA = {};
 	let assignedTA = [];
+	var current_datetime =  new Date().toISOString().slice(0, 19);
 	//retrieve course data and TA data
 	async function getdata_course_ta() {
 		// Course--FindById 
@@ -37,7 +38,7 @@ router.get("/new",middleware.isLoggedIn,function(req,res){
 			ta_data.forEach(function(data){
 				availableTA[data.username] = data.Tid;
 			});
-			res.render("./assignment/create.ejs", {user:req.user, course:course_data[0], asisstant:ta_data});
+			res.render("./assignment/create.ejs", {user:req.user, course:course_data[0], asisstant:ta_data, current_datetime:current_datetime});
 		}
 	}
 	getdata_course_ta().catch((message) => { 
@@ -53,12 +54,12 @@ router.post("/new",middleware.isLoggedIn,function(req,res){
 		var name               = req.body.name;
 		var course             = req.body.course;
 		var type               = req.body.Type;
-		var deadlineRubriks    = req.body.deadlineRubriks;
-		var deadlineEvaluation = req.body.deadlineEvaluation;
+		console.log("REQ: " + req.body.deadlineRubriks)
+		var deadlineRubriks    = req.body.deadlineRubriks.slice(0, 19).replace('T', ' ');
+		var deadlineEvaluation = req.body.deadlineEvaluation.slice(0, 19).replace('T', ' ');
 		var assignedTA         = req.body.assignedTA;
 		var created_at         =  new Date().toISOString().slice(0, 19).replace('T', ' ');
-		deadlineRubriks    = created_at;
-		deadlineEvaluation = created_at;
+
 			// Assignment--SAVE  
 		async function AssignmentCreate() {
 
@@ -114,7 +115,12 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 			
 			console.log("Assignment: "+ JSON.stringify(assignment_data));
 			console.log("Asisstant: "+ JSON.stringify(asisstant_data));
-			res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
+			if(req.user.type === "Professor")
+				res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
+			else if(req.user.type === "Asisstant")
+				res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
+			else if(req.user.type === "Student")
+				res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
 		}
 	}
 	showInfo().catch((message) => { 
@@ -123,17 +129,48 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 	});
 });
 
+router.get("/:Aid/update",middleware.isLoggedIn,function(req,res){
+	console.log("info of Aid "+req.params.Aid);
+	async function showInfo() {
+		// ASsignment--FindById 
+		var query     = 'SELECT * FROM `assignment` where id = ?';
+		let assignment_data = await queryExecute(query ,[req.params.Aid]) ;
+		if(assignment_data.length == 0 || assignment_data == undefined || assignment_data == null){
+			throw "assignment not found :ERROR";
+		}
+		else{
+			//  assigned  AID TID
+			res.render("./assignment/edit.ejs", {user:req.user,assignment_data:assignment_data[0],CID:req.params.id});
+		}
+	}
+	showInfo().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+});
 
-
-
-
+router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
+	console.log("info of Aid "+req.params.Aid);
+	var name               = req.body.name;
+	var deadlineRubriks    = req.body.deadlineRubriks.slice(0, 19).replace('T', ' ');
+	var deadlineEvaluation = req.body.deadlineEvaluation.slice(0, 19).replace('T', ' ');
+	
+	async function updateAssignment() {
+		// ASsignment--FindById 
+		var query     = 'UPDATE `assignment` SET name = ?, deadline_rubriks= ?, deadline_eval = ? where id = ?';
+		let updated   = await queryExecute(query ,[name, deadlineRubriks, deadlineEvaluation, req.params.Aid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	updateAssignment().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+});
 
 
 // REFATORING --------------------from assignment to submission and rubrics
 router.use("/:Aid/submission",SubmissionRoutes);
 router.use("/:Aid/rubrics",RubricsRoutes);
-
-
 
 
 // ------------------------------------------END ROUTES------------------------------------------------
