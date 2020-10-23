@@ -43,19 +43,57 @@
 				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>		
 			</div>
 		</div>
-
+        
 			<h4>TODO</h4>
-				<h3>1. show students details </h3>
-				<h3>2. show students submission  </h3>
+				<h3>1. show students details - Done </h3>
+				<h3>2. show students submission - Done </h3>
 				<h3>3. show rubricks  </h3>
 				<h3>4. show marks </h3>
 			<p>coming soon..</p>
 			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
 		</div>
 
-		
-
-
 	</div>
+	<%//submission info %>
+	<div class="container">
+
+		<%
+			var v = "http://localhost:3000";
+			var allPaths = {};
+			submission_data.forEach(function(sdata){
+               var path = sdata.a_path.split( '/' );
+               pos = path.indexOf("public");
+               newPath="";
+               console.log(path+" "+pos);
+               for(var i=pos+1;i<path.length;i++){
+			 	  newPath = newPath +"/"+ path[i]
+			   }
+			   allPaths[sdata.sub_id]= newPath;
+			})
+			
+		%>
+
+	  <div class="container">
+        <div class="row">
+           <div class="col-md-2"> <h4> <strong> Submission ID </strong>  </h4></div>
+           <div class="col-md-2"> <h4> <strong> TA ID </h4> </strong> </div>
+           <div class="col-md-2"> <h4> <strong> TA Name </h4> </strong> </div>
+           <div class="col-md-2"> <h4> <strong> Assignment Name </strong> </h4> </div>
+           <div class="col-md-2"> <h4> <strong> View Submission </strong> </h4> </div>
+           <div class="col-md-2"> <h4> <strong> Marks </h4> </strong> </div>
+        </div>
+
+        <% submission_data.forEach(function(sdata){ %>
+           <div class="row">
+	           <div class="col-md-2"> <%= sdata.sub_id %> </div>
+	           <div class="col-md-2"> <%= sdata.Tid %>  </div>
+	           <div class="col-md-2"> <%= sdata.ta_name %>  </div>
+	           <div class="col-md-2"> <%= sdata.a_name %>  </div>
+	           <div class="col-md-2"> <a href="<%= allPaths[sdata.sub_id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+	           <div class="col-md-2"> 5  </div>
+	        </div>
+            <% }) %>
+       </div>
+
 </body>
 </html>

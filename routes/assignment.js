@@ -104,23 +104,91 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 	async function showInfo() {
 		// ASsignment--FindById 
 		var query     = 'SELECT * FROM `assignment` where id = ?';
-		let assignment_data = await queryExecute(query ,[req.params.Aid]) ;
-		if(assignment_data.length == 0 || assignment_data == undefined || assignment_data == null){
+		let assignment_data = await queryExecute(query ,[req.params.Aid]);
+		if(assignment_data.length == 0 || assignment_data == undefined || assignment_data == null)
+		{
 			throw "assignment not found :ERROR";
 		}
-		else{
+		else
+		{
 			//  assigned  AID TID
 			query     = 'select * from asisstant inner join assigned on asisstant.id = assigned.Tid where assigned.Aid = ?';
 			let asisstant_data = await queryExecute(query ,[req.params.Aid]) ;
-			
+
 			console.log("Assignment: "+ JSON.stringify(assignment_data));
 			console.log("Asisstant: "+ JSON.stringify(asisstant_data));
-			if(req.user.type === "Professor")
-				res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
-			else if(req.user.type === "Asisstant")
-				res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
-			else if(req.user.type === "Student")
-				res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
+
+			// for view submission
+			var query1   = "select * from `submission`";
+	        var params1  = [];
+	        let submit_data = await queryExecute(query1 ,params1) ;
+	        if(submit_data.length == 0 || submit_data == undefined || submit_data == null)
+	        {
+	           //throw "no submissions found :ERROR";
+	            var submission_data= []; 
+	            if(req.user.type === "Professor")
+	            {
+	            	res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+	            }
+	            else if(req.user.type === "Asisstant")
+	            {
+                    res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+	            }
+	            else if(req.user.type === "Student")
+	            {
+                    res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+	            }
+	        }
+	        else
+	        {
+		        if(req.user.type === "Professor")
+				{
+					query = 'SELECT *, student.name as s_name, asisstant.name as ta_name, submission.id as sub_id from checks \
+		                     inner join submission on checks.Subid = submission.id \
+		                     inner join student on checks.Sid = student.id \
+		                     inner join asisstant on checks.Tid = asisstant.id\
+		                     where submission.Aid = ?';
+				    
+				    var params= [req.params.Aid];
+				    var submission_data = await queryExecute(query,params);
+				    console.log(submission_data.length);
+				    //console.log('***************************');
+					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+				}
+				else if(req.user.type === "Asisstant")
+				{
+	                query = 'SELECT *, student.name as s_name, asisstant.name as ta_name, submission.id as sub_id  from checks \
+		                     inner join submission on checks.Subid = submission.id \
+		                     inner join student on checks.Sid = student.id \
+		                     inner join asisstant on checks.Tid = asisstant.id\
+		                     where asisstant.id = ? and submission.Aid = ?';
+				    
+				    var params= [req.user.id,req.params.Aid];
+				    var submission_data = await queryExecute(query,params);
+					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+				}
+				else if(req.user.type === "Student")
+				{
+					query = 'SELECT *, student.name as s_name, asisstant.name as ta_name, submission.id as sub_id  from checks \
+		                     inner join submission on checks.Subid = submission.id \
+		                     inner join student on checks.Sid = student.id \
+		                     inner join asisstant on checks.Tid = asisstant.id\
+		                     where student.id = ? and submission.Aid = ?';
+				    
+				    var params= [req.user.id,req.params.Aid];
+				    var submission_data = await queryExecute(query,params);
+					res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+				}
+	        }
+
+			
+
+			// if(req.user.type === "Professor")
+			// 	res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
+			// else if(req.user.type === "Asisstant")
+			// 	res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
+			// else if(req.user.type === "Student")
+			// 	res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
 		}
 	}
 	showInfo().catch((message) => { 

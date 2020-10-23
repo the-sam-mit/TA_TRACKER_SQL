@@ -1,4 +1,4 @@
-<!-- views/assignmen/info.ejs assignment page -->  
+<!-- views/assignment/info.ejs assignment page -->  
 <!doctype html>
 <html>
 <head>
@@ -7,9 +7,13 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
-	</style>
+
+</style>
+
 </head>
 <body>
+    
+   
 	<div class="container">
 
 		<div class="page-header text-center">
@@ -31,46 +35,46 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="container">
+
+	    
+
 		<%
 			var v = "http://localhost:3000";
-			var path = submission_data.a_path.split( '/' );
-			pos = path.indexOf("public");
-			newPath="";
-			console.log(path+" "+pos);
-			for(var i=pos+1;i<path.length;i++){
-			    newPath = newPath +"/"+ path[i]
-			}
+			var allPaths = {};
+			submission_data.forEach(function(sdata){
+               var path = sdata.a_path.split( '/' );
+               pos = path.indexOf("public");
+               newPath="";
+               console.log(path+" "+pos);
+               for(var i=pos+1;i<path.length;i++){
+			 	  newPath = newPath +"/"+ path[i]
+			   }
+			   allPaths[sdata.Subid]= newPath;
+			})
+			
 		%>
 
-		<% //submission info list here %>
-		<div class="row">
-			<div class="col-md-4">  
-				<h4 ><strong>id</strong>             <%= submission_data.id %>             </h4>		
-				<h4 ><strong>Aid</strong>               <%= submission_data.Aid %>               </h4>		
-				<h4 ><strong>Cid</strong>    <%= submission_data.Cid %>    </h4>		
-				<h4 ><strong>Name</strong> <%= submission_data.a_name %> </h4>		
-				<h4 ><strong>Path</strong>   
-					<a href="<%=newPath%>">  <%=newPath%> </a>
-				</h4>		
-			</div>
-		</div>
+	  <div class="container">
+        <div class="row">
+           <div class="col-sm-2">  <strong> Submission ID </strong>  </div>
+           <div class="col-sm-2">  <strong> Assignment ID </strong> </div>
+           <div class="col-sm-2">  <strong> Course ID </strong> </div>
+           <div class="col-sm-2">  <strong> Assignment Name </strong> </div>
+           <div class="col-sm-4">  <strong> View Submission </strong> </div>
+        </div>
 
-		<%//TA info %>
-		<div class="row">
-			<% asisstant_data.forEach(function(data){ %>
-				<div class="col-md-9">  
-					<h4 ><strong>Name</strong>      <%= data.name %>     </h4>		
-					<h4 ><strong>Username</strong>  <%= data.username %> </h4>		
-					<h4 ><strong>Type</strong>      <%= data.type %>     </h4>		
-					<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
-					<p ><strong> Year</strong>      <%= data.year %>     </p>		
-					<p ><strong> Stream</strong>    <%= data.stream %>   </p>		
-				</div>
-			<% }) %>
-		</div>
-
-		
+        <% submission_data.forEach(function(sdata){ %>
+           <div class="row">
+	           <div class="col-sm-2"> <%= sdata.Subid %> </div>
+	           <div class="col-sm-2"> <%= sdata.Aid %>  </div>
+	           <div class="col-sm-2"> <%= sdata.Cid %>  </div>
+	           <div class="col-sm-2"> <%= sdata.a_name %>  </div>
+	           <div class="col-sm-4"> <a href="<%= allPaths[sdata.id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+	        </div>
+            <% }) %>
+       </div>
 
 
 	</div>
