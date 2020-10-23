@@ -157,7 +157,7 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 				}
 				else if(req.user.type === "Asisstant")
 				{
-	                query = 'SELECT *, student.name as s_name, asisstant.name as ta_name, submission.id as sub_id  from checks \
+					query = 'SELECT *, student.name as s_name, asisstant.name as ta_name, submission.id as sub_id  from checks \
 		                     inner join submission on checks.Subid = submission.id \
 		                     inner join student on checks.Sid = student.id \
 		                     inner join asisstant on checks.Tid = asisstant.id\
@@ -165,7 +165,12 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 				    
 				    var params= [req.user.id,req.params.Aid];
 				    var submission_data = await queryExecute(query,params);
-					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+
+				    var query2     = 'select * from checks inner join student on checks.Sid=student.id where checks.Tid = ?';
+					let students = await queryExecute(query2 ,[req.user.id]) ;
+					console.log("Students: "+ JSON.stringify(students));
+					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students});
+	                
 				}
 				else if(req.user.type === "Student")
 				{
@@ -189,6 +194,16 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 			// 	res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
 			// else if(req.user.type === "Student")
 			// 	res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
+			if(req.user.type === "Professor")
+				res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
+			else if(req.user.type === "Asisstant"){
+				var query2     = 'select * from checks inner join student on checks.Sid=student.id where checks.Tid = ?';
+				let students = await queryExecute(query2 ,[req.user.id]) ;
+				console.log("Students: "+ JSON.stringify(students));
+				res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0], students:students});
+			}
+			else if(req.user.type === "Student")
+				res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
 		}
 	}
 	showInfo().catch((message) => { 
