@@ -33,29 +33,16 @@
 	</div>
 	<div class="container">
 
-		<% //assignment info list here %>
+		<% //submission info list here %>
 		<div class="row">
 			<div class="col-md-4">  
-				<h4 ><strong>course</strong>             <%= assignment_data.course %>             </h4>		
-				<h4 ><strong>type</strong>               <%= assignment_data.type %>               </h4>		
-				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %>    </h4>		
-				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %> </h4>		
-				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>				
+				<h4 ><strong>Assignment id-</strong>             <%= rubrics_data.a_id %>             </h4>		
+				<h4 ><strong>TA id:-</strong>               <%= rubrics_data.t_id %>               </h4>		
+				<h4 ><strong>Rubrics Name:-</strong>    <%= rubrics_data.image %>    </h4>		
+				<h4 ><strong>Rubrics Created at:-</strong>    <%= rubrics_data.date_time %>    </h4>		
+				<img alt="User Pic" src="http://localhost:3000/Rubrics/<%=rubrics_data.image%>" class="img-circle img-responsive">		
 			</div>
 		</div>
-		
-			<h4>TODO</h4>
-				<h3>1. show students assigned </h3>
-				<h3>2. show students submission assigned </h3>
-				<h3>3. show rubricks  </h3>
-				<h3>4. give marks </h3>
-			<p>coming soon..</p>
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
-		</div>
-
-		
-
 
 	</div>
 </body>

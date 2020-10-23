@@ -117,8 +117,9 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 			console.log("Asisstant: "+ JSON.stringify(asisstant_data));
 			if(req.user.type === "Professor")
 				res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data});
-			else if(req.user.type === "Asisstant")
+			else if(req.user.type === "Asisstant"){
 				res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
+			}
 			else if(req.user.type === "Student")
 				res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0]});
 		}
