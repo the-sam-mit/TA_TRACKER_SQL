@@ -114,25 +114,28 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
     });
   }
 
-  //TA submission relation----------------------------------------------------
-  function taChecks(submissions, talist) {
-    return new Promise(function(resolve, reject) {
-      var ta = 0;
-      // query for checks table -----------add TID, SubID
-      console.log("TA CHEKS");
-      submissions.forEach(async function(data){
-        var query         = "INSERT INTO `checks`(Subid,Sid,Tid) VALUES (?,?,?)";
-        var Subid         = data.Subid;
-        var Sid           = data.Sid;
-        var Tid           = talist[ta];
-        var params        = [Subid, Sid, Tid];
-        let checksInsert  = await queryExecute(query ,params) ;
+  // //TA submission relation----------------------------------------------------
+  // function taChecks(submissions, talist) {
+  //   return new Promise(function(resolve, reject) {
+  //     var ta = 0;
+  //     // query for checks table -----------add TID, SubID
+  //     console.log("TA CHEKS");
+  //     submissions.forEach(async function(data){
+  //       var query         = "INSERT INTO `checks`(Subid,Sid,Tid) VALUES (?,?,?)";
+  //       var Subid         = data.Subid;
+  //       var Sid           = data.Sid;
+  //       var Tid           = talist[ta];
+  //       var params        = [Subid, Sid, Tid];
+  //       let checksInsert  = await queryExecute(query ,params) ;
         
-        console.log(`${params} in checks table inserted`);
-        ta = (ta + 1) % talist.length;
-      });
-      resolve(true);
-    })
+  //       console.log(`${params} in checks table inserted`);
+  //       ta = (ta + 1) % talist.length;
+  //     });
+  //     resolve(true);
+  //   })
+  // }
+  async function call() {
+    res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
   }
 
   if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif"|| file.mimetype == "text/plain" ||  file.mimetype == "application/zip" )
@@ -145,6 +148,7 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
         console.log("func3");
         await unzip();
         setTimeout(storeinDB,3000);
+        setTimeout(call,6000);
       }
       func3();
     });
@@ -154,38 +158,9 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
     message = "This format is not allowed , please upload file with '.png','.gif','.jpg'";
     res.render('index.ejs',{message: message});
   }
-});
-
-
-// submission info------------------------------------------
-router.get("/:Subid", middleware.isLoggedIn, function(req,res){
-  console.log("get  submission");
-
-  async function getInfo() {
-    // submission --FindBy SubId 
-    var query   = "select * from `submission` where id = ?";
-    var params  = [req.params.Subid];
-    let submission_data = await queryExecute(query ,params) ;
-    if(submission_data.length == 0 || submission_data == undefined || submission_data == null){
-      throw "submission not found :ERROR";
-    }
-    else{
-      //  assigned  SubID TID
-      query     = 'select * from asisstant inner join checks on asisstant.id = checks.Tid where checks.Subid = ?';
-      let asisstant_data = await queryExecute(query ,params) ;
       
-      console.log("submission_data: "+ JSON.stringify(submission_data));
-      console.log("Asisstant: "+ JSON.stringify(asisstant_data));
-      res.render("./submission/view.ejs", {user:req.user,CID:req.params.id, submission_data:submission_data[0],asisstant_data:asisstant_data});
-    }
-  }
-  getInfo().catch((message) => { 
-    console.log(message);
-    res.render("./error.ejs" ,{error:message});
-  });
-
-
 });
+
 
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;

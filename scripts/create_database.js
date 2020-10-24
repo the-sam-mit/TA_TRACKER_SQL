@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table1 + '` ( \
 )');
 console.log('Success: professor table Created!')
 
-// --------------------------------------------
+// --------------------------------------------f
 // student
 connection.query('\
 CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table2 + '` ( \
@@ -178,6 +178,7 @@ var sql= "CREATE TABLE IF NOT EXISTS `submission` ( \
     `Cid` INT UNSIGNED, \
     `a_name` VARCHAR(60) NOT NULL, \
     `a_path` VARCHAR(255) , \
+    `marks` FLOAT, \
         PRIMARY KEY (`id`), \
     UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
     FOREIGN KEY(Aid) REFERENCES "+dbconfig.users_table4+"(id),\
@@ -189,8 +190,14 @@ console.log('Success: submission table Created!');
 
 // rubrics------------------
 //rubrics table - Aid,Cid,image,
-var sql= "CREATE TABLE IF NOT EXISTS `rubrics_image` ( `c_id`  int(10) unsigned NOT NULL, \
-`a_id` int(10) unsigned NOT NULL,   `image` varchar(255) NOT NULL )DEFAULT CHARSET=latin1";
+var sql= "CREATE TABLE IF NOT EXISTS `rubrics_image` ( `c_id`  int unsigned NOT NULL, \
+`a_id` int unsigned NOT NULL, `t_id` int unsigned NOT NULL,  `image` varchar(255) NOT NULL,\
+`date_time` DATETIME DEFAULT CURRENT_TIMESTAMP,\
+primary key(`t_id`,`a_id`,`c_id`),\
+FOREIGN KEY(a_id) REFERENCES "+dbconfig.users_table4+"(id),\
+FOREIGN KEY(c_id) REFERENCES "+dbconfig.courses+"(id),\
+FOREIGN KEY(t_id) REFERENCES "+dbconfig.users_table3+"(id)\
+)DEFAULT CHARSET=latin1";
 
 connection.query(sql);
 console.log('Success: rubrics table Created!');

@@ -35,9 +35,37 @@ router.get("/add",middleware.isLoggedIn,function(req,res){
 	res.render("./rubrics/upload.ejs",{message: message,user:req.user,params:req.params}); // more parameters are to be added.
 });
 
+router.get("/view",middleware.isLoggedIn,function(req,res){
+	console.log("view  rubrics");
+	// console.log("User id = ");
+	// console.log(req.user.id);
+	// message = "format required, '.png','.gif','.jpg'";
+	// res.render("./rubrics/upload.ejs",{message: message,user:req.user,params:req.params}); // more parameters are to be added.
+
+
+	async function getInfo() {
+		var query     = 'select * from rubrics_image where a_id = ? and t_id=?';
+		let rubrics_data = await queryExecute(query ,[req.params.Aid, req.user.id]) ;
+		console.log(rubrics_data);
+    	if(rubrics_data.length == 0 || rubrics_data == undefined || rubrics_data == null){
+    	  	throw "rubrics not found :ERROR";
+    	}
+	    else{
+	      console.log("rubrics_data: "+ JSON.stringify(rubrics_data));
+          res.render("./rubrics/view.ejs", {user:req.user,CID:req.params.id, rubrics_data:rubrics_data[0]});
+	   	}
+  	}
+
+	getInfo().catch((message) => { 
+    	console.log(message);
+    	res.render("./error.ejs" ,{error:message});
+    });
+
+});
+
 router.post("/adds", middleware.isLoggedIn, function(req,res){
 	console.log("adding rubrics");
-	console.log(req.params);
+	console.log(req.user);
       if (!req.files)
           return res.status(400).send('No files were uploaded.');
 
@@ -52,9 +80,11 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
                   if (err)
 					return res.status(500).send(err);
 					console.log(file);
-					var sql = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`image`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + file.name + "')";
-					var query    = "INSERT INTO rubrics_image(c_id,a_id,image) VALUES (?,?,?)";;
-					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,file.name]);
+					var current_datetime =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+					console.log("dates");
+					console.log(current_datetime);
+					var query = "INSERT INTO rubrics_image(c_id,a_id,t_id,image,date_time) VALUES (?,?,?,?,?)";;
+					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,req.user.id,file.name,current_datetime]);
 						res.redirect("/courses/");
 			  });
 		}
@@ -66,6 +96,15 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
 			console.log(message);
 			res.render("./error.ejs" ,{error:message});
 		});
+});
+
+// APPROVE ROUTES HALFWAY----------------------------------------
+router.post("/approve", middleware.isLoggedIn, function(req,res){
+	console.log("APPROVED:::---DONE");
+	var query    = "UPDATE rubrics_image SET approved = ? where a_id = ?";;
+	// let insert_assigned = queryExecute(query ,[true,req.params.Aid]);
+				
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 });
 
 // ------------------------------------------END ROUTES------------------------------------------------
