@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table1 + '` ( \
 )');
 console.log('Success: professor table Created!')
 
-// --------------------------------------------
+// --------------------------------------------f
 // student
 connection.query('\
 CREATE TABLE IF NOT EXISTS `' + dbconfig.users_table2 + '` ( \
@@ -178,6 +178,7 @@ var sql= "CREATE TABLE IF NOT EXISTS `submission` ( \
     `Cid` INT UNSIGNED, \
     `a_name` VARCHAR(60) NOT NULL, \
     `a_path` VARCHAR(255) , \
+    `marks` FLOAT, \
         PRIMARY KEY (`id`), \
     UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
     FOREIGN KEY(Aid) REFERENCES "+dbconfig.users_table4+"(id),\

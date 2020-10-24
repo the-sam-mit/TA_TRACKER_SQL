@@ -48,7 +48,9 @@
 			<div class="col-md-4">  
 				<p>coming soon..</p>
 				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/submission/import" class="btn btn-md btn-info">import Submissions</a>
+
 				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-success">Update Details</a>
+
 				<form id="deletebutton" action="#" method="GET"> 
 					<button class="btn btn-md btn-danger">Delete</button>
 				</form>
@@ -76,6 +78,78 @@
 		</div>
 
 		
+
+
+	</div>
+
+	<%//submission info %>
+	<div class="container">
+
+		<%
+			var v = "http://localhost:3000";
+			var allPaths = {};
+			submission_data.forEach(function(sdata){
+               var path = sdata.a_path.split( '/' );
+               pos = path.indexOf("public");
+               newPath="";
+               console.log(path+" "+pos);
+               for(var i=pos+1;i<path.length;i++){
+			 	  newPath = newPath +"/"+ path[i]
+			   }
+			   allPaths[sdata.sub_id]= newPath;
+			})
+			
+		%>
+
+	  <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+             <div class="row">
+
+	           <div class="col-md-3"> <h4> <strong> Submission ID </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Student ID </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Student Name </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> TA ID </h4></strong> </div>
+
+	         </div>
+          </div>
+
+          <div class="col-md-6">
+	        <div class="row">
+	           <div class="col-md-3"> <h4> <strong> TA Name </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Assignment Name </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> View Submission </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Marks </h4> </strong> </div>
+           </div>
+          </div>
+        </div>
+
+        <% submission_data.forEach(function(sdata){ %>
+           <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+
+		           <div class="col-md-3"> <%= sdata.sub_id %> </div>
+		           <div class="col-md-3"> <%= sdata.Sid %>  </div>
+		           <div class="col-md-3"> <%= sdata.s_name %>  </div>
+		           <div class="col-md-3"> <%= sdata.Tid %>  </div>
+		   
+		        </div>
+		      </div>
+
+		      <div class="col-md-6">
+                <div class="row">
+
+		           <div class="col-md-3"> <%= sdata.ta_name %>  </div>
+		           <div class="col-md-3"> <%= sdata.a_name %>  </div>
+		           <div class="col-md-3"> <a href="<%= allPaths[sdata.sub_id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+		           <div class="col-md-3"> 5.0  </div>
+
+		        </div>
+		      </div>
+	        </div>
+            <% }) %>
+       </div>
 
 
 	</div>

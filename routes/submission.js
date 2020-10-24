@@ -162,36 +162,6 @@ router.post("/import", middleware.isLoggedIn, function(req,res){
 });
 
 
-// submission info--------------------SINGLE-------------NOT ADDED BUTTON----TO BE USED for student-----
-router.get("/:Subid", middleware.isLoggedIn, function(req,res){
-  console.log("get  submission");
-
-  async function getInfo() {
-    // submission --FindBy SubId 
-    var query   = "select * from `submission` where id = ?";
-    var params  = [req.params.Subid];
-    let submission_data = await queryExecute(query ,params) ;
-    if(submission_data.length == 0 || submission_data == undefined || submission_data == null){
-      throw "submission not found :ERROR";
-    }
-    else{
-      //  assigned  SubID TID
-      query     = 'select * from asisstant inner join checks on asisstant.id = checks.Tid where checks.Subid = ?';
-      let asisstant_data = await queryExecute(query ,params) ;
-      
-      console.log("submission_data: "+ JSON.stringify(submission_data));
-      console.log("Asisstant: "+ JSON.stringify(asisstant_data));
-      res.render("./submission/view.ejs", {user:req.user,CID:req.params.id, submission_data:submission_data[0],asisstant_data:asisstant_data});
-    }
-  }
-  getInfo().catch((message) => { 
-    console.log(message);
-    res.render("./error.ejs" ,{error:message});
-  });
-
-
-});
-
 // ------------------------------------------END ROUTES------------------------------------------------
 module.exports=router;
 
