@@ -83,7 +83,6 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
 					var current_datetime =  new Date().toISOString().slice(0, 19).replace('T', ' ');
 					console.log("dates");
 					console.log(current_datetime);
-					// var sql   = "INSERT INTO `rubrics_image`(`c_id`,`a_id`,`t_id`,`image`,`date_time`) VALUES ('" + req.params.id + "','" + req.params.Aid + "','" + req.user.id + "','" + file.name + "')";
 					var query = "INSERT INTO rubrics_image(c_id,a_id,t_id,image,date_time) VALUES (?,?,?,?,?)";;
 					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,req.user.id,file.name,current_datetime]);
 						res.redirect("/courses/");
