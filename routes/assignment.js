@@ -132,7 +132,10 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 	            }
 	            else if(req.user.type === "Asisstant")
 	            {
-                    res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+	            	var query2     = 'select * from checks inner join student on checks.Sid=student.id where checks.Tid = ?';
+					      let students = await queryExecute(query2 ,[req.user.id]) ;
+					      console.log("Students: "+ JSON.stringify(students));
+                res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students});
 	            }
 	            else if(req.user.type === "Student")
 	            {
