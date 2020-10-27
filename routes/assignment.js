@@ -250,6 +250,23 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 	});
 });
 
+// marks updates
+router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
+	console.log("hi there----------------------------------------------------------------------------------------------------------------------------------------------------");
+	console.log(req.body.marks);
+	console.log(req.params.SSid);
+	async function updateMarks() {
+		var query     = 'UPDATE `submission` SET marks = ? where id = ?';
+		let updated   = await queryExecute(query ,[req.body.marks, req.params.SSid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	updateMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+// -------------
 
 // REFATORING --------------------from assignment to submission and rubrics
 router.use("/:Aid/submission",SubmissionRoutes);
