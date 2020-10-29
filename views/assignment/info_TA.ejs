@@ -70,7 +70,6 @@
 
 	<%//submission info %>
 	<div class="container">
-
 		<%
 			var v = "http://localhost:3000";
 			var allPaths = {};
@@ -99,12 +98,19 @@
 
         <% submission_data.forEach(function(sdata){ %>
             <div class="row">
-	           <div class="col-md-2"> <%= sdata.id %> </div>
+	           <div class="col-md-2"> <%= sdata.Subid %> </div>
 	           <div class="col-md-2"> <%= sdata.Sid %>  </div>
 	           <div class="col-md-2"> <%= sdata.s_name %>  </div>
 	           <div class="col-md-2"> <%= sdata.a_name %>  </div>
 	           <div class="col-md-2"> <a href="<%= allPaths[sdata.id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
-	           <div class="col-md-2"> 5  </div>
+	           <div class="col-md-2"> <%= sdata.marks %>  </div>
+	           
+	           <form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksupdate/<%= sdata.Subid %>" method="POST">
+		        	<div class="form-group">
+						<input class="form-control" placeholder="marks" name="marks" type="text">
+					<button class="btn btn-md btn-info btn-block">Add Marks</button>
+					</div>
+  				</form>
 	        </div>
             <% }) %>
        </div>
