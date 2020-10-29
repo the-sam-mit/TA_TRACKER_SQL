@@ -1,0 +1,73 @@
+<!-- views/assignment/info.ejs assignment page -->  
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+</style>
+
+</head>
+<body>
+    
+   
+	<div class="container">
+
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Performance Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well" style="background:#fea">
+					<h3><span class="fa fa-user"></span> TA Details</h3>
+						<p>
+							<strong>id</strong>: <%= assistant_data.id %><br>
+							<strong>username</strong>: <%= assistant_data.username %><br>
+							<strong>password</strong>: <%= assistant_data.password %>
+						</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<div class="container">
+	        <div class="row">
+	           <div class="col-sm-2">  <strong> Range of marks</strong>  </div>
+	           <div class="col-sm-2">  <strong> Number of students </strong> </div>
+	        </div>
+	        <div class="row" style="background:#ccc" >
+				<%var i = 0;%>
+				<% marks_data.forEach(function(data){ %>
+					<div class="col-sm-2">  <strong> <%=10*i%> - <%=10*i + 10%></strong>  </div>
+	           		<div class="col-sm-2">  <strong> <%= data %> </strong> </div>
+					<br>
+					<%i = i+1;%>
+				<% }) %>
+			</div>
+	     </div>
+
+
+	</div>
+</body>
+</html>
