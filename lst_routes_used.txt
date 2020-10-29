@@ -1,0 +1,27 @@
+# Basic
+/
+/login
+/signp
+/courses
+/courses/new
+
+
+# Courses
+/courses/:id    GET  show info
+/courses/:id    PUT  update
+/courses/:id/edit  
+/courses/:id/delete
+
+
+# Assignment
+/courses/:id/:id/assignment/new    
+/courses/:id/assignment/:id            
+
+
+# SUBMISSON
+/courses/:id/assignment/:id/submission/import   GET, POST
+
+-----------------------------------------------------------
+TODO
+/courses/:id/assignment/:id/submission/:id
+
