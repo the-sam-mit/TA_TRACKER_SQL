@@ -77,7 +77,11 @@
 							<h4 ><strong>Type</strong> <%= data.type %></h4>		
 							<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
 							<p ><strong> Year</strong> <%= data.year %></p>		
-							<p ><strong> Stream</strong> <%= data.stream %></p>		
+							<p ><strong> Stream</strong> <%= data.stream %></p>	
+							<% if(user.type === "Professor"){ %>
+								<a href="/courses/<%=course_data.id%>/performance/<%=data.id%>/view"><button class="btn btn-md btn-primary">Track Performance</button></a>		
+							<% } %>
+							
 						</div>
 					<% }) %>
 				</div>

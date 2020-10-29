@@ -15,6 +15,7 @@ router.use(flash());
 
 // ================Module inport========================
 var  AssignmentRoutes = require('./assignment.js');
+var  PerformanceRoutes = require('./performance.js');
 
 //-------------Landing GET------------------------WORKING----
 router.get("/",middleware.isLoggedIn,function(req,res){
@@ -301,6 +302,13 @@ function makeid(length) {
  }
 
 router.use("/:id/assignment",AssignmentRoutes);
+// performance tracker----------------------------------------------------------------------
+
+router.use("/:Tid/performance",PerformanceRoutes);
+
+
+// performance tracker ends----------------------------------------------------------------------
+
 module.exports=router;
 
 // FUNCTION TO INTIATE QUERY
