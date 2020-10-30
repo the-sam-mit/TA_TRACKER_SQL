@@ -7,6 +7,29 @@
         
     </head>
      <body>
+        <%	if(error && error.length>0){ %>
+            <div class="container">
+                <div class="alert alert-danger" role="alert">
+                    <h4><%= error %></h4>
+                </div>
+            </div>
+        <%	} %>
+        <% if(success && success.length>0){ %>	
+            <div class="container">
+                <div class="alert alert-success" role="alert">
+                    <h4><%= success %></h4>
+                </div>
+            </div>
+        <%} %> 
+        <% if(warning && warning.length>0){ %>	
+            <div class="container">
+                <div class="alert alert-warning" role="alert">
+                    <h4><%= warning %></h4>
+                </div>
+            </div>
+        <%} %> 
+ 
+        
         <div class="container col-sm-12" id="mainform">
             <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                                     
                 <div class="panel panel-info">

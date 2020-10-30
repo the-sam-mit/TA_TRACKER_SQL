@@ -48,7 +48,8 @@ router.get("/view",middleware.isLoggedIn,function(req,res){
 		let rubrics_data = await queryExecute(query ,[req.params.Aid, req.user.id]) ;
 		console.log(rubrics_data);
     	if(rubrics_data.length == 0 || rubrics_data == undefined || rubrics_data == null){
-    	  	throw "rubrics not found :ERROR";
+			  req.flash("warning", "rubrics not found");
+			  res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/`);
     	}
 	    else{
 	      console.log("rubrics_data: "+ JSON.stringify(rubrics_data));
@@ -85,7 +86,8 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
 					console.log(current_datetime);
 					var query = "INSERT INTO rubrics_image(c_id,a_id,t_id,image,date_time) VALUES (?,?,?,?,?)";;
 					let insert_assigned = queryExecute(query ,[req.params.id,req.params.Aid,req.user.id,file.name,current_datetime]);
-						res.redirect("/courses/");
+					req.flash("success", "rubrics uploaded successfully");
+					res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/`);
 			  });
 		}
 
@@ -98,9 +100,34 @@ router.post("/adds", middleware.isLoggedIn, function(req,res){
 		});
 });
 
-// APPROVE ROUTES HALFWAY----------------------------------------
+// APPROVE ROUTES DONE----------------------------------------
 router.post("/approve", middleware.isLoggedIn, function(req,res){
 	console.log("APPROVED:::---DONE");
+
+	async function getInfo_approved() {
+		var query     = 'select * from rubrics_image where a_id = ? and t_id=?';
+		let rubrics_data = await queryExecute(query ,[req.params.Aid, req.user.id]) ;
+		console.log(rubrics_data);
+    	if(rubrics_data.length == 0 || rubrics_data == undefined || rubrics_data == null){
+			  req.flash("warning", "rubrics not found");
+			  res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/`);
+    	}
+	    else{
+			var query    = "UPDATE rubrics_image SET approved = ? where a_id = ?";;
+			let insert_assigned = queryExecute(query ,[true,req.params.Aid]);
+			console.log("====================================================\n====================================================\n====================================================\n");
+			req.flash("success", "rubrics approved");
+			console.log("++++++++++++++++++++++++++++++++++++++++\n");
+			res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/rubrics/view`);
+	   	}
+  	}
+
+	  getInfo_approved().catch((message) => { 
+    	console.log(message);
+    	res.render("./error.ejs" ,{error:message});
+	});
+	
+
 	var query    = "UPDATE rubrics_image SET approved = ? where a_id = ?";;
 	// let insert_assigned = queryExecute(query ,[true,req.params.Aid]);
 				

@@ -10,6 +10,28 @@
 	</style>
 </head>
 <body>
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
 	<div class="container">
 
 		<div class="page-header text-center">
@@ -50,7 +72,7 @@
 				<h3>3. show rubricks  </h3>
 				<h3>4. show marks </h3>
 			<p>coming soon..</p>
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
+			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
 		</div>
 
 	</div>

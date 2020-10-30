@@ -189,10 +189,11 @@ connection.query(sql);
 console.log('Success: submission table Created!');
 
 // rubrics------------------
-//rubrics table - Aid,Cid,image,
+//rubrics table - Aid,Cid,image,           ---------------updated oct 31
 var sql= "CREATE TABLE IF NOT EXISTS `rubrics_image` ( `c_id`  int unsigned NOT NULL, \
 `a_id` int unsigned NOT NULL, `t_id` int unsigned NOT NULL,  `image` varchar(255) NOT NULL,\
 `date_time` DATETIME DEFAULT CURRENT_TIMESTAMP,\
+`approved` BOOLEAN DEFAULT false, \
 primary key(`t_id`,`a_id`,`c_id`),\
 FOREIGN KEY(a_id) REFERENCES "+dbconfig.users_table4+"(id),\
 FOREIGN KEY(c_id) REFERENCES "+dbconfig.courses+"(id),\

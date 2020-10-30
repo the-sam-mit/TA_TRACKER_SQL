@@ -9,7 +9,29 @@
 		body 		{ padding-top:80px; word-wrap:break-word; }
 	</style>
 </head>
-<body>
+<body>	
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
 	<div class="container">
 
 		<div class="page-header text-center">
@@ -67,11 +89,8 @@
 				</div>
 			<% }) %>
 
-			<p>coming soon..</p>
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
-			<form id="approvebutton" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/approve" method="POST">
-				<button href="" class="btn btn-md btn-success">Approve Rubrics</button>
-			</form>
+			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
+			
 		</div>
 
 		
@@ -81,22 +100,19 @@
 
 	<%//submission info %>
 	<div class="container">
-		<%
-			var v = "http://localhost:3000";
-			var allPaths = {};
-			submission_data.forEach(function(sdata){
-               var path = sdata.a_path.split( '/' );
-               pos = path.indexOf("public");
-               newPath="";
-               console.log(path+" "+pos);
-               for(var i=pos+1;i<path.length;i++){
-			 	  newPath = newPath +"/"+ path[i]
-			   }
-			   allPaths[sdata.sub_id]= newPath;
-			})
+		<%	var v = "http://localhost:3000"; %>
+		<%	var allPaths = {}; %>
+		<%	submission_data.forEach(function(sdata){ %>
+        <%       var path = sdata.a_path.split( '/' ); %>
+        <%       pos = path.indexOf("public"); %>
+        <%       newPath=""; %>
+        <%       console.log(path+" "+pos); %>
+        <%       for(var i=pos+1;i<path.length;i++){ %>
+		<%	 	  newPath = newPath +"/"+ path[i] %>
+		<%	   } %>
+		<%	   allPaths[sdata.sub_id]= newPath; %>
+		<%	}) %>
 			
-		%>
-
 	  <div class="container">
         <div class="row">
           <div class="col-md-6">

@@ -12,7 +12,28 @@
 
 </head>
 <body>
-    
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
    
 	<div class="container">
 
