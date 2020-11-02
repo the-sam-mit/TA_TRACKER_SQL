@@ -9,7 +9,8 @@
 		body 		{ padding-top:80px; word-wrap:break-word; }
 	</style>
 </head>
-<body>
+<body onload="checkDeadline('<%=assignment_data.deadline_rubriks%>', '<%= assignment_data.deadline_eval%>')" >
+	<%//flash msg%>
 	<%	if(error && error.length>0){ %>
 		<div class="container">
 			<div class="alert alert-danger" role="alert">
@@ -31,7 +32,14 @@
 			</div>
         </div>
 	<%} %> 
-	
+
+	<%//time and time left%>
+    <div class="container " style="background-color: azure;" >
+		<div class="row"><h4>Deadlines</h4></div>
+		<div class="row" id="clock2"></div>
+		<div class="row" id="clock3"></div>
+	</div>
+
 	<div class="container">
 
 		<div class="page-header text-center">
@@ -81,10 +89,11 @@
 				<h3>2. show students submission assigned </h3>
 				<h3>3. show rubricks -> done </h3>
 				<h3>4. give marks </h3>
-			<p>coming soon..</p>
 			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
-
+			<%			console.log(rubrics_data) %>
+			<% if(rubrics_data == undefined || rubrics_data == null){%>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
+			<% } %>
 			
 		</div>
 
@@ -138,4 +147,47 @@
        </div>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+	function diff_minutes(dt2, dt1) 
+	{
+		var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+		diff /= 60;
+		if(diff <= 0) return [0,0,0];
+		let min_tot = Math.abs(Math.round(diff));
+		
+		let days = Math.abs(Math.floor(min_tot / (24*60)));
+		min_tot = min_tot - (days*24*60);
+		let hrs = Math.abs(Math.floor(min_tot / 60));
+		min_tot = min_tot - (hrs*60);
+		let min = min_tot ;
+		return [days,hrs,min];
+	}
+	function checkDeadline(rubric, eval) {
+      var today = new Date();
+      var q = new Date(rubric);
+      var e = new Date(eval);
+      
+	  var left = diff_minutes(q,today);
+	  if(left[0] == 0 && left[1] == 0 && left[2] == 0 )
+		document.getElementById('clock2').innerHTML = "Rubrics Deadline Ended";
+	  else
+		  document.getElementById('clock2').innerHTML = "<h5>Rubrics Time Left : "+`days ${left[0]}  hours ${left[1]}  minutes ${left[2]}</h5>`;
+		  
+	 var left2 = diff_minutes(e,today);
+	  if(left2[0] == 0 && left2[1] == 0 && left2[2] == 0 )
+		document.getElementById('clock3').innerHTML = "Marks Deadline Ended";
+	  else
+	  	document.getElementById('clock3').innerHTML = "<h5>Marks Time Left : "+`days ${left2[0]}  hours ${left2[1]}  minutes ${left2[2]}</h5>`;
+		  var t = setTimeout(checkDeadline, 500,rubric,eval);
+    }
+    // add zero in front of numbers < 10
+    function checkTime(i) {
+      if (i < 10) {i = "0" + i};  
+      return i;
+    }
+</script>
 </html>

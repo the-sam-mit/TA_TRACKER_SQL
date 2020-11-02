@@ -18,15 +18,6 @@ var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
 
-//-----------------------------------------------------------------------------rubrics view GET------------------------WORKING----
-// router.get("/add", middleware.isLoggedIn, function(req,res){
-//     // console.log("add  rubrics");
-//     // console.log(req.params);
-// 	// message = "format required, '.png','.gif','.jpg'";
-// 	// res.render("./rubrics/upload.ejs",{message: message});
-
-// });
-
 // //-----------------------------------------------------------------------------rubrics upload GET & POST------------------------WORKING----
 router.get("/add",middleware.isLoggedIn,function(req,res){
 	console.log("add  rubrics");
@@ -37,22 +28,17 @@ router.get("/add",middleware.isLoggedIn,function(req,res){
 
 router.get("/view",middleware.isLoggedIn,function(req,res){
 	console.log("view  rubrics");
-	// console.log("User id = ");
-	// console.log(req.user.id);
-	// message = "format required, '.png','.gif','.jpg'";
-	// res.render("./rubrics/upload.ejs",{message: message,user:req.user,params:req.params}); // more parameters are to be added.
-
 
 	async function getInfo() {
 		var query     = 'select * from rubrics_image where a_id = ? and t_id=?';
 		let rubrics_data = await queryExecute(query ,[req.params.Aid, req.user.id]) ;
-		console.log(rubrics_data);
-    	if(rubrics_data.length == 0 || rubrics_data == undefined || rubrics_data == null){
+    	if(rubrics_data.length == 0 || rubrics_data == undefined || rubrics_data == null || (rubrics_data[0].approved == 0 && req.user.type == "Student")){
 			  req.flash("warning", "rubrics not found");
 			  res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/`);
     	}
 	    else{
-	      console.log("rubrics_data: "+ JSON.stringify(rubrics_data));
+		  console.log("rubrics_data: "+ JSON.stringify(rubrics_data));
+		  
           res.render("./rubrics/view.ejs", {user:req.user,CID:req.params.id, rubrics_data:rubrics_data[0]});
 	   	}
   	}
@@ -115,23 +101,31 @@ router.post("/approve", middleware.isLoggedIn, function(req,res){
 	    else{
 			var query    = "UPDATE rubrics_image SET approved = ? where a_id = ?";;
 			let insert_assigned = queryExecute(query ,[true,req.params.Aid]);
-			console.log("====================================================\n====================================================\n====================================================\n");
 			req.flash("success", "rubrics approved");
-			console.log("++++++++++++++++++++++++++++++++++++++++\n");
 			res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/rubrics/view`);
 	   	}
   	}
 
-	  getInfo_approved().catch((message) => { 
+	getInfo_approved().catch((message) => { 
     	console.log(message);
     	res.render("./error.ejs" ,{error:message});
 	});
-	
+});
 
-	var query    = "UPDATE rubrics_image SET approved = ? where a_id = ?";;
-	// let insert_assigned = queryExecute(query ,[true,req.params.Aid]);
-				
-	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+// DECLINE ROUTES DONE----------------------------------------
+router.post("/decline", middleware.isLoggedIn, function(req,res){
+	console.log("decline:::---DONE");
+
+	async function delete_rubric() {
+		var query  = 'DELETE FROM  rubrics_image where a_id = ? and t_id=?';
+		let result    = await queryExecute(query ,[req.params.Aid, req.user.id]) ;
+		req.flash("warning", "rubrics removed");	
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}/`);
+  	}
+	delete_rubric().catch((message) => { 
+    	console.log(message);
+    	res.render("./error.ejs" ,{error:message});
+	});
 });
 
 // ------------------------------------------END ROUTES------------------------------------------------

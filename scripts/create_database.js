@@ -217,24 +217,4 @@ connection.query(sql);
 console.log('Success: checks table Created!');
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 connection.end();

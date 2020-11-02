@@ -76,15 +76,18 @@
 				</div>
 				<div class="col-lg-9" >  
 					<%if ( user.type === "Professor" && rubrics_data.approved == 0){  %>
-						<form id="approvebutton" action="/courses/<%=rubrics_data.c_id%>/assignment/<%=rubrics_data.a_id%>/rubrics/approve" method="POST">
-							<button href="" class="btn btn-md btn-success">Approve Rubrics</button>
+						<form  style="width=2px" id="approvebutton" action="/courses/<%=rubrics_data.c_id%>/assignment/<%=rubrics_data.a_id%>/rubrics/approve" method="POST">
+							<button href="" class="btn btn-md btn-success">Accept</button>
+						</form>
+						<form  id="declinebutton" action="/courses/<%=rubrics_data.c_id%>/assignment/<%=rubrics_data.a_id%>/rubrics/decline" method="POST">
+							<button href="" class="btn btn-md btn-danger">Decline</button>
 						</form>
 					<%}%>
 				</div>
 				
 			</div>
 			<div class="row">  
-				<h4 ><strong>Rubrics:-</strong>    <a href="http://localhost:3000/Rubrics/<%=rubrics_data.image%>" class="btn btn-md btn-primary">  View/Download </a> </h4>
+				<h4 ><strong>Rubrics:-</strong>    <a href="http://localhost:3000/Rubrics/<%=rubrics_data.image%>" target="_blank" class="btn btn-md btn-primary">  View/Download </a> </h4>
 			</div>
 		</div>
 	</div>

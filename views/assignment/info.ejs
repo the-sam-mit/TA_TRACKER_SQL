@@ -3,13 +3,41 @@
 <html>
 <head>
 	<title>Node Authentication</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
 	</style>
 </head>
-<body>	
+<!-- Modal Deadline-->
+<div class="modal" id="deadlineModal" tabindex="-1" role="dialog" aria-labelledby="deadlineModal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="ModalLabel">deadline need to be updated</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <% if((new Date().getTime() - new Date(assignment_data.deadline_rubriks).getTime()) >= 0){ %>
+				<p>Rubrics Upload is behind deadline.</p>
+			<% } %>
+			<% if((new Date().getTime() - new Date(assignment_data.deadline_eval).getTime()) >= 0){ %>
+				<p>Marks Upload is behind deadline.</p>
+		  <% } %>
+		</div>
+		<div class="modal-footer">
+			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-primary">Update</a>
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+<body onload="Deadline('<%=assignment_data.deadline_rubriks%>', '<%= assignment_data.deadline_eval%>')" >	
 	<%	if(error && error.length>0){ %>
 		<div class="container">
 			<div class="alert alert-danger" role="alert">
@@ -31,9 +59,15 @@
 			</div>
         </div>
 	<%} %> 
-	
-	<div class="container">
 
+	<%//time and time left%>
+    <div class="container " style="background-color: azure;" >
+		<div class="row"><h4>Deadlines</h4></div>
+		<div class="row" id="clock2"></div>
+		<div class="row" id="clock3"></div>
+	</div>
+	<%// deadline modal init%>
+	<div class="container">
 		<div class="page-header text-center">
 			<h1><span class="fa fa-anchor"></span> Assignment Dashboard</h1>
 			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
@@ -74,6 +108,7 @@
 				<form id="deletebutton" action="#" method="GET"> 
 					<button class="btn btn-md btn-danger">Delete</button>
 				</form>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
 			</div>
 		</div>
 		<%//TA info %>
@@ -89,7 +124,7 @@
 				</div>
 			<% }) %>
 
-			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
+			
 			
 		</div>
 
@@ -162,4 +197,51 @@
 
 	</div>
 </body>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+	function diff_minutes(dt2, dt1) 
+	{
+		var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+		diff /= 60;
+		if(diff <= 0) return [0,0,0];
+		let min_tot = Math.abs(Math.round(diff));
+		
+		let days = Math.abs(Math.floor(min_tot / (24*60)));
+		min_tot = min_tot - (days*24*60);
+		let hrs = Math.abs(Math.floor(min_tot / 60));
+		min_tot = min_tot - (hrs*60);
+		let min = min_tot ;
+		return [days,hrs,min];
+	}
+	function checkDeadline(rubric, eval) {
+      var today = new Date();
+      var q = new Date(rubric);
+      var e = new Date(eval);
+      
+	  var left = diff_minutes(q,today);
+	  if(left[0] == 0 && left[1] == 0 && left[2] == 0 )
+		document.getElementById('clock2').innerHTML = "Rubrics Deadline Passed";
+	  else
+		  document.getElementById('clock2').innerHTML = "<h5>Rubrics Upload : "+`${left[0]} days  ${left[1]} hours  ${left[2]} minutes</h5>`;
+		  
+	 var left2 = diff_minutes(e,today);
+	  if(left2[0] == 0 && left2[1] == 0 && left2[2] == 0 )
+		document.getElementById('clock3').innerHTML = "Marks Deadline Passed";
+	  else
+	  	document.getElementById('clock3').innerHTML = "<h5>Marks Upload : "+`${left2[0]} days  ${left2[1]} hours  ${left2[2]} minutes</h5>`;
+		  var t = setTimeout(checkDeadline, 500,rubric,eval);
+    }
+    // add zero in front of numbers < 10
+    function checkTime(i) {
+      if (i < 10) {i = "0" + i};  
+      return i;
+    }
+	function Deadline(rubric, eval) {
+		if (((new Date().getTime() - new Date(rubric).getTime()) >= 0) || ((new Date().getTime() - new Date(eval).getTime()) >= 0))
+			$('#deadlineModal').modal('show') 
+		checkDeadline(rubric,eval); 
+	};
+</script>
 </html>
