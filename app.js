@@ -50,6 +50,7 @@ app.use(async function(req,res,next){
 	res.locals.userDetails=req.user;                    // USER DETAILS
 	res.locals.error=req.flash("error");                // FLASH ERROR MESSAGE
 	res.locals.success=req.flash("success");            // FLASH SUCcESS MESSAGE
+	res.locals.warning=req.flash("warning");            // FLASH SUCcESS MESSAGE
 	next();
 });
 global.__basedir = __dirname;
