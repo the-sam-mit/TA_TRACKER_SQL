@@ -15,7 +15,7 @@ router.use(flash());
 
 // ================Module inport========================
 var  AssignmentRoutes = require('./assignment.js');
-
+var  PerformanceRoutes = require('./performance.js');
 //-------------Landing GET------------------------WORKING----
 router.get("/",middleware.isLoggedIn,function(req,res){
 	console.log(" courses list ! ");
@@ -299,7 +299,7 @@ function makeid(length) {
 	}
 	return result;
  }
-
+router.use("/:id/performance",PerformanceRoutes);
 router.use("/:id/assignment",AssignmentRoutes);
 module.exports=router;
 

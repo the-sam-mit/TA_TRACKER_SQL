@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
-
 </style>
 
 </head>
@@ -34,11 +33,12 @@
         </div>
 	<%} %> 
 	
+	
    
 	<div class="container">
 
 		<div class="page-header text-center">
-			<h1><span class="fa fa-anchor"></span> Assignment Dashboard</h1>
+			<h1><span class="fa fa-anchor"></span> Performance Dashboard</h1>
 			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
 		</div>
 
@@ -55,47 +55,39 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well" style="background:#fea">
+					<h3><span class="fa fa-user"></span> TA Details</h3>
+						<p>
+							<strong>id</strong>: <%= assistant_data.id %><br>
+							<strong>username</strong>: <%= assistant_data.username %><br>
+							<strong>password</strong>: <%= assistant_data.password %>
+						</p>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="container">
 
-	    
-
-		<%
-			var v = "http://localhost:3000";
-			var allPaths = {};
-			submission_data.forEach(function(sdata){
-               var path = sdata.a_path.split( '/' );
-               pos = path.indexOf("public");
-               newPath="";
-               console.log(path+" "+pos);
-               for(var i=pos+1;i<path.length;i++){
-			 	  newPath = newPath +"/"+ path[i]
-			   }
-			   allPaths[sdata.Subid]= newPath;
-			})
-			
-		%>
-
-	  <div class="container">
-        <div class="row">
-           <div class="col-sm-2">  <strong> Submission ID </strong>  </div>
-           <div class="col-sm-2">  <strong> Assignment ID </strong> </div>
-           <div class="col-sm-2">  <strong> Course ID </strong> </div>
-           <div class="col-sm-2">  <strong> Assignment Name </strong> </div>
-           <div class="col-sm-4">  <strong> View Submission </strong> </div>
-        </div>
-
-        <% submission_data.forEach(function(sdata){ %>
-           <div class="row">
-	           <div class="col-sm-2"> <%= sdata.Subid %> </div>
-	           <div class="col-sm-2"> <%= sdata.Aid %>  </div>
-	           <div class="col-sm-2"> <%= sdata.Cid %>  </div>
-	           <div class="col-sm-2"> <%= sdata.a_name %>  </div>
-	           <div class="col-sm-4"> <a href="<%= allPaths[sdata.id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+		<div class="container">
+	        <div class="row">
+	           <div class="col-sm-2">  <strong> Range of marks</strong>  </div>
+	           <div class="col-sm-2">  <strong> Number of students </strong> </div>
 	        </div>
-            <% }) %>
-       </div>
+	        <div class="row" style="background:#ccc" >
+				<%var i = 0;%>
+				<% marks_data.forEach(function(data){ %>
+					<div class="col-sm-2">  <strong> <%=10*i%> - <%=10*i + 10%></strong>  </div>
+	           		<div class="col-sm-2">  <strong> <%= data %> </strong> </div>
+					<br>
+					<%i = i+1;%>
+				<% }) %>
+			</div>
+	     </div>
 
 
 	</div>
