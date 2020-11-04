@@ -159,10 +159,20 @@ connection.query(sql);
 console.log('Success: includes table Created!');
 
 
-// assigned table(A_id - T_id )       AID, TID
+// assigned table(A_id - T_id )       AID, TID ------aka performance table------------------updated NOV 4
 var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel4+"(\
             Aid INT UNSIGNED,\
             Tid INT UNSIGNED,\
+            RubUploaded INT DEFAULT 0,\
+            RubAccepted INT DEFAULT 0,\
+            RubDeadlineUpdated INT DEFAULT 0,\
+            MarkUploaded INT DEFAULT 0,\
+            MarkQuery1 INT DEFAULT 0,\
+            MarkResolve1 INT DEFAULT 0,\
+            MarkQuery2 INT DEFAULT 0,\
+            MarkDeadlineUpdated INT DEFAULT 0,\
+            professorRating INT DEFAULT 0,\
+            studentRating INT DEFAULT 0,\
             FOREIGN KEY(Aid) REFERENCES "+dbconfig.users_table4+"(id),\
             FOREIGN KEY(Tid) REFERENCES "+dbconfig.users_table3+"(id)\
              )";

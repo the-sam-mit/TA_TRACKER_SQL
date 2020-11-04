@@ -227,6 +227,7 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 		// ASsignment--FindById 
 		var query     = 'UPDATE `assignment` SET name = ?, deadline_rubriks= ?, deadline_eval = ? where id = ?';
 		let updated   = await queryExecute(query ,[name, deadlineRubriks, deadlineEvaluation, req.params.Aid]) ;
+		
 		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 	}
 	updateAssignment().catch((message) => { 

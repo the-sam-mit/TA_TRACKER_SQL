@@ -51,3 +51,36 @@ Aayush T                     ---        Student Routes
 Samarth & Shubham            ---        Raise Resolve Query
 Ayush                        ---        Approvals/ decision of professors, Freeze Marks, Deadline Related
 Amritansh                    ---        Frontend Pages + Performances graphs and measure Related Work
+======================================================================================================
+
+--------------------------------------  ================ -----------------------------------------------------
+                                        | TODO-- NOV-4 | 
+                                        ================
+
+1. FRONTEND- 14/15 left to complete
+
+2. Professor_Route--
+                  -- rateTA
+                  -- Freeze marks  <-------------------------------|<--|
+                  -- approve marks <-------------------------------|<--|---------------
+                                                                                      |
+3. TA_ROUTES -----                                                                    |
+        - Done all marks button ====> req for freeze/approve marks and deadline match--
+        - TA performance score Params::-
+                    professorRating,
+                    studentRating,
+                    deadline skips,
+                    marks,
+                    --- need to be stored for each assignment in TABLE                                                                                                                       |  
+
+4. StudentRoute -- rateTA
+                -- see marks only when freezed, see rubricks when approved ========= DEPENDENT on OTHERS WORK
+                -- initiate query route for student
+
+5. Collective work ( STUDENT + TA + PROFESSOR )_routes --All of us needed
+--------------------------------------------
+QUERY ROUTES NEEDED for -- student raise -1
+                        -- TA resolve
+                        -- student raise -2
+                        -- professor resolve
+

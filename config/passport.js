@@ -66,6 +66,7 @@ module.exports = function(passport) {
         },
         function(req, username, password,  done) {
             let type = req.body.type;
+            let name = req.body.name;
             console.log("SIGNUP: "+JSON.stringify(req.body));
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
@@ -81,10 +82,11 @@ module.exports = function(passport) {
                         var newUserMysql = {
                             username: username,
                             password: bcrypt.hashSync(password, null, null),
-                            type: "Professor"
+                            type: "Professor",
+                            name: name
                         };
-                        var insertQuery = "INSERT INTO professor( username, password, type ) values (?,?,?)";
-                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.type],
+                        var insertQuery = "INSERT INTO professor( username, password, type,name ) values (?,?,?,?)";
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.type,  newUserMysql.name],
                             function(err, rows) {
                                 if(err){
                                     throw err;
@@ -110,10 +112,11 @@ module.exports = function(passport) {
                         var newUserMysql = {
                             username: username,
                             password: bcrypt.hashSync(password, null, null),
-                            type: "Student"
+                            type: "Student",
+                            name: name
                         };
-                        var insertQuery = "INSERT INTO student( username, password, type ) values (?,?,?)";
-                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password,  newUserMysql.type],
+                        var insertQuery = "INSERT INTO student( username, password, type,name ) values (?,?,?,?)";
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password,  newUserMysql.type,  newUserMysql.name],
                             function(err, rows) {
                                 if(err){
                                     throw err;
@@ -138,10 +141,11 @@ module.exports = function(passport) {
                         var newUserMysql = {
                             username: username,
                             password: bcrypt.hashSync(password, null, null),
-                            type: "Asisstant"
+                            type: "Asisstant",
+                            name: name
                         };
-                        var insertQuery = "INSERT INTO asisstant( username, password, type ) values (?,?,?)";
-                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.type],
+                        var insertQuery = "INSERT INTO asisstant( username, password, type,name ) values (?,?,?,?)";
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.type,  newUserMysql.name],
                             function(err, rows) {
                                 if(err){
                                     throw err;
