@@ -57,30 +57,30 @@
 		</div>
 	</div>
 	 <% if(user.type === "Professor"){ %>
+		<a href="/courses/<%=course_data.id%>/edit" class="btn btn-md btn-success">Edit</a>
+		<form id="deletebutton" action="/courses/<%=course_data.id%>/delete" method="GET"> 
+			<button class="btn btn-md btn-danger">Delete</button>
+		</form>
 		<a href="/courses/<%=course_data.id%>/assignment/new" class="btn btn-md btn-success">Open Assignment</a>
 	 <% } %>
 	<div class="container">
 		<%//course%>
 		<div class="row">
 				<div class="row" >
-					<div class="col-md-9">  
+					<div class="col">  
 						<h4 ><strong>Name</strong> <%= course_data.name %></h4>		
-						<h5 ><strong>Semeseter</strong> <%= course_data.semeseter %></h5>		
+						<h5 ><strong>Semester</strong> <%= course_data.semester %></h5>		
 						<p ><strong> Year</strong> <%= course_data.year %></p>		
 						<p ><strong> Stream</strong> <%= course_data.stream %></p>		
 						<p ><strong> Code</strong> <%= course_data.code %></p>		
 					</div>
 				</div>
-				<a href="/courses/<%=course_data.id%>/edit" class="btn btn-md btn-success">Edit</a>
-				<form id="deletebutton" action="/courses/<%=course_data.id%>/delete" method="GET"> 
-					<button class="btn btn-md btn-danger">Delete</button>
-				</form>
 		</div>
 		<%//Professor%>
 		<%console.log(professor_data)%>
 		<div class="row">
 				<div class="row" >
-					<div class="col-md-9"> 
+					<div class="col"> 
 						<% professor_data.forEach(function(data){ %> 
 							<h4 ><strong>Name</strong> <%= data.name %></h4>		
 							<h5 ><strong>username</strong> <%= data.username %></h5>		
@@ -93,7 +93,7 @@
 		<div class="row">
 				<div class="row" style="background:#fea" >
 					<% asisstant_data.forEach(function(data){ %>
-						<div class="col-md-9">  
+						<div class="col">  
 							<h4 ><strong>Name</strong> <%= data.name %></h4>		
 							<h4 ><strong>Username</strong> <%= data.username %></h4>		
 							<h4 ><strong>Type</strong> <%= data.type %></h4>		
@@ -111,7 +111,7 @@
 		<div class="row">
 				<div class="row" style="background:#ccc" >
 					<% student_data.forEach(function(data){ %>
-						<div class="col-md-9">  
+						<div class="col">  
 							<h4 ><strong>Name</strong> <%= data.name %></h4>		
 							<h4 ><strong>Username</strong> <%= data.username %></h4>		
 							<h4 ><strong>Type</strong> <%= data.type %></h4>		
@@ -125,7 +125,7 @@
 		<%//assignment%>
 		<div class="row">
 			<% assignment_data.forEach(function(data){ %>
-				<div class="col-md-9">  
+				<div class="col">  
 					<h4 ><strong>Name</strong> <%= data.name %></h4>		
 					<h5 ><strong>Type</strong> <%= data.type %></h5>		
 					<p ><strong> DeadlineEvaluation</strong> <%= data.deadline_eval %></p>		
@@ -135,5 +135,6 @@
 			<% }) %>			
 		</div>
 	</div>
+	
 </body>
 </html>

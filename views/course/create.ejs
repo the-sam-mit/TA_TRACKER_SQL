@@ -40,14 +40,35 @@
 					<input class="form-control" placeholder="name" name="name" type="text">
 				</div>
 				<div class="form-group">
-					<input class="form-control" placeholder="semester" name="semester" type="text">
-				</div>
-				<div class="form-group">
-					<input class="form-control" placeholder="year" name="year" type="text">
-				</div>
-				<div class="form-group">
-					<input class="form-control" placeholder="stream" name="stream" type="text">
-				</div>
+					<label for="sem">Semester</label>
+					<select name="semester"  class="form-control" id="sem">
+						<option selected>1</option>
+						<% for(var i=2;i<=8;i++){ %>
+							<option><%=i%></option>
+							<% } %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="year">Year</label>
+						<select name="year"  class="form-control" id="year">
+							<% for(var i=1998;i<2019;i++){ %>
+								<option><%=i%></option>
+								<% } %>
+								<option selected >2020</option>
+								<% for(var i=2021;i<2030;i++){ %>
+									<option><%=i%></option>
+									<% } %>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="stream">Stream</label>
+								<select name="stream"  class="form-control" id="stream">
+									<option selected >IT</option>
+									<option>ECE</option>
+									<option>IT-BI</option>
+								</select>
+							</div>
+							
 				<button class="btn btn-md btn-primary btn-block">Create</button>
 			</form>
 		</div>

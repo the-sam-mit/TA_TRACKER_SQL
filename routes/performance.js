@@ -52,7 +52,14 @@ router.get("/:id/view",middleware.isLoggedIn,function(req,res){
     	}
 	    else{
 	      console.log("assistant_data: "+ JSON.stringify(assistant_data));
-          res.render("./performance/view.ejs", {user:req.user, assistant_data:assistant_data[0], marks_data:marks});
+	      var query2     = 'select * from checks inner join student on checks.Sid=student.id where checks.Tid = ?';
+		  let students = await queryExecute(query2 ,[req.params.id]) ;
+          console.log("bache:-", students);
+
+          var query3     = 'select * from assigned inner join under on under.Tid=assigned.Tid where under.Tid = ?';
+		  let assns = await queryExecute(query3 ,[req.params.id]) ;
+          console.log("bache:-", assns);
+          res.render("./performance/view.ejs", {user:req.user, assistant_data:assistant_data[0], marks_data:marks, students:students, assns:assns});
 	   	}
   	}
 
