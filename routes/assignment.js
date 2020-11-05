@@ -238,7 +238,7 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 
 // marks updates
 router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
-	console.log("hi there----------------------------------------------------------------------------------------------------------------------------------------------------");
+	console.log("hi there- at updating---------------------------------------------------------------------------------------------------------------------------------------------------");
 	console.log(req.body.marks);
 	console.log(req.params.SSid);
 	async function updateMarks() {
@@ -247,6 +247,32 @@ router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
 		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 	}
 	updateMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+
+router.post("/:Aid/marksfreeze",middleware.isLoggedIn,function(req,res){
+	console.log("hi there at freezing----------------------------------------------------------------------------------------------------------------------------------------------------");
+	console.log(req.body.marks);
+
+	async function freezeMarks() {
+		var query  = 'select * from assignment  where id = ?';
+		let assignmentno =await queryExecute(query ,[req.params.Aid]);
+	
+		if((new Date().getTime() - new Date(assignmentno[0].deadline_rubriks).getTime()) >= 0)
+		{
+			var query1='UPDATE assigned SET MarkUploaded=MarkUploaded+1  where Aid = ? and Tid=?';
+			let execute= queryExecute(query1,[req.params.Aid,req.user.id])
+		}
+		else{
+			var query1='UPDATE assigned SET MarkUploaded=0 where Aid = ? and Tid=?';
+			let execute=queryExecute(query1,[req.params.Aid,req.user.id])
+		}
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	freezeMarks().catch((message) => { 
 		console.log(message);
 		res.render("./error.ejs" ,{error:message});
 	});

@@ -71,7 +71,7 @@
 				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %>    </h4>		
 				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %> </h4>		
 				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>				
-				<h4 ><strong>Usernames of Students assigned:</strong>  									               </h4>				
+				<h4 ><strong>Usernames of Students assigned:</strong>  								</h4>				
 
 				<% students.forEach(function(eachStudent){ %>
 			        <li> <%= eachStudent.username %></li>
@@ -143,7 +143,11 @@
 					</div>
   				</form>
 	        </div>
-            <% }) %>
+			<% }) %>
+		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksfreeze" method="POST">
+			<button  class="btn btn-primary btn-lg" >Freeze Marks</button>
+		</form>
+			
        </div>
 
 </body>
