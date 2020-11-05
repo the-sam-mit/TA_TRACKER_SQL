@@ -157,8 +157,13 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 		                     where submission.Aid = ?';
 				    
 				    var params= [req.params.Aid];
-				    var submission_data = await queryExecute(query,params);
-					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,rubrics_data:rubrics_data[0]});
+					var submission_data = await queryExecute(query,params);
+					
+					query = 'select sum(a.MarkUploaded) as countMarkUploads, count(*) as countTA from assigned as a where a.Aid=?'; 
+				    var params= [req.params.Aid];
+				    var marksData = await queryExecute(query,params);
+					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],
+						asisstant_data:asisstant_data,submission_data:submission_data,rubrics_data:rubrics_data[0],marksData:marksData[0]});
 				}
 				else if(req.user.type === "Asisstant")
 				{
@@ -244,6 +249,35 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 		res.render("./error.ejs" ,{error:message});
 	});
 });
+// PROFESSOR MARKS CHANGES
+// marks Freeze Professor
+router.post("/:Aid/marksFreeze",middleware.isLoggedIn,function(req,res){
+	console.log("ASSIGNMENT freezing marks for:"+req.params.Aid);
+	async function freezeMarks() {
+		var query     = 'UPDATE `assignment` SET marksFreezed = ? where id = ?';
+		let updated   = await queryExecute(query ,[1, req.params.Aid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	freezeMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+});
+
+// marks Unfreeze Professor
+router.post("/:Aid/marksUnfreeze",middleware.isLoggedIn,function(req,res){
+	console.log("ASSIGNMENT Unfreeze marks for:"+req.params.Aid);
+	async function UnfreezeMarks() {
+		var query     = 'UPDATE `assignment` SET marksFreezed = ? where id = ?';
+		let updated   = await queryExecute(query ,[0, req.params.Aid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	UnfreezeMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+});
+
 
 // marks updates
 router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){

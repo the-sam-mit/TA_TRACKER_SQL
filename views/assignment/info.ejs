@@ -92,23 +92,29 @@
 		<% //assignment info list here %>
 		<div class="row">
 			<div class="col-md-4">  
-				<h4 ><strong>course</strong>             <%= assignment_data.course %>             </h4>		
-				<h4 ><strong>type</strong>               <%= assignment_data.type %>               </h4>		
-				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %>    </h4>		
-				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %> </h4>		
-				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>		
-				<h4 ><strong>assignedTA</strong>         <%= assignment_data.assignedTA %>         </h4>		
+				<h4 ><strong>course</strong>             <%= assignment_data.course %>           </h4>		
+				<h4 ><strong>type</strong>               <%= assignment_data.type %>             </h4>		
+				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %> </h4>		
+				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %>    </h4>		
+				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>       </h4>		
+				<h4 ><strong>MarksFreezed</strong>         <%= assignment_data.marksFreezed %>       </h4>		
+				<h4 ><strong>assignedTA</strong>         <%= assignment_data.assignedTA %>       </h4>		
 			</div>
 
 			<% //assignment features %>
 			<div class="col-md-4">  
-				<p>coming soon..</p>
-				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/submission/import" class="btn btn-md btn-info">import Submissions</a>
-				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-success">Update Details</a>
-				<form id="deletebutton" action="#" method="GET"> 
-					<button class="btn btn-md btn-danger">Delete</button>
-				</form>
-				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/submission/import" class="btn btn-md btn-outline-info">import Submissions</a>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-outline-success">Update Details</a>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-outline-info">View Rubrics</a>
+				<%if(assignment_data.marksFreezed == 1){%>
+					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksUnfreeze" method="POST"> 
+						<button class="btn btn-md btn-primary">Unfreeze Marks</button>
+					</form>
+				<%}else if(assignment_data.marksFreezed == 0 && marksData.countTA == marksData.countMarkUploads ){%>
+					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksFreeze" method="POST"> 
+						<button  class="btn btn-md btn-warning">Freeze Marks</button>
+					</form>
+				<%}%>
 			</div>
 		</div>
 		<%//TA info %>
@@ -121,16 +127,10 @@
 					<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
 					<p ><strong> Year</strong>      <%= data.year %>     </p>		
 					<p ><strong> Stream</strong>    <%= data.stream %>   </p>		
+					<p ><strong> MarksUploaded</strong>    <%= data.MarkUploaded %>   </p>		
 				</div>
 			<% }) %>
-
-			
-			
 		</div>
-
-		
-
-
 	</div>
 
 	<%//submission info %>
