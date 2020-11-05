@@ -251,7 +251,7 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 });
 // PROFESSOR MARKS CHANGES
 // marks Freeze Professor
-router.post("/:Aid/marksFreeze",middleware.isLoggedIn,function(req,res){
+router.post("/:Aid/ProfmarksFreeze",middleware.isLoggedIn,function(req,res){
 	console.log("ASSIGNMENT freezing marks for:"+req.params.Aid);
 	async function freezeMarks() {
 		var query     = 'UPDATE `assignment` SET marksFreezed = ? where id = ?';
@@ -265,7 +265,7 @@ router.post("/:Aid/marksFreeze",middleware.isLoggedIn,function(req,res){
 });
 
 // marks Unfreeze Professor
-router.post("/:Aid/marksUnfreeze",middleware.isLoggedIn,function(req,res){
+router.post("/:Aid/ProfmarksUnfreeze",middleware.isLoggedIn,function(req,res){
 	console.log("ASSIGNMENT Unfreeze marks for:"+req.params.Aid);
 	async function UnfreezeMarks() {
 		var query     = 'UPDATE `assignment` SET marksFreezed = ? where id = ?';
@@ -296,6 +296,7 @@ router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
 	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
 });
 
+//marks freeze TA
 router.post("/:Aid/marksfreeze",middleware.isLoggedIn,function(req,res){
 	console.log("hi there at freezing----------------------------------------------------------------------------------------------------------------------------------------------------");
 	console.log(req.body.marks);

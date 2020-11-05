@@ -107,11 +107,11 @@
 				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-outline-success">Update Details</a>
 				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-outline-info">View Rubrics</a>
 				<%if(assignment_data.marksFreezed == 1){%>
-					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksUnfreeze" method="POST"> 
+					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksUnfreeze" method="POST"> 
 						<button class="btn btn-md btn-primary">Unfreeze Marks</button>
 					</form>
 				<%}else if(assignment_data.marksFreezed == 0 && marksData.countTA == marksData.countMarkUploads ){%>
-					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksFreeze" method="POST"> 
+					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksFreeze" method="POST"> 
 						<button  class="btn btn-md btn-warning">Freeze Marks</button>
 					</form>
 				<%}%>
