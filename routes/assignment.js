@@ -173,7 +173,16 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 
 				    var query2     = 'select * from checks inner join student on checks.Sid=student.id where checks.Tid = ?';
 					let students = await queryExecute(query2 ,[req.user.id]) ;
-					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students,rubrics_data:rubrics_data[0]});
+
+					var query3     = 'select MarkUploaded from assigned where Tid=? and Aid=?';
+					let marks_updated = await queryExecute(query3 ,[req.user.id, req.params.Aid]) ;
+					var str="enabled";
+					if(marks_updated[0].MarkUploaded==1){
+						str="disabled";
+					}
+					console.log("MARKS:_ ", marks_updated[0].MarkUploaded);
+					console.log(str);
+					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students,rubrics_data:rubrics_data[0],str:str});
 	                
 				}
 				else if(req.user.type === "Student")
@@ -239,8 +248,8 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 // marks updates
 router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
 	console.log("hi there----------------------------------------------------------------------------------------------------------------------------------------------------");
-	console.log(req.body.marks);
-	console.log(req.params.SSid);
+	console.log(req.body);
+	console.log(req.params);
 	async function updateMarks() {
 		var query     = 'UPDATE `submission` SET marks = ? where id = ?';
 		let updated   = await queryExecute(query ,[req.body.marks, req.params.SSid]) ;

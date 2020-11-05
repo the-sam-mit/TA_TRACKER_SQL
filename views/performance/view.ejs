@@ -79,9 +79,11 @@
 	        </div>
 	        <div class="row" style="background:#ccc" >
 				<%var i = 0;%>
+				<%var tot = 0;%>
 				<% marks_data.forEach(function(data){ %>
 					<div class="col-sm-2">  <strong> <%=10*i%> - <%=10*i + 10%></strong>  </div>
 	           		<div class="col-sm-2">  <strong> <%= data %> </strong> </div>
+	           		<%tot = tot+data;%>
 					<br>
 					<%i = i+1;%>
 				<% }) %>
@@ -99,6 +101,10 @@
 	           		<div class="col-sm-2">  <strong> <%= data.username %> </strong> </div>
 				<% }) %>
 			</div>
+	        <div class="row">
+	        	<div>  <strong> Students Graded: </strong><%= tot %>/<%= students.length %> </div>
+	        </div>
+
 	     </div>
 
  	     <div class="container">
@@ -113,11 +119,7 @@
 	     </div>
 	</div>
 	<div class="container">
-		<h3>To be done (if possible)</h6>
-		<h6 style="color:Green;">Graph</h3>
-		<h6 style="color:Green;">display assn assigned => done</h3>
-		<h6 style="color:Green;">display students handled => done</h3>
-		<h6 style="color:Tomato;">deadline upload??</h3>
+		<h6 style="color:Tomato;">deadline upload.</h3>
 	</div>
 
 
@@ -135,6 +137,7 @@
 		 dada.push(['<%=10*j%> - <%=10*j + 10%>', <%= data %>]);
 		<%j = j+1;%>
 	<% }) %>
+	dada.push(['Not uploaded',<%= students.length- tot %>]);
 	console.log(dada);
 	  var data = google.visualization.arrayToDataTable(dada);
 	  var options = {'title':'Marks Analysis', 'width':550, 'height':400};
