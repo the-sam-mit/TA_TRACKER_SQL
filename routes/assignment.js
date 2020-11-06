@@ -143,8 +143,10 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 	            }
 	            else if(req.user.type === "Student")
 	            {
-                    res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
-	            }
+			    var query3= 'select * from query where Aid = ? and Sid = ?';
+	            	    let query_data = await queryExecute(query3 ,[req.params.id,req.user.id]);
+                    	    res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,query_data: query_data});
+                    }
 	        }
 	        else
 	        {
@@ -200,7 +202,9 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 				    
 				    var params= [req.user.id,req.params.Aid];
 				    var submission_data = await queryExecute(query,params);
-					res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data});
+				    var query3= 'select * from query where Aid = ? and Sid = ?';
+	            		    let query_data = await queryExecute(query3 ,[req.params.id,req.user.id]);
+				    res.render("./assignment/info_Student.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,query_data: query_data});
 				}
 	        }
 		}
@@ -322,6 +326,39 @@ router.post("/:Aid/marksfreeze",middleware.isLoggedIn,function(req,res){
 	});
 	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
 });
+
+// ta rating by student
+router.post("/:Aid/rateTA/:Tid",middleware.isLoggedIn,function(req,res){
+	
+	console.log(req.params.Tid);
+	async function rateTA() {
+		var query     = 'UPDATE `assigned` SET  studentRating= ? where Tid = ? and Aid = ?';
+		let rated   = await queryExecute(query ,[req.body.rating, req.params.Tid, req.params.Aid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	rateTA().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+
+// raise query
+router.post("/:Aid/query/:Tid/:Sub_id",middleware.isLoggedIn,function(req,res){
+	
+	console.log(req.params.Tid);
+	async function raiseQuery() {
+		var query     = "INSERT INTO query(Sub_id,Sid, Tid, Aid, q_type, q_description) VALUES (?,?,?,?,?,?)";
+		let query_raised  = await queryExecute(query ,[req.params.Sub_id,req.user.id,req.params.Tid, req.params.Aid,req.body.queryType,req.body.description]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	raiseQuery().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+
 // -------------
 
 // REFATORING --------------------from assignment to submission and rubrics
