@@ -56,8 +56,9 @@ router.get("/:id/view",middleware.isLoggedIn,function(req,res){
 		  let students = await queryExecute(query2 ,[req.params.id]) ;
           console.log("bache:-", students);
 
-          var query3     = 'select * from assigned inner join under on under.Tid=assigned.Tid where under.Tid = ?';
-		  let assns = await queryExecute(query3 ,[req.params.id]) ;
+          var query3     = 'select * from assigned inner join under on under.Tid=assigned.Tid where under.Pid = ? and under.Tid=?';
+		  let assns = await queryExecute(query3 ,[req.user.id,req.params.id]) ;
+          console.log("marks_data: "+ JSON.stringify(assns));
           console.log("bache:-", assns);
           res.render("./performance/view.ejs", {user:req.user, assistant_data:assistant_data[0], marks_data:marks, students:students, assns:assns});
 	   	}

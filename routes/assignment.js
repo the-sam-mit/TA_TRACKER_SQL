@@ -157,8 +157,13 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 		                     where submission.Aid = ?';
 				    
 				    var params= [req.params.Aid];
-				    var submission_data = await queryExecute(query,params);
-					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,rubrics_data:rubrics_data[0]});
+					var submission_data = await queryExecute(query,params);
+					
+					query = 'select sum(a.MarkUploaded) as countMarkUploads, count(*) as countTA from assigned as a where a.Aid=?'; 
+				    var params= [req.params.Aid];
+				    var marksData = await queryExecute(query,params);
+					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],
+						asisstant_data:asisstant_data,submission_data:submission_data,rubrics_data:rubrics_data[0],marksData:marksData[0]});
 				}
 				else if(req.user.type === "Asisstant")
 				{
@@ -173,7 +178,16 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 
 				    var query2     = 'select * from checks inner join student on checks.Sid=student.id where checks.Tid = ?';
 					let students = await queryExecute(query2 ,[req.user.id]) ;
-					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students,rubrics_data:rubrics_data[0]});
+
+					var query3     = 'select MarkUploaded from assigned where Tid=? and Aid=?';
+					let marks_updated = await queryExecute(query3 ,[req.user.id, req.params.Aid]) ;
+					var str="enabled";
+					if(marks_updated[0].MarkUploaded==1){
+						str="disabled";
+					}
+					console.log("MARKS:_ ", marks_updated[0].MarkUploaded);
+					console.log(str);
+					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students,rubrics_data:rubrics_data[0],str:str});
 	                
 				}
 				else if(req.user.type === "Student")
@@ -235,10 +249,39 @@ router.post("/:Aid/update",middleware.isLoggedIn,function(req,res){
 		res.render("./error.ejs" ,{error:message});
 	});
 });
+// PROFESSOR MARKS CHANGES
+// marks Freeze Professor
+router.post("/:Aid/ProfmarksFreeze",middleware.isLoggedIn,function(req,res){
+	console.log("ASSIGNMENT freezing marks for:"+req.params.Aid);
+	async function freezeMarks() {
+		var query     = 'UPDATE `assignment` SET marksFreezed = ? where id = ?';
+		let updated   = await queryExecute(query ,[1, req.params.Aid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	freezeMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+});
+
+// marks Unfreeze Professor
+router.post("/:Aid/ProfmarksUnfreeze",middleware.isLoggedIn,function(req,res){
+	console.log("ASSIGNMENT Unfreeze marks for:"+req.params.Aid);
+	async function UnfreezeMarks() {
+		var query     = 'UPDATE `assignment` SET marksFreezed = ? where id = ?';
+		let updated   = await queryExecute(query ,[0, req.params.Aid]) ;
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	UnfreezeMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+});
+
 
 // marks updates
 router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
-	console.log("hi there----------------------------------------------------------------------------------------------------------------------------------------------------");
+	console.log("hi there- at updating---------------------------------------------------------------------------------------------------------------------------------------------------");
 	console.log(req.body.marks);
 	console.log(req.params.SSid);
 	async function updateMarks() {
@@ -247,6 +290,33 @@ router.post("/:Aid/marksupdate/:SSid",middleware.isLoggedIn,function(req,res){
 		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 	}
 	updateMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+
+//marks freeze TA
+router.post("/:Aid/marksfreeze",middleware.isLoggedIn,function(req,res){
+	console.log("hi there at freezing----------------------------------------------------------------------------------------------------------------------------------------------------");
+	console.log(req.body.marks);
+
+	async function freezeMarks() {
+		var query  = 'select * from assignment  where id = ?';
+		let assignmentno =await queryExecute(query ,[req.params.Aid]);
+	
+		if((new Date().getTime() - new Date(assignmentno[0].deadline_rubriks).getTime()) >= 0)
+		{
+			var query1='UPDATE assigned SET MarkUploaded=MarkUploaded+1  where Aid = ? and Tid=?';
+			let execute= queryExecute(query1,[req.params.Aid,req.user.id])
+		}
+		else{
+			var query1='UPDATE assigned SET MarkUploaded=0 where Aid = ? and Tid=?';
+			let execute=queryExecute(query1,[req.params.Aid,req.user.id])
+		}
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	freezeMarks().catch((message) => { 
 		console.log(message);
 		res.render("./error.ejs" ,{error:message});
 	});

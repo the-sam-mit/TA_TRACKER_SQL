@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `' + dbconfig.courses + '` ( \
 console.log('Success: course table Created!');
 
 // UPDATED FROM HERE
-// ----------------------------------------
+// ----------------------------------------MarksFreezed = 1:finalFreeze, 0:FreezeBased on TA freeze, -1:Unfreeze
 // assignment
 var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
             id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,\
@@ -90,10 +90,16 @@ var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
              type VARCHAR(255),\
              created_at DATETIME DEFAULT CURRENT_TIMESTAMP,\
              deadline_rubriks DATETIME ,\
-             deadline_eval DATETIME \
-             )";
+             deadline_eval DATETIME, \
+             marksFreezed INT DEFAULT 0 \
+              )";
 connection.query(sql);
 console.log('Success: assignment table Created!');
+
+// marksFreezed Column
+var sql = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
+connection.query(sql);
+console.log('Success: assignment table col -marksFreezed added!');
 
 
 // ----------------------------------------

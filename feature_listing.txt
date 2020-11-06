@@ -61,17 +61,22 @@ Amritansh                    ---        Frontend Pages + Performances graphs and
 
 2. Professor_Route--
                   -- rateTA
-                  -- Freeze marks  <-------------------------------|<--|
-                  -- approve marks <-------------------------------|<--|---------------
-                                                                                      |
-3. TA_ROUTES -----                                                                    |
-        - Done all marks button ====> req for freeze/approve marks and deadline match--
-        - TA performance score Params::-
-                    professorRating,
-                    studentRating,
-                    deadline skips,
-                    marks,
-                    --- need to be stored for each assignment in TABLE                                                                                                                       |  
+                  -- Freeze marks  <-------------------------------|<--|-<--TAconsent---<
+                                                                                        |
+3. TA_ROUTES -----                                                                      |
+        - Gave all marks button ====> req for freeze/approve marks and deadline match--->
+        - TA performance score Params::-  =========> Nov4-- updated assigned table to hold some measures
+                        professorRating,
+                        studentRating,
+                        deadline skips, 
+                        MarkUploaded, ( within deadline ) if not put 1 there
+                        MarkQuery1,  -----as req
+                        MarkResolve1, -----as req
+                        MarkQuery2,   -----as req
+                        marks,       ------as req
+                    --- need to be stored for each assignment in TABLE              
+        
+        - fetch all performance data                                                                                                         |  
 
 4. StudentRoute -- rateTA
                 -- see marks only when freezed, see rubricks when approved ========= DEPENDENT on OTHERS WORK
@@ -83,4 +88,3 @@ QUERY ROUTES NEEDED for -- student raise -1
                         -- TA resolve
                         -- student raise -2
                         -- professor resolve
-
