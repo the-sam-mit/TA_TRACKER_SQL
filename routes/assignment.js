@@ -182,7 +182,7 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 					var query3     = 'select MarkUploaded from assigned where Tid=? and Aid=?';
 					let marks_updated = await queryExecute(query3 ,[req.user.id, req.params.Aid]) ;
 					var str="enabled";
-					if(marks_updated[0].MarkUploaded==1){
+					if(marks_updated[0].MarkUploaded>=1){
 						str="disabled";
 					}
 					console.log("MARKS:_ ", marks_updated[0].MarkUploaded);
