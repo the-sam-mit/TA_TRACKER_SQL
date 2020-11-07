@@ -96,10 +96,13 @@ var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
 connection.query(sql);
 console.log('Success: assignment table Created!');
 
-// marksFreezed Column
-var sql = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
-connection.query(sql);
-console.log('Success: assignment table col -marksFreezed added!');
+var sql = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND COLUMN_NAME='marksFreezed' AND TABLE_NAME='assignment'"
+connection.query(sql,function (err, result, fields) {
+    if(result[0] != null || result[0] != undefined){
+        var sql2 = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
+        connection.query(sql2);
+    }
+});console.log('Success: assignment table altered marksk freezed corrected Created!');
 
 
 // ----------------------------------------
