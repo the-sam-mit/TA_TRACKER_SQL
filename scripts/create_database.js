@@ -232,5 +232,21 @@ var sql= "CREATE TABLE IF NOT EXISTS `checks` ( \
 connection.query(sql);
 console.log('Success: checks table Created!');
 
+// query      submission ID , TID, SID
+var sql= "CREATE TABLE IF NOT EXISTS `query` ( \
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
+    `Sub_id` INT UNSIGNED, \
+    `Sid` INT UNSIGNED, \
+    `Tid` INT UNSIGNED, \
+    `Aid` INT UNSIGNED, \
+    `q_type` VARCHAR(255) , \
+    `q_description` VARCHAR(255) , \
+        PRIMARY KEY (`id`), \
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) \
+)";
+
+// //FOREIGN KEY(Aid) REFERENCES `submission`(Aid),\
+connection.query(sql);
+console.log('Success: query table Created!');
 
 connection.end();
