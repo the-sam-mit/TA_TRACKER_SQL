@@ -59,8 +59,20 @@ router.get("/:id/view",middleware.isLoggedIn,function(req,res){
           var query3     = 'select * from assigned inner join under on under.Tid=assigned.Tid where under.Pid = ? and under.Tid=?';
 		  let assns = await queryExecute(query3 ,[req.user.id,req.params.id]) ;
           console.log("marks_data: "+ JSON.stringify(assns));
-          console.log("bache:-", assns);
-          res.render("./performance/view.ejs", {user:req.user, assistant_data:assistant_data[0], marks_data:marks, students:students, assns:assns});
+		  console.log("bache:-", assns);
+		  
+		  var query4     = 'select avg(professorRating) as avgPro, avg(studentRating) as avgStu from assigned where Tid=?';
+		  let rateD = await queryExecute(query4 ,[req.params.id]) ;
+          console.log(rateD[0].avgPro);
+		  var rates = rateD[0].avgPro*10;
+		  var ratesS = rateD[0].avgStu*10;
+		  if(rates<30){
+			  rates = 30;
+		  } // this one for giving everyone a Hope! :P
+		  if(ratesS<30){
+			ratesS = 30;
+		} // this one for giving everyone a Hope! :P
+          res.render("./performance/view.ejs", {user:req.user, assistant_data:assistant_data[0], marks_data:marks, students:students, assns:assns, rates:rates, ratesS:ratesS});
 	   	}
   	}
 
