@@ -138,14 +138,14 @@
 	           
 	           <form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksupdate/<%= sdata.Subid %>" method="POST">
 		        	<div class="form-group">
-						<input class="form-control" placeholder="marks" name="marks" type="text">
+						<input class="form-control" placeholder="marks" name="marks" type="text" <%=str%>>
 						<button class="btn btn-md btn-info btn-block" <%=str%>>Add Marks</button>
 					</div>
   				</form>
 	        </div>
 			<% }) %>
 		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksfreeze" method="POST">
-			<button  class="btn btn-primary btn-lg" >Freeze Marks</button>
+			<button  class="btn btn-primary btn-lg" <%=str%>>Freeze Marks</button>
 		</form>
 			
 

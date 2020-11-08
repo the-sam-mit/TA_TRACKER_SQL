@@ -218,11 +218,17 @@ router.get("/:id",middleware.isLoggedIn,function(req,res){
 			query     = 'select * from assignment inner join include on assignment.id = include.Aid where include.Cid = ?';
 			let assignment_data = await queryExecute(query ,[req.params.id]) ;
 			
-			console.log("P: "+ JSON.stringify(professor_data));
-			console.log("S: "+ JSON.stringify(student_data));
-			console.log("A: "+ JSON.stringify(asisstant_data));
-			console.log("Assignments: "+ JSON.stringify(assignment_data));
-			res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0], professor_data:professor_data, student_data:student_data, asisstant_data:asisstant_data, assignment_data:assignment_data});
+			// assigned data
+			query     = 'select * from assignment inner join assigned on assignment.id = assigned.Aid where assigned.Tid=?';
+			let assigned_data = await queryExecute(query ,[req.user.id]) ;
+
+			if(req.user.type === "Asisstant" && (assigned_data != null && assigned_data != undefined && assigned_data.length != 0)){
+				assignment_data = assigned_data;
+				res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0], professor_data:professor_data, student_data:student_data, asisstant_data:asisstant_data, assignment_data:assignment_data});
+			}
+			else{
+				res.render("./course/Coursedashboard.ejs", {user:req.user, course_data:course_data[0], professor_data:professor_data, student_data:student_data, asisstant_data:asisstant_data, assignment_data:assignment_data});
+			}
 		}
 	}
 	showInfo().catch((message) => { 
