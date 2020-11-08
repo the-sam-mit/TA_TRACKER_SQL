@@ -97,7 +97,7 @@ connection.query(sql);
 console.log('Success: assignment table Created!');
 
 // marksFreezed Column
-var sql = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
+// var sql = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
 connection.query(sql);
 console.log('Success: assignment table col -marksFreezed added!');
 

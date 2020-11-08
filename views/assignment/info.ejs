@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Node Authentication</title>
+	<title>Professor DashBoard</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
@@ -72,7 +72,6 @@
 			<h1><span class="fa fa-anchor"></span> Assignment Dashboard</h1>
 			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
 		</div>
-
 		<div class="row">
 			<!-- LOCAL INFORMATION -->
 			<div class="col-sm-6">
@@ -110,7 +109,8 @@
 					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksUnfreeze" method="POST"> 
 						<button class="btn btn-md btn-primary">Unfreeze Marks</button>
 					</form>
-				<%}else if(assignment_data.marksFreezed == 0 && marksData.countTA == marksData.countMarkUploads ){%>
+				<%}else if(assignment_data.marksFreezed == 0  ){%>
+					<%// PUT IN ELSE-IF AFTER TA FREEEZE FIX --> && marksData.countTA == marksData.countMarkUploads%>
 					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksFreeze" method="POST"> 
 						<button  class="btn btn-md btn-warning">Freeze Marks</button>
 					</form>

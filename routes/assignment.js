@@ -161,9 +161,10 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 				    var params= [req.params.Aid];
 					var submission_data = await queryExecute(query,params);
 					
-					query = 'select sum(a.MarkUploaded) as countMarkUploads, count(*) as countTA from assigned as a where a.Aid=?'; 
+					query2 = 'select sum(a.MarkUploaded) as countMarkUploads, count(*) as countTA from assigned as a where a.Aid=?'; 
 				    var params= [req.params.Aid];
-				    var marksData = await queryExecute(query,params);
+					var marksData = await queryExecute(query2,params);
+					console.log("common -- ", marksData);
 					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],
 						asisstant_data:asisstant_data,submission_data:submission_data,rubrics_data:rubrics_data[0],marksData:marksData[0]});
 				}

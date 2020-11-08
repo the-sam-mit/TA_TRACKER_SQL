@@ -64,8 +64,8 @@ router.get("/:id/view",middleware.isLoggedIn,function(req,res){
 		  var query4     = 'select avg(professorRating) as avgPro, avg(studentRating) as avgStu from assigned where Tid=?';
 		  let rateD = await queryExecute(query4 ,[req.params.id]) ;
           console.log(rateD[0].avgPro);
-		  var rates = rateD[0].avgPro*10;
-		  var ratesS = rateD[0].avgStu*10;
+		  var rates = rateD[0].avgPro*20;
+		  var ratesS = rateD[0].avgStu*20;
 		  if(rates<30){
 			  rates = 30;
 		  } // this one for giving everyone a Hope! :P
