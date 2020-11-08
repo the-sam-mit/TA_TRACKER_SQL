@@ -112,9 +112,87 @@
 	           <div class="col-md-2"> <%= sdata.ta_name %>  </div>
 	           <div class="col-md-2"> <%= sdata.a_name %>  </div>
 	           <div class="col-md-2"> <a href="<%= allPaths[sdata.sub_id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
-	           <div class="col-md-2"> <%= sdata.marks %>   </div>
+	           <div class="col-md-2">
+	            <% if(assignment_data.marksFreezed == 1) {  %>
+	                       <%= sdata.marks %> 
+	            <% }  %>
+	           </div>
+
 	        </div>
-            <% }) %>
+           
+
+         <% }) %>
+            
+             <%//student rating for TA%>
+
+           <% if(submission_data.length != 0 && submission_data != undefined && submission_data != null && assignment_data.marksFreezed == 1){  %>
+                   <div style="width:30% ;margin:auto;">
+                 <br>
+		         <h4> Give TA Rating </h4>
+		         <h5> Rating : </h5>
+		         <% 
+		             asisstant_data.forEach(function(adata){ 
+	                      if(adata.Tid === submission_data[0].Tid){ %>
+	                       <p>   <%= adata.studentRating %>  </p>
+	             <%    }})  %> 
+             
+              
+	            <form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rateTA/<%= submission_data[0].Tid %>" method= "POST">
+
+			<div class="form-group">
+			<select name="rating"  class="form-control" id="rating">
+				<% for(var i=1;i<=5;i++){ %>
+					<option><%=i%></option>
+					<% } %>
+				</select>
+			<button class="btn btn-md btn-info btn-block">Give Rating</button>
+			</div>
+
+  		    </form>
+                  </div>
+
+            <% }  %>
+             
+               <%//query raise %>
+			 <div style="width:30% ;margin:auto;">
+             <% if(submission_data.length != 0 && submission_data != undefined && submission_data != null && assignment_data.marksFreezed == 1){ 
+                 if(query_data.length == 0 || query_data == undefined || query_data == null){  %>
+			<br>
+                 <h4> Raise query </h4>
+
+             	 <form action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/query/<%=submission_data[0].Tid %>/<%= submission_data[0].sub_id %>" method= "POST">
+                      
+                      <div class="form-group">
+                        <label for="queryType"> Query Type </label>
+				<select name="queryType"  class="form-control" id="queryType">	
+					<option> q1 </option>
+					<option> q2 </option>
+					<option> q3 </option>
+					<option> q4 </option>
+					<option> q5 </option>
+				</select>
+					  
+		       </div>
+
+		      <div class="form-group">
+			<label for="description"> Description </label>
+                       <input class="form-control" placeholder="description" name="description" type="text">
+					  
+		      </div>
+		      <button class="btn btn-md btn-info btn-block"> Raise Query </button>
+		      <br>
+
+             	 </form>
+             <% }  %>
+         <% }  %>
+
+         <% if(query_data.length != 0 && query_data != undefined && query_data != null){  %>
+                  <br>
+                  <h4> Raised Query:- </h4>
+                  <h5> Type:   <%= query_data[0].q_type %> </h5>
+                  <h5> Description:   <%= query_data[0].q_description %> </h5>
+         <% }  %>
+          </div>
        </div>
 
 </body>

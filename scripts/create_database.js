@@ -96,10 +96,13 @@ var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
 connection.query(sql);
 console.log('Success: assignment table Created!');
 
-// marksFreezed Column
-var sql = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
-connection.query(sql);
-console.log('Success: assignment table col -marksFreezed added!');
+var sql = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND COLUMN_NAME='marksFreezed' AND TABLE_NAME='assignment'"
+connection.query(sql,function (err, result, fields) {
+    if(result[0] != null || result[0] != undefined){
+        var sql2 = "alter table assignment ADD COLUMN marksFreezed INT DEFAULT 0";
+        connection.query(sql2);
+    }
+});console.log('Success: assignment table altered marksk freezed corrected Created!');
 
 
 // ----------------------------------------
@@ -232,5 +235,21 @@ var sql= "CREATE TABLE IF NOT EXISTS `checks` ( \
 connection.query(sql);
 console.log('Success: checks table Created!');
 
+// query      submission ID , TID, SID
+var sql= "CREATE TABLE IF NOT EXISTS `query` ( \
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
+    `Sub_id` INT UNSIGNED, \
+    `Sid` INT UNSIGNED, \
+    `Tid` INT UNSIGNED, \
+    `Aid` INT UNSIGNED, \
+    `q_type` VARCHAR(255) , \
+    `q_description` VARCHAR(255) , \
+        PRIMARY KEY (`id`), \
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) \
+)";
+
+// //FOREIGN KEY(Aid) REFERENCES `submission`(Aid),\
+connection.query(sql);
+console.log('Success: query table Created!');
 
 connection.end();
