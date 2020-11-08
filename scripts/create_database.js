@@ -96,6 +96,7 @@ var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.users_table4+"(\
 connection.query(sql);
 console.log('Success: assignment table Created!');
 
+
 var sql = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND COLUMN_NAME='marksFreezed' AND TABLE_NAME='assignment'"
 connection.query(sql,function (err, result, fields) {
     if(result[0] != null || result[0] != undefined){

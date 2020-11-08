@@ -7,6 +7,24 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
+		.star-ratings-sprite 
+		{
+			background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+			font-size: 0;
+			height: 21px;
+			line-height: 0;
+			overflow: hidden;
+			text-indent: -999em;
+			width: 110px;
+			margin: 0 auto;
+		}
+		.star-ratings-sprite-rating {
+    		background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+			background-position: 0 100%;
+			float: left;
+			height: 21px;
+			display:block;
+		}
 	</style>
 </head>
 <body>
@@ -71,6 +89,11 @@
 	</div>
 
 	<div class="container">
+		<h3>Professor Rating :- <%= rates%>%</h3>
+		<div class="star-ratings-sprite"><span style="width:<%= rates%>%" class="star-ratings-sprite-rating"></span></div>
+
+		<h3>Student Rating :- <%= ratesS%>%</h3>
+		<div class="star-ratings-sprite"><span style="width:<%= ratesS%>%" class="star-ratings-sprite-rating"></span></div>
 
 		<div class="container">
 	        <div class="row">

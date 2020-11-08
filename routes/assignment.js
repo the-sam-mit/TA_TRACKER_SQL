@@ -161,9 +161,10 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 				    var params= [req.params.Aid];
 					var submission_data = await queryExecute(query,params);
 					
-					query = 'select sum(a.MarkUploaded) as countMarkUploads, count(*) as countTA from assigned as a where a.Aid=?'; 
+					query2 = 'select sum(a.MarkUploaded) as countMarkUploads, count(*) as countTA from assigned as a where a.Aid=?'; 
 				    var params= [req.params.Aid];
-				    var marksData = await queryExecute(query,params);
+					var marksData = await queryExecute(query2,params);
+					console.log("common -- ", marksData);
 					res.render("./assignment/info.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],
 						asisstant_data:asisstant_data,submission_data:submission_data,rubrics_data:rubrics_data[0],marksData:marksData[0]});
 				}
@@ -184,12 +185,19 @@ router.get("/:Aid",middleware.isLoggedIn,function(req,res){
 					var query3     = 'select MarkUploaded from assigned where Tid=? and Aid=?';
 					let marks_updated = await queryExecute(query3 ,[req.user.id, req.params.Aid]) ;
 					console.log("MARKasasS:_ ", marks_updated[0]);
+					var query4  = 'select * from query  where Aid = ? and Tid=?';
+					let queriesA =await queryExecute(query4 ,[req.params.Aid,req.user.id]);
+					var queryY="disabled";
+					if(queriesA.length!=0){
+						queryY="enabled";
+					}
+					
 					var str="enabled";
 					if(marks_updated[0].MarkUploaded>=1){
 						str="disabled";
 					}
 					console.log(str);
-					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students,rubrics_data:rubrics_data[0],str:str});
+					res.render("./assignment/info_TA.ejs", {user:req.user,CID:req.params.id, assignment_data:assignment_data[0],asisstant_data:asisstant_data,submission_data:submission_data,students:students,rubrics_data:rubrics_data[0],str:str,queryY:queryY,queriesA:queriesA});
 	                
 				}
 				else if(req.user.type === "Student")
@@ -313,18 +321,51 @@ router.post("/:Aid/marksfreeze",middleware.isLoggedIn,function(req,res){
 		var query  = 'select * from assignment  where id = ?';
 		let assignmentno =await queryExecute(query ,[req.params.Aid]);
 	
-		if((new Date().getTime() - new Date(assignmentno[0].deadline_rubriks).getTime()) >= 0)
-		{
+		// if((new Date().getTime() - new Date(assignmentno[0].deadline_rubriks).getTime()) >= 0)
+		// {
 			var query1='UPDATE assigned SET MarkUploaded=MarkUploaded+1  where Aid = ? and Tid=?';
 			let execute= queryExecute(query1,[req.params.Aid,req.user.id])
-		}
-		else{
-			var query1='UPDATE assigned SET MarkUploaded=0 where Aid = ? and Tid=?';
-			let execute=queryExecute(query1,[req.params.Aid,req.user.id])
-		}
+		// }
+		// else{
+		// 	var query1='UPDATE assigned SET MarkUploaded=0 where Aid = ? and Tid=?';
+		// 	let execute=queryExecute(query1,[req.params.Aid,req.user.id])
+		// }
 		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 	}
 	freezeMarks().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+
+router.post("/:Aid/queries",middleware.isLoggedIn,function(req,res){
+	// console.log("hi there at freezing-----------------------------------------");
+	// console.log(req.body.marks);
+
+	async function queryR() {
+		var query  = 'select * from query  where Aid = ? and Tid=?';
+		let queriesA =await queryExecute(query ,[req.params.Aid,req.user.id]);
+		console.log(queriesA);
+		var query1='UPDATE assigned SET MarkUploaded=0  where Aid = ? and Tid=?';
+		let execute= queryExecute(query1,[req.params.Aid,req.user.id])
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	queryR().catch((message) => { 
+		console.log(message);
+		res.render("./error.ejs" ,{error:message});
+	});
+	res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);	
+});
+
+router.post("/:Aid/queriesRem",middleware.isLoggedIn,function(req,res){
+	async function queryR() {
+		var query  = 'delete from query  where Aid = ? and Tid=?';
+		let queriesA =await queryExecute(query ,[req.params.Aid,req.user.id]);
+		console.log(queriesA);
+		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
+	}
+	queryR().catch((message) => { 
 		console.log(message);
 		res.render("./error.ejs" ,{error:message});
 	});

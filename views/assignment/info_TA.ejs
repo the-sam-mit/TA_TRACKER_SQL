@@ -83,12 +83,6 @@
 
 			</div>
 		</div>
-		
-			<h4>TODO</h4>
-				<h3>1. show students assigned -> done (assign students to TAs, to be handled by prof)</h3>
-				<h3>2. show students submission assigned </h3>
-				<h3>3. show rubricks -> done </h3>
-				<h3>4. give marks </h3>
 			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
 			<%			console.log(rubrics_data) %>
 			<% if(rubrics_data == undefined || rubrics_data == null){%>
@@ -143,12 +137,38 @@
 					</div>
   				</form>
 	        </div>
-
 			<% }) %>
 		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksfreeze" method="POST">
-			<button  class="btn btn-primary btn-lg" <%=str%>>Freeze Marks</button>
+			<button  class="btn btn-primary btn-lg" <%=str%> >Freeze Marks</button>
 		</form>
-			
+
+		<h4><strong>Query Time (if any).</strong></h4>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2">  <strong> Query ID </strong>  </div>
+				<div class="col-md-2">  <strong> Submission ID </strong>  </div>
+				<div class="col-md-2">  <strong> Student ID </strong> </div>
+				<div class="col-md-2">  <strong> Query Type </strong> </div>
+				<div class="col-md-2">  <strong> Query Description </strong> </div>
+			</div>
+			<% queriesA.forEach(function(qdata){ %>
+				<div class="row">
+					<div class="col-md-2"> <%= qdata.id %> </div>
+					<div class="col-md-2"> <%= qdata.Sub_id %> </div>
+					<div class="col-md-2"> <%= qdata.Sid %>  </div>
+					<div class="col-md-2"> <%= qdata.q_type %>  </div>
+					<div class="col-md-2"> <%= qdata.q_description %>  </div>
+				</div>
+			<% }) %>
+		</div>
+
+		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/queries" method="POST">
+			<button  class="btn btn-primary btn-lg" <%=queryY%>>Resolve Queries</button>
+		</form>	
+
+		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/queriesRem" method="POST">
+			<button  class="btn btn-primary btn-lg" <%=queryY%>>Remove Queries</button>
+		</form>	
 
        </div>
 
