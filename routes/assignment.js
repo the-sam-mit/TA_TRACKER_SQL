@@ -12,6 +12,7 @@ var  SubmissionRoutes = require('./submission.js');
 var  RubricsRoutes     = require('./rubrics.js');
 
 const { query } = require('express');
+const e = require('express');
 // ==============ROUTER CONFIg=========================
 var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
@@ -318,18 +319,30 @@ router.post("/:Aid/marksfreeze",middleware.isLoggedIn,function(req,res){
 	console.log(req.body.marks);
 
 	async function freezeMarks() {
+		//get assignment
 		var query  = 'select * from assignment  where id = ?';
 		let assignmentno =await queryExecute(query ,[req.params.Aid]);
-	
-		// if((new Date().getTime() - new Date(assignmentno[0].deadline_rubriks).getTime()) >= 0)
-		// {
-			var query1='UPDATE assigned SET MarkUploaded=MarkUploaded+1  where Aid = ? and Tid=?';
-			let execute= queryExecute(query1,[req.params.Aid,req.user.id])
-		// }
-		// else{
-		// 	var query1='UPDATE assigned SET MarkUploaded=0 where Aid = ? and Tid=?';
-		// 	let execute=queryExecute(query1,[req.params.Aid,req.user.id])
-		// }
+		//get assigned
+		var query2  = 'select * from assigned where Aid = ? and Tid=?';
+		let assignedRes =await queryExecute(query2,[req.params.Aid,req.user.id])
+		//update markuploaded
+		var query1='UPDATE assigned SET MarkUploaded=1  where Aid = ? and Tid=?';
+		let execute= await queryExecute(query1,[req.params.Aid,req.user.id])
+		// update deadline crossed/not
+		let marksDeadline = true;       //already got whether deadline crossed or not
+		if(assignedRes[0].MarkDeadlineUpdated == 0){
+			marksDeadline = false;      // now deadline needs to be updated whether crossed or not
+		}
+		if(marksDeadline == false && (new Date().getTime() - new Date(assignmentno[0].deadline_rubriks).getTime()) >= 0){
+			//deadline crossed
+			var query1='UPDATE assigned SET MarkDeadlineUpdated=-1  where Aid = ? and Tid=?';
+			let execute= await queryExecute(query1,[req.params.Aid,req.user.id])
+		}
+		else{
+			//deadline not crossed
+			var query1='UPDATE assigned SET MarkDeadlineUpdated=1  where Aid = ? and Tid=?';
+			let execute= await queryExecute(query1,[req.params.Aid,req.user.id])
+		}
 		res.redirect(`/courses/${req.params.id}/assignment/${req.params.Aid}`);
 	}
 	freezeMarks().catch((message) => { 

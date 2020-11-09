@@ -109,8 +109,7 @@
 					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksUnfreeze" method="POST"> 
 						<button class="btn btn-md btn-primary">Unfreeze Marks</button>
 					</form>
-				<%}else if(assignment_data.marksFreezed == 0  ){%>
-					<%// PUT IN ELSE-IF AFTER TA FREEEZE FIX --> && marksData.countTA == marksData.countMarkUploads%>
+				<%}else if(assignment_data.marksFreezed == 0 && marksData.countTA == marksData.countMarkUploads ){%>
 					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksFreeze" method="POST"> 
 						<button  class="btn btn-md btn-warning">Freeze Marks</button>
 					</form>
