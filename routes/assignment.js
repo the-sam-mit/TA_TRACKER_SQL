@@ -5,7 +5,7 @@ var passport=require('passport');
 var flash=require('connect-flash');
 var mysql      = require('mysql');
 var dbconfig   = require('../config/database');
-
+const path        = require('path');
 // ==============_ Model+MiddleWare _=================
 var middleware        = require("../middleware/index.js");
 var  SubmissionRoutes = require('./submission.js');
@@ -17,7 +17,7 @@ const e = require('express');
 var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
-
+router.use(express.static(path.join(__dirname, 'public')));
 // //-----------------------------------------------------------------------------new assignment GET------------------------WORKING----
 router.get("/new",middleware.isLoggedIn,function(req,res){
 	console.log(" assignment new get ! ");

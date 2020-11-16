@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
+	<div class="container mx-auto  " style="text-align: center; margin-top: 12%;background: #d5dde0;padding-left: 0px;padding-right: 0px;margin-left: 1px;margin-right: 0px">
+		<h1>Add New Course</h1>
+		<br>
+		<div style="width:30% ;margin:auto;">
+			<form  action="/courses/new" method="POST">
+				<div class="form-group">
+					<input class="form-control" placeholder="name" name="name" type="text">
+				</div>
+				<div class="form-group">
+					<label for="sem">Semester</label>
+					<select name="semester"  class="form-control" id="sem">
+						<option selected>1</option>
+						<% for(var i=2;i<=8;i++){ %>
+							<option><%=i%></option>
+							<% } %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="year">Year</label>
+						<select name="year"  class="form-control" id="year">
+							<% for(var i=1998;i<2019;i++){ %>
+								<option><%=i%></option>
+								<% } %>
+								<option selected >2020</option>
+								<% for(var i=2021;i<2030;i++){ %>
+									<option><%=i%></option>
+									<% } %>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="stream">Stream</label>
+								<select name="stream"  class="form-control" id="stream">
+									<option selected >IT</option>
+									<option>ECE</option>
+									<option>IT-BI</option>
+								</select>
+							</div>
+							
+				<button class="btn btn-md btn-primary btn-block">Create</button>
+			</form>
+		</div>
+		<br>
+		<a href="/courses"><button class="btn " style="background: #b4b8ab">back</button></a>
+	</div>
+
+</body>
+</html>
