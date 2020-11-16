@@ -10,6 +10,7 @@
 + edit config/database.js (SQL USERNAME & PASSWORD)
 + create database 'my_schema2' manually in mysql
 + command(One Time Only): node scripts/create_database.js  
++ command Increases Watch Limit: sudo sysctl fs.inotify.max_user_watches=582222 && sudo sysctl -p
 + command STARTS SERVER: nodemon app.js
 
 ## RESOURCE
