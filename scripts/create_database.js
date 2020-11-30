@@ -170,6 +170,8 @@ console.log('Success: includes table Created!');
 
 
 // assigned table(A_id - T_id )       AID, TID ------aka performance table------------------updated NOV 4
+// MarkDeadlineUpdated = 1: within deadline , -1:after deadline, 0:not submitted yet
+
 var sql = "CREATE TABLE IF NOT EXISTS "+dbconfig.rel4+"(\
             Aid INT UNSIGNED,\
             Tid INT UNSIGNED,\

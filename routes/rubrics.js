@@ -8,6 +8,7 @@ var busboy         = require("then-busboy");
 var fileUpload     = require('express-fileupload');                    
 var JSZip          = require('jszip');                     
 var fs             = require('fs');                     
+const path        = require('path');
 
 var dbconfig       = require('../config/database');
 // ==============_ Model+MiddleWare _=================
@@ -17,7 +18,7 @@ const { query }    = require('express');
 var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
-
+router.use(express.static(path.join(__dirname, 'public')));
 // //-----------------------------------------------------------------------------rubrics upload GET & POST------------------------WORKING----
 router.get("/add",middleware.isLoggedIn,function(req,res){
 	console.log("add  rubrics");

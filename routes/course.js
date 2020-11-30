@@ -5,6 +5,7 @@ var passport       = require('passport');
 var flash          = require('connect-flash');
 var mysql          = require('mysql');
 var dbconfig       = require('../config/database');
+const path        = require('path');
 // ==============_ Model+MiddleWare _=================
 var middleware     = require("../middleware/index.js");
 const { query }    = require('express');
@@ -13,10 +14,16 @@ var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
 
+
+router.use(express.static(path.join(__dirname, 'public')));
+
 // ================Module inport========================
 var  AssignmentRoutes = require('./assignment.js');
 var  PerformanceRoutes = require('./performance.js');
 //-------------Landing GET------------------------WORKING----
+router.get("/test",function(req,res){
+	res.render("./index.html");
+})
 router.get("/",middleware.isLoggedIn,function(req,res){
 	console.log(" courses list ! ");
 	async function courseListS() {
@@ -35,6 +42,7 @@ router.get("/",middleware.isLoggedIn,function(req,res){
 		}
 		else{
 			console.log("landing S route res")
+			// res.render("./landing.ejs", {user:req.user, courseList_Avail:course_data_Avail, courseList_Joined:course_data_Joined});
 			res.render("./landing.ejs", {user:req.user, courseList_Avail:course_data_Avail, courseList_Joined:course_data_Joined});
 		}
 	}
@@ -206,7 +214,7 @@ router.get("/:id",middleware.isLoggedIn,function(req,res){
 			query     = 'select * from professor inner join teaches on professor.id = teaches.Pid where teaches.Cid = ?';
 			let professor_data = await queryExecute(query ,[req.params.id]) ;
 			
-			// student data
+			// student data 
 			query     = 'select * from student inner join takes on student.id = takes.Sid where takes.Cid = ?';
 			let student_data = await queryExecute(query ,[req.params.id]) ;
 			

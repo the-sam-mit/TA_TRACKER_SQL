@@ -10,6 +10,7 @@ var fileUpload    = require('express-fileupload');
 var JSZip         = require('jszip');                     
 var fs            = require('fs');                     
 var config        = require('./config/keys');         // config details file
+const path        = require('path');
 
 // ================
 var session  = require('express-session');
@@ -18,6 +19,7 @@ var morgan = require('morgan');
 require('./config/passport')(passport); // pass passport for configuration
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // ================
 // INTEGRATING LIBS
@@ -27,7 +29,13 @@ app.use(bodyParser.json());
 app.use(fileUpload());
 
 //----------------FOR ABLE TO USE PUBLIC DIRECTORY IN FRONTEND-----------             
-app.use(express.static(__dirname + "/public"));  //__dirname is whole directory name  
+app.use(express.static(path.join(__dirname, 'public')));
+// var engines = require('consolidate');
+
+ app.set('views', __dirname + '/views');
+// app.engine('html', engines.mustache);
+// app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
 
 // =================================_REQUIRE ROUTES_==================================
 var  CourseRoutes     = require('./routes/course.js');
