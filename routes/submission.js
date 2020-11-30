@@ -10,6 +10,7 @@ var JSZip          = require('jszip');
 var fs             = require('fs');                     
 const unzipper     = require('unzipper');
 var Path           = require('path');
+const path        = require('path');
 
 var dbconfig       = require('../config/database');
 // ==============_ Model+MiddleWare _=================
@@ -20,6 +21,7 @@ var router=express.Router({mergeParams: true});;
 router.use(methodOverride("_method"));
 router.use(flash());
 
+router.use(express.static(path.join(__dirname, 'public')));
 //-----------------------------------------------------------------------------submissions import GET------------------------WORKING----
 router.get("/import", middleware.isLoggedIn, function(req,res){
 	console.log("import  submissions");

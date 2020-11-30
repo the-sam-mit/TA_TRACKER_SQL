@@ -1,0 +1,246 @@
+<!-- views/assignmen/info.ejs assignment page -->  
+<!doctype html>
+<html>
+<head>
+	<title>Professor DashBoard</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<!-- Modal Deadline-->
+<div class="modal" id="deadlineModal" tabindex="-1" role="dialog" aria-labelledby="deadlineModal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="ModalLabel">deadline need to be updated</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <% if((new Date().getTime() - new Date(assignment_data.deadline_rubriks).getTime()) >= 0){ %>
+				<p>Rubrics Upload is behind deadline.</p>
+			<% } %>
+			<% if((new Date().getTime() - new Date(assignment_data.deadline_eval).getTime()) >= 0){ %>
+				<p>Marks Upload is behind deadline.</p>
+		  <% } %>
+		</div>
+		<div class="modal-footer">
+			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-primary">Update</a>
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+<body onload="Deadline('<%=assignment_data.deadline_rubriks%>', '<%= assignment_data.deadline_eval%>')" >	
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+
+	<%//time and time left%>
+    <div class="container " style="background-color: azure;" >
+		<div class="row"><h4>Deadlines</h4></div>
+		<div class="row" id="clock2"></div>
+		<div class="row" id="clock3"></div>
+	</div>
+	<%// deadline modal init%>
+	<div class="container">
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Assignment Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+
+		<% //assignment info list here %>
+		<div class="row">
+			<div class="col-md-4">  
+				<h4 ><strong>course</strong>             <%= assignment_data.course %>           </h4>		
+				<h4 ><strong>type</strong>               <%= assignment_data.type %>             </h4>		
+				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %> </h4>		
+				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %>    </h4>		
+				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>       </h4>		
+				<h4 ><strong>MarksFreezed</strong>         <%= assignment_data.marksFreezed %>       </h4>		
+				<h4 ><strong>assignedTA</strong>         <%= assignment_data.assignedTA %>       </h4>		
+			</div>
+
+			<% //assignment features %>
+			<div class="col-md-4">  
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/submission/import" class="btn btn-md btn-outline-info">import Submissions</a>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/update" class="btn btn-md btn-outline-success">Update Details</a>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-outline-info">View Rubrics</a>
+				<%if(assignment_data.marksFreezed == 1){%>
+					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksUnfreeze" method="POST"> 
+						<button class="btn btn-md btn-primary">Unfreeze Marks</button>
+					</form>
+				<%}else if(assignment_data.marksFreezed == 0 && marksData.countTA == marksData.countMarkUploads ){%>
+					<form id="freeze" action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/ProfmarksFreeze" method="POST"> 
+						<button  class="btn btn-md btn-warning">Freeze Marks</button>
+					</form>
+				<%}%>
+			</div>
+		</div>
+		<%//TA info %>
+		<div class="row">
+			<% asisstant_data.forEach(function(data){ %>
+				<div class="col-md-9">  
+					<h4 ><strong>Name</strong>      <%= data.name %>     </h4>		
+					<h4 ><strong>Username</strong>  <%= data.username %> </h4>		
+					<h4 ><strong>Type</strong>      <%= data.type %>     </h4>		
+					<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
+					<p ><strong> Year</strong>      <%= data.year %>     </p>		
+					<p ><strong> Stream</strong>    <%= data.stream %>   </p>		
+					<p ><strong> MarksUploaded</strong>    <%= data.MarkUploaded %>   </p>		
+				</div>
+			<% }) %>
+		</div>
+	</div>
+
+	<%//submission info %>
+	<div class="container">
+		<%	var v = "http://localhost:3000"; %>
+		<%	var allPaths = {}; %>
+		<%	submission_data.forEach(function(sdata){ %>
+        <%       var path = sdata.a_path.split( '/' ); %>
+        <%       pos = path.indexOf("public"); %>
+        <%       newPath=""; %>
+        <%       console.log(path+" "+pos); %>
+        <%       for(var i=pos+1;i<path.length;i++){ %>
+		<%	 	  newPath = newPath +"/"+ path[i] %>
+		<%	   } %>
+		<%	   allPaths[sdata.sub_id]= newPath; %>
+		<%	}) %>
+			
+	  <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+             <div class="row">
+
+	           <div class="col-md-3"> <h4> <strong> Submission ID </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Student ID </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Student Name </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> TA ID </h4></strong> </div>
+
+	         </div>
+          </div>
+
+          <div class="col-md-6">
+	        <div class="row">
+	           <div class="col-md-3"> <h4> <strong> TA Name </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Assignment Name </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> View Submission </strong> </h4> </div>
+	           <div class="col-md-3"> <h4> <strong> Marks </h4> </strong> </div>
+           </div>
+          </div>
+        </div>
+
+        <% submission_data.forEach(function(sdata){ %>
+           <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+		           <div class="col-md-3"> <%= sdata.sub_id %> </div>
+		           <div class="col-md-3"> <%= sdata.Sid %>  </div>
+		           <div class="col-md-3"> <%= sdata.s_name %>  </div>
+		           <div class="col-md-3"> <%= sdata.Tid %>  </div>
+		   
+		        </div>
+		      </div>
+		      <div class="col-md-6">
+                <div class="row">
+		           <div class="col-md-3"> <%= sdata.ta_name %>  </div>
+		           <div class="col-md-3"> <%= sdata.a_name %>  </div>
+		           <div class="col-md-3"> <a href="<%= allPaths[sdata.sub_id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+		           <div class="col-md-3"> <%= sdata.marks %>   </div>
+		        </div>
+		      </div>
+	        </div>
+            <% }) %>
+       </div>
+
+
+	</div>
+</body>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+	function diff_minutes(dt2, dt1) 
+	{
+		var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+		diff /= 60;
+		if(diff <= 0) return [0,0,0];
+		let min_tot = Math.abs(Math.round(diff));
+		
+		let days = Math.abs(Math.floor(min_tot / (24*60)));
+		min_tot = min_tot - (days*24*60);
+		let hrs = Math.abs(Math.floor(min_tot / 60));
+		min_tot = min_tot - (hrs*60);
+		let min = min_tot ;
+		return [days,hrs,min];
+	}
+	function checkDeadline(rubric, eval) {
+      var today = new Date();
+      var q = new Date(rubric);
+      var e = new Date(eval);
+      
+	  var left = diff_minutes(q,today);
+	  if(left[0] == 0 && left[1] == 0 && left[2] == 0 )
+		document.getElementById('clock2').innerHTML = "Rubrics Deadline Passed";
+	  else
+		  document.getElementById('clock2').innerHTML = "<h5>Rubrics Upload : "+`${left[0]} days  ${left[1]} hours  ${left[2]} minutes</h5>`;
+		  
+	 var left2 = diff_minutes(e,today);
+	  if(left2[0] == 0 && left2[1] == 0 && left2[2] == 0 )
+		document.getElementById('clock3').innerHTML = "Marks Deadline Passed";
+	  else
+	  	document.getElementById('clock3').innerHTML = "<h5>Marks Upload : "+`${left2[0]} days  ${left2[1]} hours  ${left2[2]} minutes</h5>`;
+		  var t = setTimeout(checkDeadline, 500,rubric,eval);
+    }
+    // add zero in front of numbers < 10
+    function checkTime(i) {
+      if (i < 10) {i = "0" + i};  
+      return i;
+    }
+	function Deadline(rubric, eval) {
+		if (((new Date().getTime() - new Date(rubric).getTime()) >= 0) || ((new Date().getTime() - new Date(eval).getTime()) >= 0))
+			$('#deadlineModal').modal('show') 
+		checkDeadline(rubric,eval); 
+	};
+</script>
+</html>

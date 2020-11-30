@@ -1,0 +1,219 @@
+<!-- views/assignmen/info.ejs assignment page -->  
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body onload="checkDeadline('<%=assignment_data.deadline_rubriks%>', '<%= assignment_data.deadline_eval%>')" >
+	<%//flash msg%>
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+
+	<%//time and time left%>
+    <div class="container " style="background-color: azure;" >
+		<div class="row"><h4>Deadlines</h4></div>
+		<div class="row" id="clock2"></div>
+		<div class="row" id="clock3"></div>
+	</div>
+
+	<div class="container">
+
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Assignment Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+
+		<% //assignment info list here %>
+		<div class="row">
+			<div class="col-md-4">  
+				<h4 ><strong>course</strong>             <%= assignment_data.course %>             </h4>		
+				<h4 ><strong>type</strong>               <%= assignment_data.type %>               </h4>		
+				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %>    </h4>		
+				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %> </h4>		
+				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>				
+				<h4 ><strong>Usernames of Students assigned:</strong>  								</h4>				
+
+				<% students.forEach(function(eachStudent){ %>
+			        <li> <%= eachStudent.username %></li>
+			    <% }) %>				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">  
+
+			</div>
+		</div>
+			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
+			<%			console.log(rubrics_data) %>
+			<% if(rubrics_data == undefined || rubrics_data == null){%>
+				<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/add" class="btn btn-md btn-info">add Rubrics</a>
+			<% } %>
+			
+		</div>
+
+	</div>
+
+	<%//submission info %>
+	<div class="container">
+		<%
+			var v = "http://localhost:3000";
+			var allPaths = {};
+			submission_data.forEach(function(sdata){
+               var path = sdata.a_path.split( '/' );
+               pos = path.indexOf("public");
+               newPath="";
+               console.log(path+" "+pos);
+               for(var i=pos+1;i<path.length;i++){
+			 	  newPath = newPath +"/"+ path[i]
+			   }
+			   allPaths[sdata.id]= newPath;
+			})
+			
+		%>
+
+	  <div class="container">
+        <div class="row">
+           <div class="col-md-2">  <strong> Submission ID </strong>  </div>
+           <div class="col-md-2">  <strong> Student ID </strong> </div>
+           <div class="col-md-2">  <strong> Student Name </strong> </div>
+           <div class="col-md-2">  <strong> Assignment Name </strong> </div>
+           <div class="col-md-2">  <strong> View Submission </strong> </div>
+           <div class="col-md-2">  <strong> Marks </strong> </div>
+        </div>
+
+        <% submission_data.forEach(function(sdata){ %>
+            <div class="row">
+	           <div class="col-md-2"> <%= sdata.Subid %> </div>
+	           <div class="col-md-2"> <%= sdata.Sid %>  </div>
+	           <div class="col-md-2"> <%= sdata.s_name %>  </div>
+	           <div class="col-md-2"> <%= sdata.a_name %>  </div>
+	           <div class="col-md-2"> <a href="<%= allPaths[sdata.id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+	           <div class="col-md-2"> <%= sdata.marks %>  </div>
+	           
+	           <form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksupdate/<%= sdata.Subid %>" method="POST">
+		        	<div class="form-group">
+						<input class="form-control" placeholder="marks" name="marks" type="text" <%=str%>>
+						<button class="btn btn-md btn-info btn-block" <%=str%>>Add Marks</button>
+					</div>
+  				</form>
+	        </div>
+			<% }) %>
+		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/marksfreeze" method="POST">
+			<button  class="btn btn-primary btn-lg" <%=str%> >Freeze Marks</button>
+		</form>
+
+		<h4><strong>Query Time (if any).</strong></h4>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2">  <strong> Query ID </strong>  </div>
+				<div class="col-md-2">  <strong> Submission ID </strong>  </div>
+				<div class="col-md-2">  <strong> Student ID </strong> </div>
+				<div class="col-md-2">  <strong> Query Type </strong> </div>
+				<div class="col-md-2">  <strong> Query Description </strong> </div>
+			</div>
+			<% queriesA.forEach(function(qdata){ %>
+				<div class="row">
+					<div class="col-md-2"> <%= qdata.id %> </div>
+					<div class="col-md-2"> <%= qdata.Sub_id %> </div>
+					<div class="col-md-2"> <%= qdata.Sid %>  </div>
+					<div class="col-md-2"> <%= qdata.q_type %>  </div>
+					<div class="col-md-2"> <%= qdata.q_description %>  </div>
+				</div>
+			<% }) %>
+		</div>
+
+		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/queries" method="POST">
+			<button  class="btn btn-primary btn-lg" <%=queryY%>>Resolve Queries</button>
+		</form>	
+
+		<form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/queriesRem" method="POST">
+			<button  class="btn btn-primary btn-lg" <%=queryY%>>Remove Queries</button>
+		</form>	
+
+       </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+	function diff_minutes(dt2, dt1) 
+	{
+		var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+		diff /= 60;
+		if(diff <= 0) return [0,0,0];
+		let min_tot = Math.abs(Math.round(diff));
+		
+		let days = Math.abs(Math.floor(min_tot / (24*60)));
+		min_tot = min_tot - (days*24*60);
+		let hrs = Math.abs(Math.floor(min_tot / 60));
+		min_tot = min_tot - (hrs*60);
+		let min = min_tot ;
+		return [days,hrs,min];
+	}
+	function checkDeadline(rubric, eval) {
+      var today = new Date();
+      var q = new Date(rubric);
+      var e = new Date(eval);
+      
+	  var left = diff_minutes(q,today);
+	  if(left[0] == 0 && left[1] == 0 && left[2] == 0 )
+		document.getElementById('clock2').innerHTML = "Rubrics Deadline Ended";
+	  else
+		  document.getElementById('clock2').innerHTML = "<h5>Rubrics Time Left : "+`days ${left[0]}  hours ${left[1]}  minutes ${left[2]}</h5>`;
+		  
+	 var left2 = diff_minutes(e,today);
+	  if(left2[0] == 0 && left2[1] == 0 && left2[2] == 0 )
+		document.getElementById('clock3').innerHTML = "Marks Deadline Ended";
+	  else
+	  	document.getElementById('clock3').innerHTML = "<h5>Marks Time Left : "+`days ${left2[0]}  hours ${left2[1]}  minutes ${left2[2]}</h5>`;
+		  var t = setTimeout(checkDeadline, 500,rubric,eval);
+    }
+    // add zero in front of numbers < 10
+    function checkTime(i) {
+      if (i < 10) {i = "0" + i};  
+      return i;
+    }
+</script>
+</html>

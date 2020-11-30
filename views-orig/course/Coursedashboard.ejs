@@ -1,0 +1,140 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
+	<div class="container">
+
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Course Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+
+		<div class="row">
+
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	 <% if(user.type === "Professor"){ %>
+		<a href="/courses/<%=course_data.id%>/edit" class="btn btn-md btn-success">Edit</a>
+		<form id="deletebutton" action="/courses/<%=course_data.id%>/delete" method="GET"> 
+			<button class="btn btn-md btn-danger">Delete</button>
+		</form>
+		<a href="/courses/<%=course_data.id%>/assignment/new" class="btn btn-md btn-success">Open Assignment</a>
+	 <% } %>
+	<div class="container">
+		<%//course%>
+		<div class="row">
+				<div class="row" >
+					<div class="col">  
+						<h4 ><strong>Name</strong> <%= course_data.name %></h4>		
+						<h5 ><strong>Semester</strong> <%= course_data.semester %></h5>		
+						<p ><strong> Year</strong> <%= course_data.year %></p>		
+						<p ><strong> Stream</strong> <%= course_data.stream %></p>		
+						<p ><strong> Code</strong> <%= course_data.code %></p>		
+					</div>
+				</div>
+		</div>
+		<%//Professor%>
+		<%console.log(professor_data)%>
+		<div class="row">
+				<div class="row" >
+					<div class="col"> 
+						<% professor_data.forEach(function(data){ %> 
+							<h4 ><strong>Name</strong> <%= data.name %></h4>		
+							<h5 ><strong>username</strong> <%= data.username %></h5>		
+							<p ><strong> Type</strong> <%= data.type %></p>		
+						<% }) %>
+					</div>
+				</div>
+		</div>
+		<%//ta%>
+		<div class="row">
+				<div class="row" style="background:#fea" >
+					<% asisstant_data.forEach(function(data){ %>
+						<div class="col">  
+							<h4 ><strong>Name</strong> <%= data.name %></h4>		
+							<h4 ><strong>Username</strong> <%= data.username %></h4>		
+							<h4 ><strong>Type</strong> <%= data.type %></h4>		
+							<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
+							<p ><strong> Year</strong> <%= data.year %></p>		
+							<p ><strong> Stream</strong> <%= data.stream %></p>		
+							<% if(user.type === "Professor"){ %>
+								<a href="/courses/<%=course_data.id%>/performance/<%=data.id%>/view"><button class="btn btn-md btn-primary">Track Performance</button></a>		
+							<% } %>
+						</div>
+					<% }) %>
+				</div>
+		</div>
+		<%//student%>
+		<div class="row">
+				<div class="row" style="background:#ccc" >
+					<% student_data.forEach(function(data){ %>
+						<div class="col">  
+							<h4 ><strong>Name</strong> <%= data.name %></h4>		
+							<h4 ><strong>Username</strong> <%= data.username %></h4>		
+							<h4 ><strong>Type</strong> <%= data.type %></h4>		
+							<h5 ><strong>Semeseter</strong> <%= data.semeseter %></h5>		
+							<p ><strong> Year</strong> <%= data.year %></p>		
+							<p ><strong> Stream</strong> <%= data.stream %></p>		
+						</div>
+					<% }) %>
+				</div>
+		</div>
+		<%//assignment%>
+		<div class="row">
+			<% assignment_data.forEach(function(data){ %>
+				<div class="col">  
+					<h4 ><strong>Name</strong> <%= data.name %></h4>		
+					<h5 ><strong>Type</strong> <%= data.type %></h5>		
+					<p ><strong> DeadlineEvaluation</strong> <%= data.deadline_eval %></p>		
+					<p ><strong> CreatedAt</strong> <%= data.created_at %></p>	
+					<a href="/courses/<%=course_data.id%>/assignment/<%=data.id%>"><button class="btn btn-md btn-primary">View</button></a>	
+				</div>
+			<% }) %>			
+		</div>
+	</div>
+	
+</body>
+</html>

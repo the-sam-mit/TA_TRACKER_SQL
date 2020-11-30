@@ -3,14 +3,14 @@ var router=express.Router({mergeParams: true});;
 var methodOverride=require("method-override");
 var passport=require('passport');
 var flash=require('connect-flash');
-
+const path        = require('path');
 // ==============_ Model+MiddleWare _=================
 var middleware  = require("../middleware/index.js");
 // ==============ROUTER CONFIg=========================
 router.use(methodOverride("_method"));
 router.use(flash());
 
-
+router.use(express.static(path.join(__dirname, 'public')));
 // ===============_ API's _============================
 
 

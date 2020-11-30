@@ -1,0 +1,111 @@
+<!-- views/assignmen/info.ejs assignment page -->  
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body onload="approveColor('<%=rubrics_data.approved%>')">
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
+	
+	<div class="container">
+
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Rubrics</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+
+		<% //submission info list here %>
+		<div class="row">
+			<div class="row">  
+				<h4 ><strong>Assignment id-</strong>             <%= rubrics_data.a_id %>             </h4>		
+			</div>
+			<div class="row">  
+				<h4 ><strong>TA id:-</strong>               <%= rubrics_data.t_id %>               </h4>		
+			</div>
+			<div class="row">  
+				<h4 ><strong> Name      :-</strong>    <%= rubrics_data.image %>    </h4>		
+			</div>
+			<div class="row">  
+				<h4 ><strong> Created at:-</strong>    <%= rubrics_data.date_time %>    </h4>
+			</div>
+			<div class="row" id="approved">  
+				<div class="col-lg-3" >  
+					<h4 id="approval_text"> Approval Pending </h4>
+				</div>
+				<div class="col-lg-9" >  
+					<%if ( user.type === "Professor" && rubrics_data.approved == 0){  %>
+						<form  style="width=2px" id="approvebutton" action="/courses/<%=rubrics_data.c_id%>/assignment/<%=rubrics_data.a_id%>/rubrics/approve" method="POST">
+							<button href="" class="btn btn-md btn-success">Accept</button>
+						</form>
+						<form  id="declinebutton" action="/courses/<%=rubrics_data.c_id%>/assignment/<%=rubrics_data.a_id%>/rubrics/decline" method="POST">
+							<button href="" class="btn btn-md btn-danger">Decline</button>
+						</form>
+					<%}%>
+				</div>
+				
+			</div>
+			<div class="row">  
+				<h4 ><strong>Rubrics:-</strong>    <a href="http://localhost:3000/Rubrics/<%=rubrics_data.image%>" target="_blank" class="btn btn-md btn-primary">  View/Download </a> </h4>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+	function approveColor(approved){
+		if(approved == false)
+			$('#approved').css("background-color","pink");
+		if(approved == true){
+			$('#approved').css("background-color","green");
+			$('#approval_text').text("Approved");
+
+		}
+	}
+</script>
+</html>

@@ -1,0 +1,98 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
+	
+	<div class="container">
+
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Course Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+
+		<div class="row">
+
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container mx-auto " style="text-align: center; margin-top: 12%;background: #d5dde0;padding-left: 0px;padding-right: 0px;margin-left: 1px;margin-right: 0px">
+		<h1>Edit Details</h1>
+		<br/>
+		<div style="width:30% ;margin:auto;">
+			<%	var route1, route%>
+
+			<% course_data.forEach(function(data){ %>	
+				<%	route1 = "/courses/"+ data.id %>
+				<%	console.log( "DATA: "+JSON.stringify(data)) %>
+				<%	route  = route1+"?_method=PUT" %>
+
+				<form  action="<%=route%>" method="POST">
+					<div class="form-group">
+						<input class="form-control" value="<%=data.name %>" placeholder="name" name="name" type="text">
+					</div>
+					<div class="form-group">
+						<input class="form-control" value="<%=data.semester %>" placeholder="semester" name="semester" type="text">
+					</div>
+					<div class="form-group">
+						<input class="form-control" value="<%=data.year %>" placeholder="year" name="year" type="text">
+					</div>
+					<div class="form-group">
+						<input class="form-control" value="<%=data.stream %>" placeholder="stream" name="stream" type="text">
+					</div>
+					<button class="btn btn-md btn-primary btn-block">Update</button>
+				</form>
+			<%});%>
+		</div>
+		<br/>
+		<a href="<%= route1 %>"><button class="btn " style="background: #b4b8ab">back</button></a>
+	</div>
+
+</body>
+</html>
+
+
+
