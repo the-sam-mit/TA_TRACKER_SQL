@@ -1,0 +1,199 @@
+<!-- views/assignmen/info.ejs assignment page -->  
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+	<%	if(error && error.length>0){ %>
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<h4><%= error %></h4>
+			</div>
+		</div>
+	<%	} %>
+	<% if(success && success.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-success" role="alert">
+				<h4><%= success %></h4>
+			</div>
+        </div>
+	<%} %> 
+	<% if(warning && warning.length>0){ %>	
+		<div class="container">
+			<div class="alert alert-warning" role="alert">
+				<h4><%= warning %></h4>
+			</div>
+        </div>
+	<%} %> 
+	
+	<div class="container">
+
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Assignment Dashboard</h1>
+			<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		</div>
+
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+						<p>
+							<strong>id</strong>: <%= user.id %><br>
+							<strong>username</strong>: <%= user.username %><br>
+							<strong>password</strong>: <%= user.password %>
+						</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+
+		<% //assignment info list here %>
+		<div class="row">
+			<div class="col-md-4">  
+				<h4 ><strong>course</strong>             <%= assignment_data.course %>             </h4>		
+				<h4 ><strong>type</strong>               <%= assignment_data.type %>               </h4>		
+				<h4 ><strong>deadlineRubriks</strong>    <%= assignment_data.deadline_rubriks %>    </h4>		
+				<h4 ><strong>deadlineEvaluation</strong> <%= assignment_data.deadline_eval %> </h4>		
+				<h4 ><strong>created_at</strong>         <%= assignment_data.created_at %>         </h4>		
+			</div>
+		</div>
+        
+			<h4>TODO</h4>
+				<h3>1. show students details - Done </h3>
+				<h3>2. show students submission - Done </h3>
+				<h3>3. show rubricks  </h3>
+				<h3>4. show marks </h3>
+			<p>coming soon..</p>
+			<a href="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rubrics/view" class="btn btn-md btn-info">View Rubrics</a>
+		</div>
+
+	</div>
+	<%//submission info %>
+	<div class="container">
+
+		<%
+			var v = "http://localhost:3000";
+			var allPaths = {};
+			submission_data.forEach(function(sdata){
+               var path = sdata.a_path.split( '/' );
+               pos = path.indexOf("public");
+               newPath="";
+               console.log(path+" "+pos);
+               for(var i=pos+1;i<path.length;i++){
+			 	  newPath = newPath +"/"+ path[i]
+			   }
+			   allPaths[sdata.sub_id]= newPath;
+			})
+			
+		%>
+
+	  <div class="container">
+        <div class="row">
+           <div class="col-md-2"> <h4> <strong> Submission ID </strong>  </h4></div>
+           <div class="col-md-2"> <h4> <strong> TA ID </h4> </strong> </div>
+           <div class="col-md-2"> <h4> <strong> TA Name </h4> </strong> </div>
+           <div class="col-md-2"> <h4> <strong> Assignment Name </strong> </h4> </div>
+           <div class="col-md-2"> <h4> <strong> View Submission </strong> </h4> </div>
+           <div class="col-md-2"> <h4> <strong> Marks </h4> </strong> </div>
+        </div>
+
+        <% submission_data.forEach(function(sdata){ %>
+           <div class="row">
+	           <div class="col-md-2"> <%= sdata.sub_id %> </div>
+	           <div class="col-md-2"> <%= sdata.Tid %>  </div>
+	           <div class="col-md-2"> <%= sdata.ta_name %>  </div>
+	           <div class="col-md-2"> <%= sdata.a_name %>  </div>
+	           <div class="col-md-2"> <a href="<%= allPaths[sdata.sub_id] %>" class="btn btn-md btn-info">  <%= sdata.a_name %> </a>  </div>
+	           <div class="col-md-2">
+	            <% if(assignment_data.marksFreezed == 1) {  %>
+	                       <%= sdata.marks %> 
+	            <% }  %>
+	           </div>
+
+	        </div>
+           
+
+         <% }) %>
+            
+             <%//student rating for TA%>
+
+           <% if(submission_data.length != 0 && submission_data != undefined && submission_data != null && assignment_data.marksFreezed == 1){  %>
+                   <div style="width:30% ;margin:auto;">
+                 <br>
+		         <h4> Give TA Rating </h4>
+		         <h5> Rating : </h5>
+		         <% 
+		             asisstant_data.forEach(function(adata){ 
+	                      if(adata.Tid === submission_data[0].Tid){ %>
+	                       <p>   <%= adata.studentRating %>  </p>
+	             <%    }})  %> 
+             
+              
+	            <form  action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/rateTA/<%= submission_data[0].Tid %>" method= "POST">
+
+			<div class="form-group">
+			<select name="rating"  class="form-control" id="rating">
+				<% for(var i=1;i<=5;i++){ %>
+					<option><%=i%></option>
+					<% } %>
+				</select>
+			<button class="btn btn-md btn-info btn-block">Give Rating</button>
+			</div>
+
+  		    </form>
+                  </div>
+
+            <% }  %>
+             
+               <%//query raise %>
+			 <div style="width:30% ;margin:auto;">
+             <% if(submission_data.length != 0 && submission_data != undefined && submission_data != null && assignment_data.marksFreezed == 1){ 
+                 if(query_data.length == 0 || query_data == undefined || query_data == null){  %>
+			<br>
+                 <h4> Raise query </h4>
+
+             	 <form action="/courses/<%=CID%>/assignment/<%=assignment_data.id%>/query/<%=submission_data[0].Tid %>/<%= submission_data[0].sub_id %>" method= "POST">
+                      
+                      <div class="form-group">
+                        <label for="queryType"> Query Type </label>
+				<select name="queryType"  class="form-control" id="queryType">	
+					<option> q1 </option>
+					<option> q2 </option>
+					<option> q3 </option>
+					<option> q4 </option>
+					<option> q5 </option>
+				</select>
+					  
+		       </div>
+
+		      <div class="form-group">
+			<label for="description"> Description </label>
+                       <input class="form-control" placeholder="description" name="description" type="text">
+					  
+		      </div>
+		      <button class="btn btn-md btn-info btn-block"> Raise Query </button>
+		      <br>
+
+             	 </form>
+             <% }  %>
+         <% }  %>
+
+         <% if(query_data.length != 0 && query_data != undefined && query_data != null){  %>
+                  <br>
+                  <h4> Raised Query:- </h4>
+                  <h5> Type:   <%= query_data[0].q_type %> </h5>
+                  <h5> Description:   <%= query_data[0].q_description %> </h5>
+         <% }  %>
+          </div>
+       </div>
+
+</body>
+</html>

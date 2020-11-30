@@ -24,8 +24,8 @@
 
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	
-
 </head>
+
 
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -327,7 +327,8 @@
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
+                <!-- End of Topbar -->                <!-- End of Topbar -->
+            
 <!-- ------------------------------___CONTENT___--------------------------------------------------- -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -353,100 +354,213 @@
                             </div>
                         </div>
                     <%} %> 
-
                     <!-- Page Heading -->
-                    <div class="container">
+                    <div class="row">
+                        <!-- course Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Teaching Assistant</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= assistant_data.username %></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= assistant_data.id %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-book fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="page-header text-center">
-                            <h1><span class="fa fa-anchor"></span> Performance Dashboard</h1>
-                            <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-                        </div>
-                
-                        <div class="row">
-                            <!-- LOCAL INFORMATION -->
-                            <div class="col-sm-6">
-                                <div class="well">
-                                    <h3><span class="fa fa-user"></span> Local</h3>
-                                        <p>
-                                            <strong>id</strong>: <%= user.id %><br>
-                                            <strong>username</strong>: <%= user.username %><br>
-                                            <strong>password</strong>: <%= user.password %>
-                                        </p>
+                        <!-- sem Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Students Assigned</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= students.length%></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                
-                        <div class="row">
-                            <!-- LOCAL INFORMATION -->
-                            <div class="col-sm-6">
-                                <div class="well" style="background:#fea">
-                                    <h3><span class="fa fa-user"></span> TA Details</h3>
-                                        <p>
-                                            <strong>id</strong>: <%= assistant_data.id %><br>
-                                            <strong>username</strong>: <%= assistant_data.username %><br>
-                                            <strong>password</strong>: <%= assistant_data.password %>
-                                        </p>
+
+                        <!-- assignment Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Assignments Assigned
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%= assns.length %></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- asisstant Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Performance Rating</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= rates%>%<div class="star-ratings-sprite">
+                                                <span style="width:<%= ratesS%>%" class="star-ratings-sprite-rating">
+                                                </span>
+                                            </div></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Student Rating</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= ratesS%>%<div class="star-ratings-sprite">
+                                                <span style="width:<%= ratesS%>%" class="star-ratings-sprite-rating">
+                                                </span>
+                                            </div></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Students Graded
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                        <%var tot = 0;%>
+                                                        <% marks_data.forEach(function(data){ %>
+                                                                <%tot = tot+data;%>
+                                                        <% }) %>
+                                                        <%= tot %>/<%= students.length %></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                
-                    <div class="container">
-                        <h3>Professor Rating :- <%= rates%>%</h3>
-                        <div class="star-ratings-sprite"><span style="width:<%= rates%>%" class="star-ratings-sprite-rating"></span></div>
-                
-                        <h3>Student Rating :- <%= ratesS%>%</h3>
-                        <div class="star-ratings-sprite"><span style="width:<%= ratesS%>%" class="star-ratings-sprite-rating"></span></div>
-                
-                        <div class="container">
-                            <div class="row">
-                               <div class="col-sm-2">  <strong> Range of marks</strong>  </div>
-                               <div class="col-sm-2">  <strong> Number of students </strong> </div>
-                            </div>
-                            <div class="row" style="background:#ccc" >
-                                <%var i = 0;%>
-                                <%var tot = 0;%>
-                                <% marks_data.forEach(function(data){ %>
-                                    <div class="col-sm-2">  <strong> <%=10*i%> - <%=10*i + 10%></strong>  </div>
-                                       <div class="col-sm-2">  <strong> <%= data %> </strong> </div>
-                                       <%tot = tot+data;%>
-                                    <br>
-                                    <%i = i+1;%>
-                                <% }) %>
-                            </div>
-                         </div>
-                        
-                        <div id="piechart"></div>
-                
-                         <div class="container">
-                            <div class="row">
-                               <div>  <strong> Students Assigned: </strong><%= students.length %> </div>
-                            </div>
-                            <div class="row" style="background:#ccc" >
-                                <% students.forEach(function(data){ %>
-                                       <div class="col-sm-2">  <strong> <%= data.username %> </strong> </div>
-                                <% }) %>
-                            </div>
-                            <div class="row">
-                                <div>  <strong> Students Graded: </strong><%= tot %>/<%= students.length %> </div>
-                            </div>
-                
-                         </div>
-                
-                          <div class="container">
-                            <div class="row">
-                               <div">  <strong> Assignments Assigned: </strong><%= assns.length %> </div>
-                            </div>
-                            <div class="row" style="background:#ccc" >
-                                <% assns.forEach(function(data){ %>
-                                       <div class="col-sm-2">  Aid: <strong> <%= data.Aid %> </strong> </div>
-                                <% }) %>
-                            </div>
-                         </div>
+                    <br>
+                    <div class="row">
+                        <div class="col col-lg-6">
+                            <h1 class="h3 mb-4 text-gray-700">Students Assigned</h1>
+                            <table id="dtBasicExample3" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                    <th class="th-sm">Name
+                                    </th>
+                                    <th class="th-sm">Roll
+                                    </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% students.forEach(function(data){ %>
+                                        <tr>
+                                            <td> <%=data.name %> </td>		
+                                            <td> <%=data.username %> </td>		
+                                        </tr>
+                                    <% }) %>	
+                                </tbody>
+                            </table>                              
+                        </div>
+                        <div class="col col-lg-6">
+                            <h1 class="h3 mb-4 text-gray-700">Assignments Assigned</h1>
+                            <table id="dtBasicExample3" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                    <th class="th-sm">Assignment ID
+                                    </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% assns.forEach(function(data){ %>
+                                        <tr>
+                                            <td> <%=data.Aid %> </td>		
+                                        </tr>
+                                    <% }) %>	
+                                </tbody>
+                            </table>                              
+                        </div>
                     </div>
-                    <div class="container">
-                        <h6 style="color:Tomato;">deadline upload.</h3>
+                    <br>
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <h1 class="h3 mb-4 text-gray-700">Marks Analysis </h1>
+                            <div id="piechart"></div>
+                        </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <h1 class="h3 mb-4 text-gray-700">Marks Awarded </h1>
+                            <!-- <div id="piechart"></div> -->
+                            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                    <th class="th-sm">Range of Marks
+                                    </th>
+                                    <th class="th-sm">Number of Students
+                                    </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%var i = 0;%>
+                                    <%var tot = 0;%>
+                                    <% marks_data.forEach(function(data){ %>
+                                        <tr>
+                                            <td> <%=10*i%> - <%=10*i + 10%></td>
+                                            <td> <%= data %> </td>
+                                            <%tot = tot+data;%>
+                                            <%i = i+1;%>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>   
+                        </div>
+                    </div>
+                    <br>
                 
             <!-- End of Main Content -->
 
